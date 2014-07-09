@@ -1,0 +1,27 @@
+{
+  "name": "reblog",
+  "version": "0.0.0",
+  "authors": [
+    "codeboy <me@codeboy.im>"
+  ],
+  "moduleType": [
+    "amd",
+    "globals"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "lib/vendors/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jsx": "https://raw.githubusercontent.com/philix/jsx-requirejs-plugin/master/js/jsx.js",
+    "requirejs": "~2.1.14",
+    "react": "~0.10.0",
+    "text": "~2.0.12"
+  }
+}
