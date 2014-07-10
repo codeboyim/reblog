@@ -11,7 +11,7 @@
             'text': vendors + 'text/text',
             'jsx': vendors + 'jsx/js/jsx',
             'JSXTransformer': vendors + 'jsx/js/JSXTransformer-0.10.0',
-            'react': vendors + 'react/react',
+            'react': vendors + 'react/react'
         },
 
         jsx: {
