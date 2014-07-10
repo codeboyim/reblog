@@ -6,7 +6,7 @@ define(['backbone'], function(backbone) {
     return backbone.Model.extend({
         defaults: {
             title: '',
-            article: '',
+            body: '',
             postedOn: null,
             createdOn: null,
             modifiedOn: null,

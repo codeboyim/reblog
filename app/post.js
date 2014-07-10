@@ -2,7 +2,7 @@
  * @module post
  */
 
-define(['require', 'jquery', './PostModel', 'jsx!./views/list'], function(require, $, PostModel) {
+define(['require', 'jquery', 'jsx!./views/list', './backend'], function(require, $) {
     var post,
         viewPath = 'jsx!./views/',
         views = {},
@@ -15,7 +15,6 @@ define(['require', 'jquery', './PostModel', 'jsx!./views/list'], function(requir
      */
     function init(container) {
         _container = container ? container : $(document.body);
-        post = new PostModel();
     }
 
     /**
@@ -29,16 +28,10 @@ define(['require', 'jquery', './PostModel', 'jsx!./views/list'], function(requir
         attachTo = attachTo ? attachTo : _container;
 
         if (!v) {
-            try {
-                v = require(viewPath + name);
-                v = new v({
-                    el: attachTo
-                });
-            } catch (err) {
-                console.error('requested view - "' + name + '" doesn\'t exist');
-                return;
-            }
-
+            v = require(viewPath + name);
+            v = new v({
+                el: attachTo
+            });
             views[name] = v;
         }
 
