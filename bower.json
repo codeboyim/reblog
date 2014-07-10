@@ -19,9 +19,11 @@
     "tests"
   ],
   "dependencies": {
-    "jsx": "https://raw.githubusercontent.com/philix/jsx-requirejs-plugin/master/js/jsx.js",
+    "jsx": "https://github.com/philix/jsx-requirejs-plugin.git#~0.2.1",
     "requirejs": "~2.1.14",
     "react": "~0.10.0",
-    "text": "~2.0.12"
+    "text": "~2.0.12",
+    "backbone": "~1.1.2",
+    "jquery": "~1.11.1"
   }
 }

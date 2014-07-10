@@ -1,0 +1,9 @@
+{
+    "undef": true,
+    "globals": {
+        "define": false,
+        "require": false,
+        "document": false,
+        "console": false
+    }
+}
