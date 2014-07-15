@@ -20,11 +20,15 @@
 
     });
 
-    require(['jquery', 'app/post'],
+    require(['jquery', 'app/post', 'backbone'],
 
-        function($, post) {
-            post.init($('#posts'));
-            post.load('list');
+        function($, post, Backbone) {
+            $(function() {
+                post.init($('#posts'));
+                Backbone.history.start({
+                    pushState: false
+                });
+            });
         });
 
 })();

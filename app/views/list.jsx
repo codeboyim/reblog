@@ -5,6 +5,7 @@ define(['backbone', 'react', '../models/PostCollection'], function(Backbone, Rea
     
     var PostList = React.createClass({
         render: function(){
+            var self = this;
             return (
             <div>
             {this.props.posts.map(
@@ -15,8 +16,8 @@ define(['backbone', 'react', '../models/PostCollection'], function(Backbone, Rea
                                 <h1>{post.get('title')}</h1>
                                 <p><time></time></p>
                             </header>
-                            <div dangerouslySetInnerHTML={{__html:post.get('body')}}>
-                            </div>
+                            <div dangerouslySetInnerHTML={{__html:post.get('body')}}/>
+                            {self.props.editable?<div><a href={"#posts/"+post.get('id')+'/edit'}>Edit</a><button>Delete</button></div>:null}
                         </article>
                     );
             })}
@@ -27,14 +28,15 @@ define(['backbone', 'react', '../models/PostCollection'], function(Backbone, Rea
     });
 
     return Backbone.View.extend({
-        initialize: function() {
+        initialize: function(options) {
             this.posts = new PostCollection();
             this.posts.fetch();
+            this.editable = !!(options&&options.editable);
         },
 
         render: function() {
             React.renderComponent(
-                <PostList posts={this.posts} />,
+                <PostList posts={this.posts} editable={this.editable} />,
                 this.el);
             
             return this.$el;

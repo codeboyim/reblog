@@ -2,11 +2,11 @@
  * @module post
  */
 
-define(['require', 'jquery', 'jsx!./views/list', './backend'], function(require, $) {
+define(['require', 'jquery', 'jsx!./views/list', 'jsx!./views/post', './backend', 'backbone'], function(require, $) {
     var post,
         viewPath = 'jsx!./views/',
         views = {},
-        /**@private */
+        router,
         _container;
 
     /**
@@ -15,28 +15,31 @@ define(['require', 'jquery', 'jsx!./views/list', './backend'], function(require,
      */
     function init(container) {
         _container = container ? container : $(document.body);
+        router = new Posts();
+        return router;
     }
 
     /**
      * load views
      * @param {String} name - view name to load
-     * @param {$=} attachTo - jQuery element the view is attached to. default to the _container
+     * @param {object=} options - hash object passed to view initialize function
+     * @param {boolean=} holdRendering - when set true, view will not render at the end of the call
      * @return {backbone.View}
      */
-    function load(name, attachTo) {
+    function load(name, options, holdRendering) {
         var v = views[name];
-        attachTo = attachTo ? attachTo : _container;
 
         if (!v) {
             v = require(viewPath + name);
-            v = new v({
-                el: attachTo
-            });
+            v = new v(options);
             views[name] = v;
         }
 
-        v.render();
+        if (!holdRendering) {
+            v.render();
+        }
 
+        return v;
     }
 
     /**
@@ -47,18 +50,62 @@ define(['require', 'jquery', 'jsx!./views/list', './backend'], function(require,
         var v = views[name] && views[name].view;
 
         if (!v) {
-            console.error('requested view - "' + name + '" is not loaded');
-            return;
+            throw Error('requested view - "' + name + '" is not loaded');
         }
 
-        v.attachTo.detach();
+        v.remove();
     }
+
+    /**
+     * Posts router
+     */
+    var Posts = require('backbone').Router.extend({
+
+        routes: {
+            'posts': 'posts',
+            'posts/:id': 'posts',
+            'posts/:id/:action': 'posts'
+        },
+
+        posts: function(id, action) {
+            var view;
+
+            if ((id === null || id === undefined) && (action === null || action === undefined)) {
+                load('list', {
+                    el: _container,
+                    editable: true
+                });
+            } else {
+                id = Number(id);
+
+                if (!id) {
+                    throw Error('invalid param id');
+                }
+
+                view = load('post', {
+                    el: _container
+                }, true);
+
+                view.model.set({
+                    'id': id
+                }, {
+                    silent: true
+                });
+
+                if (action === 'edit') {
+                    view.editMode = true;
+                    view.model.fetch();
+                }
+            }
+        },
+
+        initialize: function(options) {}
+    });
 
     /**
      * post module APIs
      */
     return {
-        init: init,
-        load: load
+        init: init
     };
 });
