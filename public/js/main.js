@@ -11,7 +11,8 @@
             'text': vendors + 'text/text',
             'jsx': vendors + 'jsx/js/jsx',
             'JSXTransformer': vendors + 'jsx/js/JSXTransformer-0.10.0',
-            'react': vendors + 'react/react'
+            'react': vendors + 'react/react',
+            'moment': vendors + 'moment/moment'
         },
 
         jsx: {
@@ -20,14 +21,19 @@
 
     });
 
-    require(['jquery', 'app/post', 'backbone'],
+    require(['jquery', 'app/post', 'backbone', 'moment'],
 
-        function($, post, Backbone) {
+        function($, post, Backbone, moment) {
+            
             $(function() {
-                post.init($('#posts'));
+                post.init($('#app_post'));
+
+                window.location.hash = 'posts';
                 Backbone.history.start({
                     pushState: false
                 });
+
+
             });
         });
 
