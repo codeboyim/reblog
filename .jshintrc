@@ -4,6 +4,7 @@
         "define": false,
         "require": false,
         "document": false,
-        "console": false
+        "console": false,
+        "window": false
     }
 }
