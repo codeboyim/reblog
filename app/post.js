@@ -72,7 +72,7 @@ define(['require', 'jquery', 'jsx!./views/list', 'jsx!./views/post', './backend'
 
             if ((id === null || id === undefined) && (action === null || action === undefined)) {
                 load('list', {
-                    el: _container,
+                    attachTo: _container,
                     editable: true
                 });
             } else {
@@ -83,7 +83,7 @@ define(['require', 'jquery', 'jsx!./views/list', 'jsx!./views/post', './backend'
                 }
 
                 view = load('post', {
-                    el: _container
+                    attachTo: _container,
                 }, true);
 
                 view.model.set({
