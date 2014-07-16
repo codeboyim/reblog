@@ -26,22 +26,25 @@ define(['backbone', 'react', '../models/PostCollection'], function(Backbone, Rea
             
         }
     });
-
-    return Backbone.View.extend({
-        initialize: function(options) {
-            this.posts = new PostCollection();
-            this.posts.fetch();
-            this.editable = !!(options&&options.editable);
-            this.attachTo= options.attachTo;
-        },
-
-        render: function() {
-            React.renderComponent(
+    
+    
+    var PostListView = function(options){
+        this.editable = !!(options&&options.editable);
+        this.attachTo= options.attachTo;
+        this.posts = new PostCollection();
+        _.extend(this, Backbone.Events).listenTo(this.posts, 'all', _.bind(this.render, this));
+        this.posts.fetch();
+    };
+    
+    PostListView.prototype.render = function(){
+    
+        return React.renderComponent(
                 <PostList posts={this.posts.toJSON()} editable={this.editable} />,
-                this.el);
-                
-            this.attachTo.append(this.$el);
-            return this.$el;
-        }
-    });
+                this.attachTo);
+    };
+    
+    
+    return PostListView;
+
+    
 });
