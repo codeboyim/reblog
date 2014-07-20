@@ -28,17 +28,29 @@ define(['backbone', 'react', '../models/Post', '../models/PostCollection', 'mome
             this.setState({post:post});
         },
         formSubmitted:function(e){
-            var submitButton=this.refs.submit.getDOMNode();
+            var submitButton=this.refs.submit.getDOMNode(),
+                isNew = this.props.post.isNew(),
+                self =  this;
             e.preventDefault();
             submitButton.disabled=true;
-            this.props.post.save().always(function(){
-               submitButton.disabled=false;
-            });
+            this.props.post.save()
+                .done(function(model){
+                    if(isNew){
+                       self.props.view.router.navigate('posts/'+model.get('id')+'/edit', {replace:true});
+                    }
+                })
+                .always(function(){
+                    submitButton.disabled=false;
+                });
+        },
+        backClicked:function(e){
+            this.props.view.unload();
         },
         renderForEdit:function(){
             var post = this.state.post;
             return (
                 <div className='post-detail edit'>
+                    <a href="#posts" onClick={this.backClicked}>Back to list</a>
                     <form onSubmit={this.formSubmitted}>
                         <div>
                             <input name="title" type="text" value={post.title} onChange={this.postPropChanged} />
@@ -73,7 +85,6 @@ define(['backbone', 'react', '../models/Post', '../models/PostCollection', 'mome
             );
         },
         render: function(){
-            
             return (
             <div>
                 {this.props.editMode&&!this.state.preview?this.renderForEdit():this.renderForView()}
@@ -82,32 +93,26 @@ define(['backbone', 'react', '../models/Post', '../models/PostCollection', 'mome
             
         }
     });
-    
-
-    return Backbone.View.extend({
-        tagName:'div',
-    /**
-     *@typedef PostViewInitHash
-     *@type {object}
-     *@property {boolean=} editMode - indicate if post's in edit
-     */
-     
-    /**
-     * @param {PostViewInitHash=} options
-     */
-        initialize: function(options) {
-            this.editMode = !!options.editMode;
-            this.model = new PostModel(options.model || {});
-            this.listenTo(this.model, 'all', _.bind(this.render, this))
-            this.attachTo = options.attachTo;
-        },
         
-        render: function() {            
-            React.renderComponent(
-                <Post editMode={this.editMode} post={this.model} />,
-                this.el);
-            this.attachTo.append(this.$el);
-            return this.$el;
-        }
-    });
+    var PostView = function(options){
+        this.editMode = !!options.editMode;
+        this.post = new PostModel();
+        _.extend(this, Backbone.Events).listenTo(this.post, 'all', _.bind(this.render, this))
+        this.attachTo = options.attachTo;
+        this.router = options.router;
+    }
+    
+    PostView.prototype.render = function(){
+         
+         return React.renderComponent(
+                <Post editMode={this.editMode} post={this.post} view={this} />,
+                this.attachTo);
+    }
+    
+    PostView.prototype.unload = function(){
+        this.post.clear();
+        React.unmountComponentAtNode(this.attachTo);
+    }
+    
+    return PostView;
 });
