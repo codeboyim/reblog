@@ -1,23 +1,36 @@
 /**
  * @module list view
  */
-define(['backbone', 'react', '../models/PostCollection'], function(Backbone, React, PostCollection) {
-    
+define(['backbone', 'underscore', 'react', '../models/PostCollection'], function(Backbone, _, React, PostCollection) {
+
     var PostList = React.createClass({
-        render: function(){
+        deleteClick: function(post, e) {
+            var self = this;
+            
+            post.destroy({wait:true}).done(function(){
+                self.props.posts.fetch();
+            });
+        },
+        render: function() {
             var self = this;
             return (
             <div>
+            <a href="#posts/create">Create a new post</a>
             {this.props.posts.map(
                 function(post){
                     return (
-                        <article key={post.id} className="post">
+                        <article key={post.get('id')} className="post">
                             <header>
-                                <h1>{post.title}</h1>
+                                <h1>{post.get('title')}</h1>
                                 <p><time></time></p>
                             </header>
-                            <div dangerouslySetInnerHTML={{__html:post.body}}/>
-                            {self.props.editable?<div><a href={"#posts/"+post.id+'/edit'}>Edit</a><button>Delete</button></div>:null}
+                            <div dangerouslySetInnerHTML={{__html:post.get('body')}}/>
+                            {self.props.editable?
+                                <div>
+                                    <a href={"#posts/"+post.get('id')+'/edit'}>Edit</a>
+                                    <button onClick={_.bind(self.deleteClick, self, post)}>Delete</button>
+                                </div>
+                                :null}
                         </article>
                     );
             })}
@@ -34,12 +47,13 @@ define(['backbone', 'react', '../models/PostCollection'], function(Backbone, Rea
         this.posts = new PostCollection();
         _.extend(this, Backbone.Events).listenTo(this.posts, 'all', _.bind(this.render, this));
         this.posts.fetch();
+        this.router = options.router;
     };
     
     PostListView.prototype.render = function(){
     
         return React.renderComponent(
-                <PostList posts={this.posts.toJSON()} editable={this.editable} />,
+                <PostList posts={this.posts} editable={this.editable} />,
                 this.attachTo);
     };
     
