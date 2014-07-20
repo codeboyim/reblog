@@ -2,7 +2,7 @@
  * @module post
  */
 
-define(['require', 'jquery', 'jsx!./views/list', 'jsx!./views/post', './backend', 'backbone'], function(require, $) {
+define(['require', 'jquery', 'underscore', 'jsx!./views/list', 'jsx!./views/post', './backend', 'backbone', ], function (require, $, _) {
     var post,
         viewPath = 'jsx!./views/',
         views = {},
@@ -23,23 +23,20 @@ define(['require', 'jquery', 'jsx!./views/list', 'jsx!./views/post', './backend'
      * load views
      * @param {String} name - view name to load
      * @param {object=} options - hash object passed to view initialize function
-     * @param {boolean=} holdRendering - when set true, view will not render at the end of the call
-     * @return {backbone.View}
+     * @return {object} view
      */
-    function load(name, options, holdRendering) {
-        var v = views[name];
+    function load(name, options) {
+        var v;
 
-        if (!v) {
+        if (!views[name]) {
             v = require(viewPath + name);
-            v = new v(options);
+            v = new v(_.extend({
+                router: router
+            }, options));
             views[name] = v;
         }
 
-        if (!holdRendering) {
-            v.render();
-        }
-
-        return v;
+        return views[name];
     }
 
     /**
@@ -47,13 +44,14 @@ define(['require', 'jquery', 'jsx!./views/list', 'jsx!./views/post', './backend'
      * @param {String} name - view name to unload
      */
     function unload(name) {
-        var v = views[name] && views[name].view;
+        var v = views[name];
 
-        if (!v) {
-            throw Error('requested view - "' + name + '" is not loaded');
+        if (v) {
+            v.unload();
+            return true;
+        } else {
+            return false;
         }
-
-        v.remove();
     }
 
     /**
@@ -67,39 +65,54 @@ define(['require', 'jquery', 'jsx!./views/list', 'jsx!./views/post', './backend'
             'posts/:id/:action': 'posts'
         },
 
-        posts: function(id, action) {
-            var view;
+        posts: function () {
+            var view,
+                id,
+                action;
 
-            if ((id === null || id === undefined) && (action === null || action === undefined)) {
+            if ((arguments[0] === null || arguments[0] === undefined) && (arguments[1] === null || arguments[1] === undefined)) {
+
                 load('list', {
                     attachTo: _container.get(0),
                     editable: true
-                });
+                }).posts.fetch();
+
             } else {
-                id = Number(id);
 
-                if (!id) {
-                    throw Error('invalid param id');
-                }
+                if (arguments[0] === 'create') {
 
-                view = load('post', {
-                    attachTo: _container,
-                }, true);
+                    load('post', {
+                        attachTo: _container.get(0),
+                        editMode: true
+                    }).render();
 
-                view.model.set({
-                    'id': id
-                }, {
-                    silent: true
-                });
+                } else {
+                    id = Number(arguments[0]);
+                    action = arguments[1];
 
-                if (action === 'edit') {
-                    view.editMode = true;
-                    view.model.fetch();
+                    if (isNaN(id)) {
+                        throw Error('invalid param id');
+                    }
+
+                    view = load('post', {
+                        attachTo: _container.get(0)
+                    });
+
+                    view.post.set({
+                        'id': id
+                    }, {
+                        silent: true
+                    });
+
+                    if (action === 'edit') {
+                        view.editMode = true;
+                        view.post.fetch();
+                    }
                 }
             }
         },
 
-        initialize: function(options) {}
+        initialize: function (options) {}
     });
 
     /**
