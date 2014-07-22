@@ -2,14 +2,13 @@
  * Post Model
  **/
 
-define(['backbone'], function(backbone) {
-    return backbone.Model.extend({
+define(['parse'], function (Parse) {
+    return Parse.Object.extend({
+        className: 'Post',
         defaults: {
             title: '',
             body: '',
             postedOn: null,
-            createdOn: null,
-            modifiedOn: null,
             createdBy: '',
             modifiedBy: ''
         }

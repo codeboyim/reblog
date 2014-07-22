@@ -1,9 +1,9 @@
 /**
  * @module post collection
  */
-define(['backbone', './Post'], function(backbone, Post) {
+define(['parse', './Post'], function(Parse, Post) {
 
-    return backbone.Collection.extend({
+    return Parse.Collection.extend({
         model: Post
     });
 });

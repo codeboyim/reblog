@@ -27,7 +27,7 @@ define(['backbone', 'underscore', 'react', '../models/PostCollection'], function
                             <div dangerouslySetInnerHTML={{__html:post.get('body')}}/>
                             {self.props.editable?
                                 <div>
-                                    <a href={"#posts/"+post.get('id')+'/edit'}>Edit</a>
+                                    <a href={"#posts/"+post.id+'/edit'}>Edit</a>
                                     <button onClick={_.bind(self.deleteClick, self, post)}>Delete</button>
                                 </div>
                                 :null}

@@ -75,7 +75,9 @@ define(['require', 'jquery', 'underscore', 'jsx!./views/list', 'jsx!./views/post
                 load('list', {
                     attachTo: _container.get(0),
                     editable: true
-                }).posts.fetch();
+                }).posts.fetch().then(null, function (posts, error) {
+                    console.error(error);
+                });
 
             } else {
 
@@ -87,26 +89,20 @@ define(['require', 'jquery', 'underscore', 'jsx!./views/list', 'jsx!./views/post
                     }).render();
 
                 } else {
-                    id = Number(arguments[0]);
+                    id = arguments[0];
                     action = arguments[1];
-
-                    if (isNaN(id)) {
-                        throw Error('invalid param id');
-                    }
 
                     view = load('post', {
                         attachTo: _container.get(0)
                     });
 
-                    view.post.set({
-                        'id': id
-                    }, {
-                        silent: true
-                    });
+                    view.post.id = id;
 
                     if (action === 'edit') {
                         view.editMode = true;
-                        view.post.fetch();
+                        view.post.fetch().then(function (p) {}, function (p, error) {
+                            console.error(error);
+                        });
                     }
                 }
             }

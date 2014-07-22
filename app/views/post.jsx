@@ -34,14 +34,16 @@ define(['backbone', 'react', '../models/Post', '../models/PostCollection', 'mome
             e.preventDefault();
             submitButton.disabled=true;
             this.props.post.save()
-                .done(function(model){
+                .then(
+                function(post){
                     if(isNew){
-                       self.props.view.router.navigate('posts/'+model.get('id')+'/edit', {replace:true});
+                       self.props.view.router.navigate('posts/'+post.id+'/edit', {replace:true});
                     }
-                })
-                .always(function(){
+                    submitButton.disabled=false;
+                }, function(){
                     submitButton.disabled=false;
                 });
+
         },
         backClicked:function(e){
             this.props.view.unload();
