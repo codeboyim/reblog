@@ -15,7 +15,6 @@ define(['backbone', 'underscore', 'react', '../models/PostCollection'], function
             var self = this;
             return (
             <div>
-            <a href="#posts/create">Create a new post</a>
             {this.props.posts.map(
                 function(post){
                     return (

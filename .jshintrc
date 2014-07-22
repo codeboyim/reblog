@@ -5,6 +5,7 @@
         "require": false,
         "document": false,
         "console": false,
-        "window": false
+        "window": false,
+        "FB": false
     }
 }
