@@ -1,6 +1,6 @@
-define(['parse', 'react', 'underscore', 'backbone'], function(Parse, React, _, Backbone){
+define(['require','parse', 'react', 'underscore', 'backbone', 'events'], function(require, Parse, React, _, Backbone){
     
-    var dispatcher = _.clone(Backbone.Events);
+    var dispatcher = require('events');
         
     var Header = React.createClass({
         
@@ -49,6 +49,7 @@ define(['parse', 'react', 'underscore', 'backbone'], function(Parse, React, _, B
 
     function load(){
         var comp = render();
+        
         dispatcher.on('auth.statusChanged', function(authenticated){
             comp.setProps({authenticated:authenticated});
         });
