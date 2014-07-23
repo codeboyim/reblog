@@ -1,6 +1,10 @@
-(function () {
+(function() {
     var root = '../../',
         vendors = root + 'lib/vendors/';
+
+    function auth_statusChanged(res) {
+        console.log(res.status);
+    }
 
     require.config({
         paths: {
@@ -28,13 +32,13 @@
 
     });
 
-    require(['jquery', 'app/post', 'backbone', 'moment', 'parse', 'jsx!_partials/login'],
+    require(['jquery', 'app/post', 'backbone', 'moment', 'parse', 'jsx!_partials/header'],
 
-        function ($, post, Backbone, moment, Parse, login) {
+        function($, post, Backbone, moment, Parse, login) {
 
             Parse.initialize("yxD2tY5w6WEVJg2Dd8a566sUI6j1xGKHVOLzRkKl", "Ii4UZXR5rMGKmo5Og36lThmXcWnw3xyvN053kC4Z");
 
-            window.fbAsyncInit = function () {
+            window.fbAsyncInit = function() {
                 Parse.FacebookUtils.init({
                     appId: '880425675305915', // Facebook App ID
                     channelUrl: '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel File
@@ -42,7 +46,7 @@
                     xfbml: false // parse XFBML
                 });
 
-                Parse.User.current();
+                FB.Event.subscribe('auth.statusChange', auth_statusChanged);
 
                 //                Parse.FacebookUtils.logIn(null, {
                 //                    success: function (user) {
@@ -58,7 +62,7 @@
                 //                });
             };
 
-            (function (d, s, id) {
+            (function(d, s, id) {
                 var js, fjs = d.getElementsByTagName(s)[0];
                 if (d.getElementById(id)) {
                     return;
@@ -69,7 +73,9 @@
                 fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', 'facebook-jssdk'));
 
-            $(function () {
+
+
+            $(function() {
                 post.init($('#app_post'));
 
                 window.location.hash = 'posts';
