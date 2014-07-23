@@ -2,7 +2,7 @@
  * @module post
  */
 
-define(['require', 'jquery', 'underscore', 'jsx!./views/list', 'jsx!./views/post', './backend', 'backbone', ], function (require, $, _) {
+define(['require', 'jquery', 'underscore', 'jsx!./views/list', 'jsx!./views/post', 'backbone', ], function (require, $, _) {
     var post,
         viewPath = 'jsx!./views/',
         views = {},

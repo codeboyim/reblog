@@ -18,7 +18,7 @@ define(['backbone', 'underscore', 'react', '../models/PostCollection'], function
             {this.props.posts.map(
                 function(post){
                     return (
-                        <article key={post.get('id')} className="post">
+                        <article key={post.id} className="post">
                             <header>
                                 <h1>{post.get('title')}</h1>
                                 <p><time></time></p>

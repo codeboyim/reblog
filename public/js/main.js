@@ -2,10 +2,6 @@
     var root = '../../',
         vendors = root + 'lib/vendors/';
 
-    function auth_statusChanged(res) {
-        console.log(res.status);
-    }
-
     require.config({
         paths: {
             'app': root + 'app',
@@ -32,13 +28,14 @@
 
     });
 
-    require(['jquery', 'app/post', 'backbone', 'moment', 'parse', 'jsx!_partials/header'],
+    require(['jquery', 'app/post', 'backbone', 'moment', 'parse', 'underscore', 'jsx!_partials/header'],
 
-        function($, post, Backbone, moment, Parse, login) {
-
+        function($, post, Backbone, moment, Parse, _, header) {
+            var dispatcher = _.clone(Backbone.Events);
             Parse.initialize("yxD2tY5w6WEVJg2Dd8a566sUI6j1xGKHVOLzRkKl", "Ii4UZXR5rMGKmo5Og36lThmXcWnw3xyvN053kC4Z");
 
             window.fbAsyncInit = function() {
+
                 Parse.FacebookUtils.init({
                     appId: '880425675305915', // Facebook App ID
                     channelUrl: '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel File
@@ -46,20 +43,22 @@
                     xfbml: false // parse XFBML
                 });
 
-                FB.Event.subscribe('auth.statusChange', auth_statusChanged);
+                $(function() {
+                    post.init($('#app_post'));
 
-                //                Parse.FacebookUtils.logIn(null, {
-                //                    success: function (user) {
-                //                        if (!user.existed()) {
-                //                            alert("User signed up and logged in through Facebook!");
-                //                        } else {
-                //                            alert("User logged in through Facebook!");
-                //                        }
-                //                    },
-                //                    error: function (user, error) {
-                //                        alert("User cancelled the Facebook login or did not fully authorize.");
-                //                    }
-                //                });
+                    window.location.hash = 'posts';
+                    Backbone.history.start({
+                        pushState: false
+                    });
+
+                    header.load();
+                });
+
+                dispatcher.on('auth.statusChanged', function(authenticated) {
+                    console.log('user logs in: ' + authenticated);
+                });
+
+
             };
 
             (function(d, s, id) {
@@ -73,18 +72,6 @@
                 fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', 'facebook-jssdk'));
 
-
-
-            $(function() {
-                post.init($('#app_post'));
-
-                window.location.hash = 'posts';
-                Backbone.history.start({
-                    pushState: false
-                });
-
-                login.load();
-            });
         });
 
 })();
