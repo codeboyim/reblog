@@ -1,0 +1,2 @@
+/
+defind([''], function(){});

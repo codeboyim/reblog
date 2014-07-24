@@ -1,10 +1,11 @@
-    /**
-     * App router
-     */
-    define(['require', 'backbone', 'underscore', 'jsx!./views/list', 'jsx!./views/post', 'jsx!./views/header'], function (require, Backbone, _) {
+    define(['require', 'backbone', 'underscore', './views/list', './views/post'], function (require, Backbone, _) {
 
-        var viewPath = 'jsx!./views/';
-        var AppRouter = Backbone.Router.extend({
+        /** 
+         *@module post/router
+         */
+        
+        var viewPath = './views/';
+        var exports = Backbone.Router.extend({
 
             routes: {
                 'posts': 'posts',
@@ -82,7 +83,7 @@
             unload: function (name) {
                 var v = this.views[name];
 
-                if (v) {
+                if (v && _.isFunction(v.unload)) {
                     v.unload();
                     return true;
                 } else {
@@ -95,5 +96,5 @@
             }
         });
 
-        return new AppRouter();
+        return exports;
     });

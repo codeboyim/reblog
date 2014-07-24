@@ -56,18 +56,12 @@
 
     });
 
-    require(['jquery', 'app/app', 'backbone'],
+    require(['jquery', 'app/app'],
 
-        function($, app, Backbone) {
+        function($, App) {
 
             $(function() {
-                app.init();
-
-                window.location.hash = 'posts';
-                Backbone.history.start({
-                    pushState: false
-                });
-
+                new App();
             });
 
         });

@@ -1,9 +1,6 @@
-/**
- * @module post view
- */
-define(['backbone', 'react', '../models/Post', '../models/PostCollection', 'moment'], function(Backbone, React, PostModel, PostCollection, moment) {
-    
-    var Post = React.createClass({
+define(['react'], function(React){
+
+    var exports = React.createClass({
     
         getInitialState: function(){
             return _.extend({preview:false, post:this.props.post.toJSON()} );
@@ -95,26 +92,7 @@ define(['backbone', 'react', '../models/Post', '../models/PostCollection', 'mome
             
         }
     });
-        
-    var PostView = function(options){
-        this.editMode = !!options.editMode;
-        this.post = new PostModel();
-        _.extend(this, Backbone.Events).listenTo(this.post, 'all', _.bind(this.render, this))
-        this.attachTo = options.attachTo;
-        this.router = options.router;
-    }
     
-    PostView.prototype.render = function(){
-         
-         return React.renderComponent(
-                <Post editMode={this.editMode} post={this.post} view={this} />,
-                this.attachTo);
-    }
-    
-    PostView.prototype.unload = function(){
-        this.post.clear();
-        React.unmountComponentAtNode(this.attachTo);
-    }
-    
-    return PostView;
+    return exports;
+
 });

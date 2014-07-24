@@ -1,9 +1,7 @@
-/**
- * @module list view
- */
-define(['backbone', 'underscore', 'react', '../models/PostCollection'], function(Backbone, _, React, PostCollection) {
+define(['react'], function(React){
 
-    var PostList = React.createClass({
+    var exports = React.createClass({
+    
         deleteClick: function(post, e) {
             var self = this;
             
@@ -39,25 +37,5 @@ define(['backbone', 'underscore', 'react', '../models/PostCollection'], function
         }
     });
     
-    
-    var PostListView = function(options){
-        this.editable = !!(options&&options.editable);
-        this.attachTo= options.attachTo;
-        this.posts = new PostCollection();
-        _.extend(this, Backbone.Events).listenTo(this.posts, 'all', _.bind(this.render, this));
-        this.posts.fetch();
-        this.router = options.router;
-    };
-    
-    PostListView.prototype.render = function(){
-    
-        return React.renderComponent(
-                <PostList posts={this.posts} editable={this.editable} />,
-                this.attachTo);
-    };
-    
-    
-    return PostListView;
-
-    
+    return exports;
 });

@@ -1,8 +1,6 @@
-define(['require','parse', 'react', 'underscore', 'backbone', 'events'], function(require, Parse, React, _, Backbone){
-    
-    var dispatcher = require('events');
-        
-    var Header = React.createClass({
+define(['react'], function(React){
+
+    var exports = React.createClass({
         
         loginClicked:function(e){
             e.preventDefault();
@@ -39,27 +37,6 @@ define(['require','parse', 'react', 'underscore', 'backbone', 'events'], functio
 
     });
     
-    function render(){
-        
-        return React.renderComponent(
-            <Header authenticated={!!Parse.User.current()} />,
-            document.getElementById('site-header')
-        );
-    }
+    return exports;
 
-    function load(){
-        var comp = render();
-        
-        dispatcher.on('auth.statusChanged', function(authenticated){
-            comp.setProps({authenticated:authenticated});
-        });
-        
-        return comp;
-    }
-
-
-    return {
-        load:load
-    };
-    
 });
