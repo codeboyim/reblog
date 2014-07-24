@@ -1,4 +1,4 @@
-(function () {
+(function() {
     var root = '../../',
         vendors = root + 'lib/vendors/';
 
@@ -29,35 +29,40 @@
 
     });
 
-    require(['jquery', 'app/app', 'backbone', 'parse'],
+    require(['parse'], function(Parse) {
+        window.fbAsyncInit = function() {
 
-        function ($, app, Backbone, Parse) {
+            Parse.FacebookUtils.init({
+                appId: '880425675305915', // Facebook App ID
+                channelUrl: '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel File
+                cookie: true, // enable cookies to allow Parse to access the session
+                xfbml: false // parse XFBML
+            });
 
-            window.fbAsyncInit = function () {
+        };
 
-                Parse.FacebookUtils.init({
-                    appId: '880425675305915', // Facebook App ID
-                    channelUrl: '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel File
-                    cookie: true, // enable cookies to allow Parse to access the session
-                    xfbml: false // parse XFBML
-                });
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "//connect.facebook.net/en_US/all.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
 
-            };
+        Parse.initialize("yxD2tY5w6WEVJg2Dd8a566sUI6j1xGKHVOLzRkKl", "Ii4UZXR5rMGKmo5Og36lThmXcWnw3xyvN053kC4Z");
 
-            (function (d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) {
-                    return;
-                }
-                js = d.createElement(s);
-                js.id = id;
-                js.src = "//connect.facebook.net/en_US/all.js";
-                fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));
+    });
 
+    require(['jquery', 'app/app', 'backbone'],
 
-            $(function () {
+        function($, app, Backbone) {
+
+            $(function() {
                 app.init();
+
                 window.location.hash = 'posts';
                 Backbone.history.start({
                     pushState: false
