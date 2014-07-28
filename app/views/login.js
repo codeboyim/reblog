@@ -27,6 +27,10 @@ define(['react', 'parse', 'backbone', 'underscore', 'globals'], function(React, 
         Parse.FacebookUtils.logIn(null, {
 
             success: function(user) {
+                FB.api(user.get('authData').facebook.id, function(res) {
+                    user.set('name', res.name)
+                        .save();
+                });
                 globals.events
                     .trigger(globals.EVENT.authStatusChanged, true)
                     .trigger(globals.EVENT.authLoggedIn, self._returnUrl);
