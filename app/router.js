@@ -80,9 +80,8 @@
                             return;
                         } else {
                             this.load('admin', {
-                                container: document.getElementById('site-content'),
-                                area: area
-                            });
+                                container: document.getElementById('site-content')
+                            }).setArea(area);
                         }
 
                     },
