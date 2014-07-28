@@ -1,46 +1,47 @@
-define(['backbone', 'underscore', 'react', '../models/PostCollection', 'jsx!./jsx/list', 'events'], function(Backbone, _, React, PostCollection, PostList, events) {
+define(['backbone', 'underscore', 'react', 'parse', 'globals', '../models/PostCollection', 'jsx!./jsx/list'], function(Backbone, _, React, Parse, globals, PostCollection, PostList) {
     /**
      * @module post/list/view
      */
 
-    var reactComponent;
-
     /**
      * @constructor
      * @param {object} options
-     *        {Element} options.attachTo
+     *        {Element} options.container
      */
     var exports = function(options) {
         /** @private */
-        this._authenticated = false;
-        /** @member */
-        this.attachTo = options.attachTo;
+        this._authenticated = !! Parse.User.current();
         /** @member */
         this.posts = new PostCollection();
+        /** @member */
+        this.container = options.container;
 
-        _.extend(this, Backbone.Events).listenTo(this.posts, 'all', _.bind(this.render, this));
-        events.on('auth:statusChanged', this._authStatusChanged);
+        _.extend(this, Backbone.Events)
+            .listenTo(this.posts, 'all', _.bind(this._postsEvents, this))
+            .listenTo(globals.events, globals.EVENT.authStatusChanged, _.bind(this._authStatusChanged, this));
+
     };
 
-    exports.prototype.render = function() {
-
-        reactComponent = React.renderComponent(PostList({
+    exports.prototype._postsEvents = function() {
+        this._reactComponent = React.renderComponent(PostList({
                 posts: this.posts,
                 editable: this._authenticated
             }),
-            this.attachTo);
-
-        return reactComponent;
+            this.container);
     };
 
     exports.prototype._authStatusChanged = function(authenticated) {
 
-        if (reactComponent) {
-            reactComponent.setProps({
+        if (this._reactComponent) {
+            this._reactComponent.setProps({
                 editable: authenticated
             });
         }
 
+    };
+
+    exports.prototype.unload = function() {
+        this.stopListening();
     };
 
     return exports;

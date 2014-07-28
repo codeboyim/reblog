@@ -1,2 +1,0 @@
-/
-defind([''], function(){});

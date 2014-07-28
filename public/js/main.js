@@ -14,7 +14,7 @@
             'react': vendors + 'react/react',
             'moment': vendors + 'moment/moment',
             'parse': '//www.parsecdn.com/js/parse-1.2.19.min',
-            'events': root + 'app/events'
+            'globals': root + 'app/globals'
         },
 
         shim: {

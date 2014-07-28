@@ -21,8 +21,7 @@ define(['react'], function(React){
                 name = e.target.name;
             
             post[name]=val;
-            this.props.post.set(post, {silent:true});
-            this.setState({post:post});
+            this.props.post.set(post);
         },
         formSubmitted:function(e){
             var submitButton=this.refs.submit.getDOMNode(),

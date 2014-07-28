@@ -1,20 +1,20 @@
-/**
- * @module app
- */
-
-define(['require', 'backbone', 'underscore', 'parse', './router', './views/header', 'events'], function(require, Backbone, _, Parse, Router) {
+define(['require', 'backbone', 'underscore', 'parse', './router', './views/header'], function(require, Backbone, _, Parse, Router) {
 
     /**
-     * initialize app
-     * @param {$=} container - jQuery element to append post views, default to <body>
+     * @module app
+     */
+
+    /**
+     * @constructor
      */
     var exports = function() {
         var Header = require('./views/header');
-        
-        (new Header()).render();
+
+        new Header({
+            container: document.getElementById('site-header')
+        });
         new Router();
-        window.location.hash = 'posts';
-        
+
         Backbone.history.start({
             pushState: false
         });
