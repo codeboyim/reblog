@@ -12,7 +12,9 @@ define(['react', 'jsx!./jsx/admin'], function(React, Admin) {
 
         this.container = options.container;
 
-        React.renderComponent(Admin(), this.container);
+        React.renderComponent(Admin({
+            area: options.area
+        }), this.container);
 
     };
 

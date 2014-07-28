@@ -79,8 +79,9 @@
                             });
                             return;
                         } else {
-                            this.load('admin' + (area ? ('.' + area) : ''), {
-                                container: document.getElementById('site-content')
+                            this.load('admin', {
+                                container: document.getElementById('site-content'),
+                                area: area
                             });
                         }
 
