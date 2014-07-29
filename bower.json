@@ -25,6 +25,10 @@
     "text": "~2.0.12",
     "backbone": "~1.1.2",
     "jquery": "~1.11.1",
-    "moment": "~2.7.0"
+    "moment": "~2.7.0",
+    "foundation": "~5.3.1"
+  },
+  "resolutions": {
+    "jquery": "~1.11.1"
   }
 }
