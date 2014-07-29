@@ -1,71 +1,43 @@
-define(['react', 'parse', 'globals', 'jsx!./admin.users'], function(React, Parse, globals, Users){
+define(['react', 'parse', 'globals', 'jsx!./admin.users', 'jsx!./admin.posts', 'jsx!./admin.prefs'], 
+
+    function(React, Parse, globals, Users, Posts, Prefs){
 
 
-    var exports = React.createClass({
-        
-        getInitialState:function(){
-            return {users:null};
-        },
+        var exports = React.createClass({
 
-        componentWillReceiveProps:function(newProps){
-            var users, self=this;
-            
-            if(newProps.area==='users'){
-                (new Parse.Query(Parse.User))                    
-                    .find()
-                    .done(function(_users){
-                        users = _users;
-                        return (new Parse.Query(Parse.Role))
-                                .equalTo('name', 'Administrators')
-                                .first();
-                    })
-                    .done(function(r){
-                        if(r){
-                            return r.getUsers().query().find();
-                        }
-                    }).done(function(admins){
-                        _.each(users, function(user){
-                                    
-                            if(_.find(admins, function(admin){return admin.id===user.id;})){
-                                user.isAdmin = true;
-                            }
-                                
-                        });
-                                    
-                        self.setState({users:users});
-                    }).fail(function(error){
-                        console.log(error);
-                    });
+            getInitialState:function(){
+                return {admin:!!Parse.User.current().admin};
+            },
+
+            subView: function(){
+
+                switch(this.props.area){
+                    case 'users':
+                        return this.state.admin?<Users />:null;
+                    case 'posts':
+                        return this.state.admin?null:null;
+                    case 'prefs':
+                        return <Prefs />;
+                    default:
+                        return null;                
+                }
+            },
+
+            render: function(){
+                return (<div>
+                            <ul>
+                                <li><a href="#admin">Admin Home</a></li>
+                                {this.state.admin?<li><a href="#admin/users">Users</a></li>:null}
+                                {this.state.admin?<li><a href="#admin/posts">Posts</a></li>:null}
+                                <li><a href="#admin/prefs">Preferences</a></li>
+                            </ul>
+                            <div>{this.subView()}</div>
+                        </div>);
             }
-        },
-        
-        subView: function(){
-            var query,
-                self = this;
-            
-            switch(this.props.area){
-            
-                case 'users':
-                    return <Users users={this.state.users} />;
-                default:
-                    return null;                
-            }
-        },
 
-        render: function(){
-            
-            return (<div>
-                        <ul>
-                            <li><a href="#admin">Admin Home</a></li>
-                            <li><a href="#admin/users">Users</a></li>
-                        </ul>
-                        <div>{this.subView()}</div>
-                    </div>);
+        });
 
-        }
+        return exports;
 
-    });
-    
-    return exports;
-
-});
+    }
+);

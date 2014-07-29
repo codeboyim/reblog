@@ -161,10 +161,19 @@
 
                     /** @private */
                     _authLoggedIn: function(returnUrl) {
+                        var query;
 
                         this.navigate(returnUrl || '', {
                             trigger: true
                         });
+
+                        (new Parse.Query(Parse.Role)).equalTo('users', Parse.User.current()).first().done(function(u) {
+
+                            if (u) {
+                                Parse.User.current().admin = true;
+                            }
+                        });
+
 
                     },
 

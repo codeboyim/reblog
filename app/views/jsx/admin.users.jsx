@@ -4,13 +4,39 @@ define(['react', 'parse', 'globals'], function(React, Parse, globals){
     var exports = React.createClass({
     
         getInitialState:function(){
-            return {users:this.props.users};
+            return {users:null};
         },
         
-        componentWillReceiveProps:function(newProps){
-            this.setState({users:newProps.users});
+        componentDidMount:function(){
+            var users, self = this;
+            
+            (new Parse.Query(Parse.User))                    
+                    .find()
+                    .done(function(_users){
+                        users = _users;
+                        return (new Parse.Query(Parse.Role))
+                                .equalTo('name', 'Administrators')
+                                .first();
+                    })
+                    .done(function(r){
+                        if(r){
+                            return r.getUsers().query().find();
+                        }
+                    }).done(function(admins){
+                        _.each(users, function(user){
+                                    
+                            if(_.find(admins, function(admin){return admin.id===user.id;})){
+                                user.isAdmin = true;
+                            }
+                            
+                        });
+                                    
+                        self.setState({users:users});
+                    }).fail(function(error){
+                        console.log(error);
+                    });
         },
-
+        
         render: function(){
             var self = this;
             return (
@@ -19,7 +45,10 @@ define(['react', 'parse', 'globals'], function(React, Parse, globals){
                     {_.map(this.state.users, function(user){
                         return (
                             <li key={user.id}>
-                                <label><input type="checkbox" checked={user.isAdmin} onChange={_.bind(self.onCheckboxChanged, self, user)} />{user.get('name')}</label>
+                                <label>
+                                    <input type="checkbox" checked={user.isAdmin} onChange={_.bind(self.onCheckboxChanged, self, user)} />
+                                    {user.get('name')}
+                                </label>
                             </li>
                             );
                     })}
