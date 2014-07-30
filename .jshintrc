@@ -6,6 +6,7 @@
         "document": false,
         "console": false,
         "window": false,
-        "FB": false
+        "FB": false,
+        "module": false
     }
 }
