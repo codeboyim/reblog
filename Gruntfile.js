@@ -28,5 +28,5 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-newer');
 
-    grunt.registerTask('default', ['sass:dev', 'watch']);
+    grunt.registerTask('default', ['newer:sass:dev', 'watch']);
 };
