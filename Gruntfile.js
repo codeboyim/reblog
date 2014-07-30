@@ -5,21 +5,20 @@ module.exports = function(grunt) {
                 options: {
                     style: 'expanded',
                     loadPath: ['lib/vendors/foundation/scss/'],
-                    trace:true
+                    trace: true,
+                    compass: true
                 },
                 files: {
-                    'public/css/site.css': ['public/scss/site.scss', 'public/scss/_settings.scss']
+                    'public/css/site.css': ['src/scss/site.scss']
                 }
             }
         },
         watch: {
-            dev: {
-                files: ['public/scss/site.scss'],
-                tasks: ['sass:dev'],
-                options: {
-                    spawn: false
-                    
-                }
+            files: ['public/scss/*.scss'],
+            tasks: ['newer:sass:dev'],
+            options: {
+                spawn: false
+
             }
         }
     });
@@ -28,5 +27,5 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-newer');
 
-    grunt.registerTask('default', ['newer:sass:dev', 'watch']);
+    grunt.registerTask('default', ['sass:dev', 'watch']);
 };
