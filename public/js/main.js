@@ -10,7 +10,7 @@
             'jquery': vendors + 'jquery/dist/jquery',
             'text': vendors + 'text/text',
             'jsx': vendors + 'jsx/js/jsx',
-            'JSXTransformer': vendors + 'jsx/js/JSXTransformer-0.10.0',
+            'JSXTransformer': vendors + 'jsx/js/JSXTransformer-0.11.1',
             'react': vendors + 'react/react',
             'moment': vendors + 'moment/moment',
             'parse': '//www.parsecdn.com/js/parse-1.2.19.min',

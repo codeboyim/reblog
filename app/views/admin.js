@@ -1,4 +1,4 @@
-define(['react', 'jsx!./jsx/admin'], function (React, Admin) {
+define(['react', 'globals', 'jsx!./jsx/admin'], function(React, globals, Admin) {
     /**
      * @module app/admin
      */
@@ -8,7 +8,7 @@ define(['react', 'jsx!./jsx/admin'], function (React, Admin) {
      * @param {object} options
      *        {Element} options.container
      */
-    var exports = function (options) {
+    var exports = function(options) {
 
         this.container = options.container;
 
@@ -18,11 +18,16 @@ define(['react', 'jsx!./jsx/admin'], function (React, Admin) {
 
     };
 
-    exports.prototype.setArea = function (area) {
+    exports.prototype.setArea = function(area) {
         this._reactComponent.setProps({
             area: area
         });
     };
+
+    exports.prototype.unload = function() {
+        React.unmountComponentAtNode(this.container);
+        globals.events.trigger(globals.EVENT.viewUnloaded, this);
+    }
 
     return exports;
 });

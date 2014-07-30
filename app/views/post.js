@@ -52,6 +52,7 @@ define(['backbone', 'underscore', 'react', 'parse', 'globals', '../models/Post',
         this.post.clear();
         this.stopListening();
         React.unmountComponentAtNode(this.container);
+        globals.events.trigger(globals.EVENT.viewUnloaded, this);
     };
 
     return exports;

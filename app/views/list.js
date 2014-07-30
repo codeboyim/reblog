@@ -42,6 +42,7 @@ define(['backbone', 'underscore', 'react', 'parse', 'globals', '../models/PostCo
 
     exports.prototype.unload = function() {
         this.stopListening();
+        globals.events.trigger(globals.EVENT.viewUnloaded, this);
     };
 
     return exports;
