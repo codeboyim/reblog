@@ -24,7 +24,7 @@ define(['react'], function(React){
                             <div dangerouslySetInnerHTML={{__html:post.get('body')}}/>
                             {self.props.editable?
                                 <div>
-                                    <a href={"#posts/"+post.id+'/edit'}>Edit</a>
+                                    <a className="button" href={"#posts/"+post.id+'/edit'}>Edit</a>
                                     <button onClick={_.bind(self.deleteClick, self, post)}>Delete</button>
                                 </div>
                                 :null}
