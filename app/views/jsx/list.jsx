@@ -12,7 +12,7 @@ define(['react'], function(React){
         render: function() {
             var self = this;
             return (
-            <div>
+            <article>
             {this.props.posts.map(
                 function(post){
                     return (
@@ -21,17 +21,13 @@ define(['react'], function(React){
                                 <h1>{post.get('title')}</h1>
                                 <p><time></time></p>
                             </header>
-                            <div dangerouslySetInnerHTML={{__html:post.get('body')}}/>
-                            {self.props.editable?
-                                <div>
-                                    <a className="button" href={"#posts/"+post.id+'/edit'}>Edit</a>
-                                    <button onClick={_.bind(self.deleteClick, self, post)}>Delete</button>
-                                </div>
-                                :null}
+                            <main>
+                                <div dangerouslySetInnerHTML={{__html:post.get('body')}}/>
+                            </main>
                         </article>
                     );
             })}
-            </div>
+            </article>
             );
             
         }

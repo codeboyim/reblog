@@ -17,27 +17,15 @@ define(['backbone', 'underscore', 'react', 'parse', 'globals', '../models/PostCo
         this.container = options.container;
 
         _.extend(this, Backbone.Events)
-            .listenTo(this.posts, 'all', _.bind(this._postsEvents, this))
-            .listenTo(globals.events, globals.EVENT.authStatusChanged, _.bind(this._authStatusChanged, this));
+            .listenTo(this.posts, 'all', _.bind(this._postsEvents, this));
 
     };
 
     exports.prototype._postsEvents = function() {
         this._reactComponent = React.renderComponent(PostList({
-                posts: this.posts,
-                editable: this._authenticated
+                posts: this.posts
             }),
             this.container);
-    };
-
-    exports.prototype._authStatusChanged = function(authenticated) {
-
-        if (this._reactComponent) {
-            this._reactComponent.setProps({
-                editable: authenticated
-            });
-        }
-
     };
 
     exports.prototype.unload = function() {

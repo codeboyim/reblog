@@ -1,7 +1,7 @@
-define(['parse', 'react', 'underscore', 'backbone', 'globals', 'jsx!./jsx/header'], function(Parse, React, _, Backbone, globals, Header) {
+define(['parse', 'react', 'underscore', 'backbone', 'globals', 'jsx!./jsx/headerNav'], function(Parse, React, _, Backbone, globals, HeaderNav) {
 
     /**
-     *@module header
+     *@module headerNav
      **/
 
     /**
@@ -21,7 +21,7 @@ define(['parse', 'react', 'underscore', 'backbone', 'globals', 'jsx!./jsx/header
             .listenTo(globals.events, globals.EVENT.authStatusChanged, _.bind(this._authStatusChanged, this));
 
         this._reactComponent = React.renderComponent(
-            Header({
+            HeaderNav({
                 authenticated: this._authenticated
             }), this.container);
     };

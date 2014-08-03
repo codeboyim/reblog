@@ -1,4 +1,4 @@
-define(['require', 'backbone', 'underscore', 'parse', './router', './views/header'], function(require, Backbone, _, Parse, Router) {
+define(['require', 'backbone', 'underscore', 'parse', './router', './views/headerNav'], function(require, Backbone, _, Parse, Router) {
 
     /**
      * @module app
@@ -8,10 +8,10 @@ define(['require', 'backbone', 'underscore', 'parse', './router', './views/heade
      * @constructor
      */
     var exports = function() {
-        var Header = require('./views/header');
+        var HeaderNav = require('./views/headerNav');
 
-        new Header({
-            container: document.getElementById('site-header')
+        new HeaderNav({
+            container: document.getElementById('header-nav')
         });
         new Router();
 

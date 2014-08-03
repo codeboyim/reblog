@@ -12,11 +12,11 @@ define(['react', 'parse', 'globals'], function(React, Parse, globals){
         render: function(){
             
             return (
-                <div>
+                <ul>
                     {this.props.authenticated?
-                        <button onClick={this.logoutClicked}>Log out</button>
+                        <li><a href="javascript:void(0);" onClick={this.logoutClicked}>Log out</a></li>
                         :null}
-                </div>
+                </ul>
             );
 
         }

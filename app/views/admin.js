@@ -27,7 +27,7 @@ define(['react', 'globals', 'jsx!./jsx/admin'], function(React, globals, Admin) 
     exports.prototype.unload = function() {
         React.unmountComponentAtNode(this.container);
         globals.events.trigger(globals.EVENT.viewUnloaded, this);
-    }
+    };
 
     return exports;
 });

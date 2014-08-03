@@ -1,3 +1,8 @@
-@import "settings",
-        "normalize",
+@import "normalize",
+        "settings",
         "foundation";
+
+
+.site-logo-name{
+    font-size:rem-calc(18);
+}
