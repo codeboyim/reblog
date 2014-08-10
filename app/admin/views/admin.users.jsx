@@ -12,17 +12,17 @@ define(['react', 'parse', 'globals'], function(React, Parse, globals){
             
             (new Parse.Query(Parse.User))                    
                     .find()
-                    .done(function(_users){
+                    .then(function(_users){
                         users = _users;
                         return (new Parse.Query(Parse.Role))
                                 .equalTo('name', 'Administrators')
                                 .first();
                     })
-                    .done(function(r){
+                    .then(function(r){
                         if(r){
                             return r.getUsers().query().find();
                         }
-                    }).done(function(admins){
+                    }).then(function(admins){
                         _.each(users, function(user){
                                     
                             if(_.find(admins, function(admin){return admin.id===user.id;})){

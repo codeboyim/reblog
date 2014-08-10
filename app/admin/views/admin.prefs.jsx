@@ -20,7 +20,6 @@ define(['react', 'parse', 'globals'], function(React, Parse, globals){
             Parse.User.current().destroy().done(function(){
                 Parse.User.logOut();
                 globals.events.trigger(globals.EVENT.authStatusChanged, false);
-                globals.events.trigger(globals.EVENT.authLoggedOut);
             });
         }
 

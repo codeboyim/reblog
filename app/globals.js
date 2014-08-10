@@ -11,8 +11,6 @@ define(['underscore', 'backbone'], function(_, Backbone) {
     /** @const */
     exports.EVENT = {
         authStatusChanged: 'auth.statusChanged',
-        authLoggedIn: 'auth.loggedIn',
-        authLoggedOut: 'auth.loggedOut',
         viewLoaded: 'view.loaded',
         viewUnloaded: 'view.unloaded'
     };

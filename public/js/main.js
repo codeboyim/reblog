@@ -1,10 +1,10 @@
-(function() {
+(function () {
     var root = '../../',
         vendors = root + 'lib/vendors/';
 
     require.config({
+        baseUrl: root + 'app',
         paths: {
-            'app': root + 'app',
             'backbone': vendors + 'backbone/backbone',
             'underscore': vendors + 'underscore/underscore',
             'jquery': vendors + 'jquery/dist/jquery',
@@ -13,8 +13,7 @@
             'JSXTransformer': vendors + 'jsx/js/JSXTransformer-0.11.1',
             'react': vendors + 'react/react',
             'moment': vendors + 'moment/moment',
-            'parse': '//www.parsecdn.com/js/parse-1.2.19.min',
-            'globals': root + 'app/globals'
+            'parse': '//www.parsecdn.com/js/parse-1.2.19.min'
         },
 
         shim: {
@@ -29,8 +28,8 @@
 
     });
 
-    require(['parse'], function(Parse) {
-        window.fbAsyncInit = function() {
+    require(['parse'], function (Parse) {
+        window.fbAsyncInit = function () {
 
             Parse.FacebookUtils.init({
                 appId: '880425675305915', // Facebook App ID
@@ -41,7 +40,7 @@
 
         };
 
-        (function(d, s, id) {
+        (function (d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) {
                 return;
@@ -56,11 +55,11 @@
 
     });
 
-    require(['jquery', 'app/app'],
+    require(['jquery', 'app'],
 
-        function($, App) {
+        function ($, App) {
 
-            $(function() {
+            $(function () {
                 new App();
             });
 

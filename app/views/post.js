@@ -1,4 +1,4 @@
-define(['backbone', 'underscore', 'react', 'parse', 'globals', '../models/Post', '../models/PostCollection', 'moment', 'jsx!./jsx/post'], function(Backbone, _, React, Parse, globals, PostModel, PostCollection, moment, Post) {
+define(['backbone', 'underscore', 'react', 'parse', 'globals', 'models/Post', 'models/PostCollection', 'moment', 'jsx!./post'], function(Backbone, _, React, Parse, globals, PostModel, PostCollection, moment, Post) {
 
     /**
      * @module post/post

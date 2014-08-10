@@ -1,13 +1,20 @@
-define(['react'], function(React){
+define(['react', 'underscore'], function(React, _){
 
     var exports = React.createClass({
-    
+        
+        componentWillMount:function () {
+            _.bindAll(this, '_postsChanged');
+            this.props.posts.on('sync', this._postsChanged);
+        },
         deleteClick: function(post, e) {
             var self = this;
             
             post.destroy({wait:true}).done(function(){
                 self.props.posts.fetch();
             });
+        },
+        _postsChanged: function(){
+            this.setProps({posts:this.props.posts});
         },
         render: function() {
             var self = this;
