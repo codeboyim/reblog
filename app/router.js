@@ -23,54 +23,6 @@
                     },
 
                     home: require('homeController'),
-                    //                    
-                    //                    posts: function () {
-                    //                        var view,
-                    //                            id,
-                    //                            action;
-                    //
-                    //                        if ((arguments[0] === null || arguments[0] === undefined) && (arguments[1] === null || arguments[1] === undefined)) {
-                    //
-                    //                            this.load('list', {
-                    //                                container: document.getElementById('site-content')
-                    //                            }).posts.fetch().then(null, function (posts, error) {
-                    //                                console.error(error);
-                    //                            });
-                    //
-                    //                        } else {
-                    //
-                    //                            if (!Parse.User.current()) {
-                    //                                this.navigate('login?returnUrl=' + encodeURIComponent(window.location.hash), {
-                    //                                    trigger: true
-                    //                                });
-                    //                                return;
-                    //                            }
-                    //
-                    //                            if (arguments[0] === 'create') {
-                    //
-                    //                                this.load('post', {
-                    //                                    container: document.getElementById('site-content')
-                    //                                }).render();
-                    //
-                    //                            } else {
-                    //                                id = arguments[0];
-                    //                                action = arguments[1];
-                    //
-                    //                                view = this.load('post', {
-                    //                                    container: document.getElementById('site-content')
-                    //                                });
-                    //
-                    //                                view.post.id = id;
-                    //
-                    //                                if (action === 'edit') {
-                    //                                    view.post.fetch().then(function (p) {}, function (p, error) {
-                    //                                        console.error(error);
-                    //                                    });
-                    //                                }
-                    //                            }
-                    //                        }
-                    //                    },
-
 
                     admin: require('admin/adminController'),
 

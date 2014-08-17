@@ -13,12 +13,16 @@
             'JSXTransformer': vendors + 'jsx/js/JSXTransformer-0.11.1',
             'react': vendors + 'react/react',
             'moment': vendors + 'moment/moment',
+            'markdown': vendors + 'markdown/dist/markdown',
             'parse': '//www.parsecdn.com/js/parse-1.2.19.min'
         },
 
         shim: {
             'parse': {
                 exports: 'Parse'
+            },
+            'markdown': {
+                exports: 'markdown'
             }
         },
 

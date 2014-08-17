@@ -1,4 +1,4 @@
-define(['react', 'underscore'], function(React, _){
+define(['react', 'underscore', 'markdown'], function(React, _, markdown){
 
     var exports = React.createClass({
         
@@ -29,7 +29,7 @@ define(['react', 'underscore'], function(React, _){
                                 <p><time></time></p>
                             </header>
                             <main>
-                                <div dangerouslySetInnerHTML={{__html:post.get('body')}}/>
+                                <div dangerouslySetInnerHTML={{__html:markdown.toHTML(post.get('body'))}}/>
                             </main>
                         </article>
                     );

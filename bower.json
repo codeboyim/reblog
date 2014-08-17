@@ -1,35 +1,35 @@
 {
-    "name": "reblog",
-    "version": "0.0.0",
-    "authors": [
-        "codeboy <me@codeboy.im>"
-    ],
-    "moduleType": [
-        "amd",
-        "globals"
-    ],
-    "license": "MIT",
-    "private": true,
-    "ignore": [
-        "**/.*",
-        "node_modules",
-        "bower_components",
-        "lib/vendors/",
-        "test",
-        "tests"
-    ],
-    "dependencies": {},
-    "devDependencies": {
-        "backbone": "~1.1.2",
-        "requirejs": "~2.1.14",
-        "jsx": "https://github.com/philix/jsx-requirejs-plugin.git#~0.2.2",
-        "react": "~0.11.1",
-        "jquery": "~1.11.1",
-        "moment": "~2.7.0",
-        "foundation": "~5.3.1",
-        "text": "~2.0.12"
-    },
-    "resolutions": {
-        "jquery": "~1.11.1"
-    }
+  "name": "reblog",
+  "version": "0.0.0",
+  "authors": [
+    "codeboy <me@codeboy.im>"
+  ],
+  "moduleType": [
+    "amd",
+    "globals"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "lib/vendors/",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "backbone": "~1.1.2",
+    "requirejs": "~2.1.14",
+    "jsx": "https://github.com/philix/jsx-requirejs-plugin.git#~0.2.2",
+    "react": "~0.11.1",
+    "jquery": "~1.11.1",
+    "moment": "~2.7.0",
+    "foundation": "~5.3.1",
+    "text": "~2.0.12",
+    "markdown": "https://github.com/evilstreak/markdown-js.git#v0.6.0-beta1"
+  },
+  "resolutions": {
+    "jquery": "~1.11.1"
+  }
 }
