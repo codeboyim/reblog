@@ -9,9 +9,10 @@ define(['react', 'parse', 'globals'], function(React, Parse, globals){
         render: function(){
 
             return (
-                    <div>
+                    <section>
+                        <h1>Preferences</h1>
                         <div><button onClick={this.buttonDeleteClicked}>Delete my account</button></div>
-                    </div>
+                    </section>
                     );
 
         },

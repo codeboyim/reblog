@@ -39,23 +39,32 @@ define(['react', 'parse', 'globals'], function(React, Parse, globals){
         
         render: function(){
             var self = this;
+            if(!Parse.User.current().admin){
+                return null;
+            }
             return (
-                <div>
+                <section>
+                    <h1>Users</h1>
                     <ul>
                     {_.map(this.state.users, function(user){
                         return (
                             <li key={user.id}>
                                 <label>
-                                    <input type="checkbox" checked={user.isAdmin} onChange={_.bind(self.onCheckboxChanged, self, user)} />
+                                    <input type="checkbox" checked={user.isAdmin} onChange={_.bind(this.onCheckboxChanged, this, user)} />
                                     {user.get('name')}
                                 </label>
                             </li>
                             );
-                    })}
+                    }, this)}
                     </ul>
-                </div>
+                </section>
             );
 
+        },
+        
+        componentWillUnmount:function(){
+            console.log('admin user will unmount');
+        
         },
         
         onCheckboxChanged:function(user, e){

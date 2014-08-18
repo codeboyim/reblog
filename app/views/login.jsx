@@ -43,8 +43,6 @@ define(['react', 'parse', 'backbone', 'underscore', 'globals'], function (React,
                         }
                         
                         self.props.onLoggedIn();
-                        
-                       
 
                     }, this));
                 },

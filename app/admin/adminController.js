@@ -1,4 +1,4 @@
-define(['react', 'parse', 'globals', 'jsx!./views/admin'], function (React, Parse, globals, Admin) {
+define(['react', 'parse', 'globals', 'models/Post', 'jsx!./views/admin'], function (React, Parse, globals, Post, Admin) {
     /**
      * @module app/admin
      */
@@ -14,10 +14,16 @@ define(['react', 'parse', 'globals', 'jsx!./views/admin'], function (React, Pars
             return;
         }
 
-        this.trigger(globals.EVENT.viewLoaded,
-            React.renderComponent(Admin({
-                area: area
-            }), document.getElementById('site-content')));
+        React.renderComponent(Admin({
+            area: area
+        }), document.getElementById('site-content'));
+
+
+        if (arguments.length > 1) {
+            if (area === 'posts') {
+                (new Post({id:arguments[1]})).fetch().done(function(post){});
+            }
+        }
 
     };
 

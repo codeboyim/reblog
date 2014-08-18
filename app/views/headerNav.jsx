@@ -18,11 +18,14 @@ define(['react', 'parse', 'globals', 'mixins/ListenToAuthStatusChanged'], functi
         render: function(){
             
             return (
-                <ul>
-                    {this.state.authenticated?
-                        <li><a href="javascript:void(0);" onClick={this.logoutClicked}>Log out</a></li>
-                        :null}
-                </ul>
+                <nav role="navigation">
+                    <h1 className="hide">main navigation links</h1>
+                    <ul>
+                        {this.state.authenticated?
+                            <li><a href="javascript:void(0);" onClick={this.logoutClicked}>Log out</a></li>
+                            :null}
+                    </ul>
+                </nav>
             );
 
         }
