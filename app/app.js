@@ -18,6 +18,16 @@ define(['backbone', 'underscore', 'react', 'parse', 'globals', 'router', 'jsx!vi
             pushState: false
         });
 
+        if (Parse.User.current()) {
+            (new Parse.Query(Parse.Role)).equalTo('users', Parse.User.current()).first().done(_.bind(function (u) {
+
+                if (u) {
+                    Parse.User.current().admin = true;
+                    globals.events.trigger(globals.EVENT.authStatusChanged, true);
+                }
+
+            }, this));
+        }
     };
 
 
