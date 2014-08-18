@@ -10,11 +10,12 @@ define(['react', 'globals', 'underscore'], function (React, globals, _) {
         },
         _authStatusChanged: function (authenticated) {
             this.setState({
-                authenticated: authenticated
+                authenticated: authenticated,
+                admin: !!Parse.User.current().admin
             });
         }
-    }
-    
+    };
+
     return exports;
 
 });
