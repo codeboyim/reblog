@@ -16,7 +16,9 @@ define(['react', 'parse', 'underscore', 'models/PostCollection'], function(React
         render: function(){
 
             return (<section>
-                        <h1>Posts</h1>
+                        <header>
+                            <h1>Posts</h1>
+                        </header>
                         <ul role="list">
                             {_.map(this.state.posts, function(post){
                                 return <li key={post.id}><a href={"#admin/posts/"+post.id}>{post.get('title')}</a></li>;

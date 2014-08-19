@@ -1,93 +1,107 @@
-define(['react'], function(React){
+define(['react', 'underscore', 'jquery', 'models/post'], function(React, _, $, PostModel){
 
     var exports = React.createClass({
     
         getInitialState: function(){
-            return _.extend({preview:false, post:this.props.post.toJSON()} );
+            return {post:new PostModel({id:this.props.id}), ajaxing:false}
         },
-        componentWillReceiveProps:function(newProps){
-            this.setState({post:newProps.post.toJSON()});
+        
+        componentWillMount: function(){
+            _.bindAll(this, 'postModelChanged');
+            this.state.post.on('all', this.postModelChanged);
         },
-        closePreview:function(){
-            this.setState({preview:false});
-        },
-        openPreview:function(e){
-            e.preventDefault();
-            this.setState({preview:true});
-        },
-        postPropChanged:function(e){
-            var post = this.state.post,
-                val = e.target.value,
-                name = e.target.name;
+        
+        componentDidMount: function (){
+            this.setState({ajaxing:true});
             
-            post[name]=val;
-            this.props.post.set(post);
+            this.state.post.fetch().always(_.bind(function (){
+                this.setState({ajaxing: false});
+            }, this));
+            
+            //$(this.getDOMNode()).foundation();
         },
+ 
+        postPropChanged:function(e){
+            this.state.post.set(e.target.name, e.target.value);
+        },
+        
+        postModelChanged: function(){
+            this.forceUpdate();
+        },
+        
         formSubmitted:function(e){
-            var submitButton=this.refs.submit.getDOMNode(),
-                isNew = this.props.post.isNew(),
-                self =  this;
+            var submitButton = this.refs.submit.getDOMNode();                
             e.preventDefault();
-            submitButton.disabled=true;
-            this.props.post.save()
-                .then(
-                function(post){
-                    if(isNew){
-                       self.props.view.router.navigate('posts/'+post.id+'/edit', {replace:true});
-                    }
-                    submitButton.disabled=false;
-                }, function(){
-                    submitButton.disabled=false;
-                });
+            
+            this.setState({ajaxing: true});
+            
+            this.state.post.save()
+                .always(_.bind(function(){
+                    this.setState({ajaxing: false});
+                }, this));
 
         },
-        backClicked:function(e){
-            this.props.view.unload();
+        
+        openPreview:function(e){
         },
-        renderForEdit:function(){
+
+        renderEditView:function(){
             var post = this.state.post;
-            return (
-                <div className='post-detail edit'>
-                    <a href="#posts" onClick={this.backClicked}>Back to list</a>
-                    <form onSubmit={this.formSubmitted}>
-                        <div>
-                            <input name="title" type="text" value={post.title} onChange={this.postPropChanged} />
-                        </div>                        
-                        <div>
-                            <textarea name="body" value={post.body} onChange={this.postPropChanged}/>
-                        </div>
-                        <div>
-                            <input name="postedOn" type="datetime-local" value={post.postedOn} onChange={this.postPropChanged}/>
-                        </div>
-                        <div>
-                            <input ref="submit" type="submit" value="Save"/>
-                            <button onClick={this.openPreview}>Preview</button>
-                        </div>
-                    </form>
-                </div>
-            );
+            
+            if(!post){
+                return null;
+            }
+            else{
+                return (
+                    <section>
+                        <h1>Edit Post</h1>
+                        <form onSubmit={this.formSubmitted}>
+                            <div className="row">
+                                <div className="large-12 column">
+                                    <input name="title" placeholder="title" type="text" value={post.get('title')} onChange={this.postPropChanged} />
+                                </div>
+                            </div>                        
+                            <div className="row">
+                                <div className="large-12 column">
+                                    <label>
+                                        <textarea rows="20" className="post-edit-body" name="body" 
+                                            value={post.get('body')} onChange={this.postPropChanged}/>
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="large-12 column">
+                                    <input ref="submit" type="submit" className="button" value="Save" />
+                                    <button onClick={this.openPreview}>Preview</button>
+                                </div>
+                            </div>
+                        </form>
+                    </section>
+                );
+            }
         },
-        renderForView:function(){
+        renderReadView:function(){
             var post = this.state.post;
-            return (
-                <div className={'post-detail'+(this.state.preview?' preview':'')}>
-                    <article key={post.id} className="post">
-                        <header>
-                            <h1>{post.title}</h1>
-                            <p><time></time></p>
-                        </header>
-                        <div dangerouslySetInnerHTML={{__html:post.body}}/>
-                    </article>
-                    {this.state.preview?<div><button onClick={this.closePreview}>Close</button></div>:null}
-                </div>
+            return (!post?
+                        null:
+                        <article>
+                            <header>
+                                <h1>{post.get('title')}</h1>
+                                <p><time></time></p>
+                            </header>
+                            <main>
+                                <div dangerouslySetInnerHTML={{__html:post.get('body')}}/>
+                            </main>
+                        </article>
             );
         },
         render: function(){
-            return (
-            <div>
-                {this.props.editMode&&!this.state.preview?this.renderForEdit():this.renderForView()}
-            </div>
-            );
+            if(this.props.editView){
+                return this.renderEditView();
+            }
+            else{
+                return this.renderReadView();
+            }
             
         }
     });

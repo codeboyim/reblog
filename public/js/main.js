@@ -33,6 +33,7 @@
     });
 
     require(['parse'], function (Parse) {
+
         window.fbAsyncInit = function () {
 
             Parse.FacebookUtils.init({
@@ -57,16 +58,17 @@
 
         Parse.initialize("yxD2tY5w6WEVJg2Dd8a566sUI6j1xGKHVOLzRkKl", "Ii4UZXR5rMGKmo5Og36lThmXcWnw3xyvN053kC4Z");
 
+
     });
 
-    require(['jquery', 'app'],
+    require(['app'], function (App) {
+ 
+        //kick-off the app
+        new App();
 
-        function ($, App) {
+    });
 
-            $(function () {
-                new App();
-            });
 
-        });
+
 
 })();

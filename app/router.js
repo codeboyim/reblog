@@ -15,8 +15,8 @@
                         'posts/:id': 'posts',
                         'posts/:id/:action': 'posts',
 
-                        'admin': 'admin',
-                        'admin/:area': 'admin',
+                        'admin(/)': 'admin',
+                        'admin/:area(/)': 'admin',
 
                         'login?returnUrl=:returnUrl': 'login',
                         'login': 'login'

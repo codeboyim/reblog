@@ -5,25 +5,37 @@ define(['react', 'parse', 'globals', 'models/Post', 'jsx!./views/admin'], functi
 
     /**
      * @constructor
-     * @param {object} options
-     *        {Element} options.container
+     * @param {string} area - section name, e.g. posts, users, prefs etc.
+     *        {...*}  args - other arguments passed by hash fragment
      */
     var exports = function (area) {
+        var options;
 
         if (!this.requireLogin('admin' + (area ? ('/' + area) : ''))) {
             return;
         }
 
+        if (arguments.length > 1) {
+
+            switch (area) {
+            case 'posts':
+                options = {
+                    id: arguments[1]
+                };
+                break;
+            default:
+                break;
+            }
+
+        }
+
         React.renderComponent(Admin({
-            area: area
+            area: area,
+            options: options
         }), document.getElementById('site-content'));
 
 
-        if (arguments.length > 1) {
-            if (area === 'posts') {
-                (new Post({id:arguments[1]})).fetch().done(function(post){});
-            }
-        }
+
 
     };
 

@@ -1,6 +1,7 @@
-define(['react', 'parse', 'jquery', 'globals', 'mixins/ListenToAuthStatusChanged','jsx!./admin.users', 'jsx!./admin.posts', 'jsx!./admin.prefs'], 
+define(['react', 'parse', 'jquery', 'globals', 'mixins/ListenToAuthStatusChanged',
+    'jsx!./admin.users', 'jsx!./admin.posts', 'jsx!./admin.prefs', 'jsx!views/post'], 
 
-    function(React, Parse, $, globals, ListenToAuthStatusChanged, Users, Posts, Prefs){
+    function(React, Parse, $, globals, ListenToAuthStatusChanged, Users, Posts, Prefs, Post){
 
 
         var exports = React.createClass({
@@ -40,12 +41,19 @@ define(['react', 'parse', 'jquery', 'globals', 'mixins/ListenToAuthStatusChanged
             },
             
             renderSubView: function(){
+                var id;
 
                 switch(this.props.area){
                     case 'users':
                         return this.state.admin?<Users />:null;
                     case 'posts':
-                        return this.state.admin?<Posts />:null;
+                        if(!this.state.admin){
+                            return null;
+                        }
+                        else{
+                            return (id=(this.props.options && this.props.options.id))?
+                                <Post id={id} editView={true}/>:<Posts />
+                        }
                     case 'prefs':
                         return <Prefs />;
                     default:
