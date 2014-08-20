@@ -1,6 +1,5 @@
 define(['react', 'parse', 'globals'], function(React, Parse, globals){
 
-
     var exports = React.createClass({
     
         getInitialState:function(){
@@ -30,8 +29,10 @@ define(['react', 'parse', 'globals'], function(React, Parse, globals){
                             }
                             
                         });
-                                    
-                        self.setState({users:users});
+                        
+                        if(self.isMounted()){
+                            self.setState({users:users});
+                        }
                     }).fail(function(error){
                         console.log(error);
                     });
@@ -44,7 +45,7 @@ define(['react', 'parse', 'globals'], function(React, Parse, globals){
             }
             return (
                 <section>
-                    <h1>Users</h1>
+                    <h3>Users</h3>
                     <ul>
                     {_.map(this.state.users, function(user){
                         return (
@@ -62,16 +63,9 @@ define(['react', 'parse', 'globals'], function(React, Parse, globals){
 
         },
         
-        componentWillUnmount:function(){
-            console.log('admin user will unmount');
-        
-        },
-        
         onCheckboxChanged:function(user, e){
             user.isAdmin = !user.isAdmin;
             this.setState({users:this.state.users});
-            
-            console.log(this.state.users);
         }
         
 

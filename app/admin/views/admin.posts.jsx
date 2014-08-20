@@ -17,7 +17,7 @@ define(['react', 'parse', 'underscore', 'models/PostCollection'], function(React
 
             return (<section>
                         <header>
-                            <h1>Posts</h1>
+                            <h3>Posts</h3>
                         </header>
                         <ul role="list">
                             {_.map(this.state.posts, function(post){
@@ -29,7 +29,9 @@ define(['react', 'parse', 'underscore', 'models/PostCollection'], function(React
         },
         
         _postsChanged:function(){
-            this.setState({posts:this.posts.models});
+            if(this.isMounted()){
+                this.setState({posts:this.posts.models});
+            }
         }
 
     });

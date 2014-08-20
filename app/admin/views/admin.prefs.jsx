@@ -10,7 +10,7 @@ define(['react', 'parse', 'globals'], function(React, Parse, globals){
 
             return (
                     <section>
-                        <h1>Preferences</h1>
+                        <h3>Preferences</h3>
                         <div><button onClick={this.buttonDeleteClicked}>Delete my account</button></div>
                     </section>
                     );

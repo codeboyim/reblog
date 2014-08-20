@@ -54,7 +54,7 @@ define(['react', 'underscore', 'jquery', 'models/post'], function(React, _, $, P
             else{
                 return (
                     <section>
-                        <h1>Edit Post</h1>
+                        <h3>Edit Post</h3>
                         <form onSubmit={this.formSubmitted}>
                             <div className="row">
                                 <div className="large-12 column">
