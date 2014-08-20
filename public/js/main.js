@@ -1,4 +1,6 @@
 (function () {
+    'use strcit';
+
     var root = '../../',
         vendors = root + 'lib/vendors/';
 
@@ -14,7 +16,8 @@
             'react': vendors + 'react/react',
             'moment': vendors + 'moment/moment',
             'markdown': vendors + 'markdown/dist/markdown',
-            'parse': '//www.parsecdn.com/js/parse-1.2.19.min'
+            'parse': '//www.parsecdn.com/js/parse-1.2.19.min',
+            'datetimepicker': vendors + 'datetimepicker/jquery.datetimepicker'
         },
 
         shim: {
@@ -23,7 +26,8 @@
             },
             'markdown': {
                 exports: 'markdown'
-            }
+            },
+            'datetimepicker': ['jquery']
         },
 
         jsx: {
@@ -62,7 +66,7 @@
     });
 
     require(['app'], function (App) {
- 
+
         //kick-off the app
         new App();
 

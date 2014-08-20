@@ -1,4 +1,5 @@
 define(['react', 'parse', 'globals', 'models/Post', 'jsx!./views/admin'], function (React, Parse, globals, Post, Admin) {
+    'use strict';
     /**
      * @module app/admin
      */
@@ -29,13 +30,10 @@ define(['react', 'parse', 'globals', 'models/Post', 'jsx!./views/admin'], functi
 
         }
 
-        React.renderComponent(Admin({
+        React.renderComponent(new Admin({
             area: area,
             options: options
         }), document.getElementById('site-content'));
-
-
-
 
     };
 

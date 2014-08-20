@@ -4,21 +4,20 @@ module.exports = function(grunt) {
             dev: {
                 options: {
                     style: 'expanded',
-                    loadPath: ['lib/vendors/foundation/scss/'],
+                    loadPath: ['lib/vendors/foundation/scss/', 'app'],
                     trace: true,
                     compass: true
                 },
                 files: {
-                    'public/css/site.css': ['src/scss/site.scss']
+                    'public/css/site.css': ['src/scss/site.scss', 'app/**/*.scss', '!app/app.scss']
                 }
             }
         },
         watch: {
-            files: ['src/scss/*.scss'],
+            files: ['src/scss/*.scss', 'app/**/*.scss'],
             tasks: ['newer:sass:dev'],
             options: {
                 spawn: false
-
             }
         }
     });

@@ -1,4 +1,4 @@
-define(['react', 'underscore', 'jquery', 'models/post'], function(React, _, $, PostModel){
+define(['react', 'underscore', 'jquery', 'models/post', 'datetimepicker'], function(React, _, $, PostModel){
 
     var exports = React.createClass({
     
@@ -18,10 +18,10 @@ define(['react', 'underscore', 'jquery', 'models/post'], function(React, _, $, P
                 this.setState({ajaxing: false});
             }, this));
             
-            //$(this.getDOMNode()).foundation();
+            $('#post_postedon').datetimepicker();
         },
  
-        postPropChanged:function(e){
+        linkedValueChanged: function(e){
             this.state.post.set(e.target.name, e.target.value);
         },
         
@@ -29,20 +29,28 @@ define(['react', 'underscore', 'jquery', 'models/post'], function(React, _, $, P
             this.forceUpdate();
         },
         
-        formSubmitted:function(e){
-            var submitButton = this.refs.submit.getDOMNode();                
+        buttonClicked: function(type, e){     
             e.preventDefault();
             
-            this.setState({ajaxing: true});
+            switch(type){
             
-            this.state.post.save()
-                .always(_.bind(function(){
-                    this.setState({ajaxing: false});
-                }, this));
+                case 'save':
+                    this.setState({ajaxing: true}); 
+                    
+                    this.state.post.save().always(_.bind(function(){
+                        
+                        if(this.isMounted()){
+                            this.setState({ajaxing: false});
+                        }
+                        
+                    }, this));
+                    
+                    break;
+                    
+                case 'preview':
+                    break;
 
-        },
-        
-        openPreview:function(e){
+            }
         },
 
         renderEditView:function(){
@@ -55,27 +63,32 @@ define(['react', 'underscore', 'jquery', 'models/post'], function(React, _, $, P
                 return (
                     <section>
                         <h3>Edit Post</h3>
-                        <form onSubmit={this.formSubmitted}>
-                            <div className="row">
-                                <div className="large-12 column">
-                                    <input name="title" placeholder="title" type="text" value={post.get('title')} onChange={this.postPropChanged} />
-                                </div>
-                            </div>                        
-                            <div className="row">
-                                <div className="large-12 column">
-                                    <label>
-                                        <textarea rows="20" className="post-edit-body" name="body" 
-                                            value={post.get('body')} onChange={this.postPropChanged}/>
-                                    </label>
-                                </div>
+                        <div className="row">
+                            <div className="large-12 column">
+                                <input name="title" placeholder="title" type="text" value={post.get('title')} onChange={this.linkedValueChanged} />
                             </div>
-                            <div className="row">
-                                <div className="large-12 column">
-                                    <input ref="submit" type="submit" className="button" value="Save" />
-                                    <button onClick={this.openPreview}>Preview</button>
-                                </div>
+                        </div>                        
+                        <div className="row">
+                            <div className="large-12 column">
+                                <label>
+                                    <textarea rows="20" className="post-edit-body" name="body" 
+                                        value={post.get('body')} onChange={this.linkedValueChanged}/>
+                                </label>
                             </div>
-                        </form>
+                        </div>
+                        <div className="row">
+                            <div className="large-2 column">
+                                <label for="post_postedon" className="inline">Schedule:</label>
+                            </div>
+                            <div className="large-4 column">
+                                <input id="post_postedon" type="datetime"/>
+                            </div>
+                            <div className="large-6 column text-right">
+                                <button onClick={_.bind(this.buttonClicked, this, 'save')}>Save</button>
+                                <button onClick={_.bind(this.buttonClicked, this, 'preview')}>Preview</button>
+                                <button onClick={_.bind(this.buttonClicked, this, 'delete')}>Delete</button>
+                            </div>
+                        </div>
                     </section>
                 );
             }
