@@ -14,10 +14,11 @@
             'jsx': vendors + 'jsx/js/jsx',
             'JSXTransformer': vendors + 'jsx/js/JSXTransformer-0.11.1',
             'react': vendors + 'react/react',
-            'moment': vendors + 'moment/moment',
             'markdown': vendors + 'markdown/dist/markdown',
             'parse': '//www.parsecdn.com/js/parse-1.2.19.min',
-            'datetimepicker': vendors + 'datetimepicker/jquery.datetimepicker'
+            'datetimepicker': vendors + 'datetimepicker/jquery.datetimepicker',
+            '_datetimepicker': '../lib/datetimepicker',
+            '_moment': '../lib/moment'
         },
 
         shim: {
@@ -29,6 +30,15 @@
             },
             'datetimepicker': ['jquery']
         },
+
+        packages: [
+            {
+                'name': 'moment',
+                'main': 'moment',
+                'location': vendors + 'moment'
+            }
+
+        ],
 
         jsx: {
             fileExtension: '.jsx'

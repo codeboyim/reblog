@@ -1,4 +1,4 @@
-define(['react', 'underscore', 'jquery', 'models/post', 'datetimepicker'], function(React, _, $, PostModel){
+define(['globals', 'react', 'underscore', 'jquery', 'models/post', '_datetimepicker'], function(globals, React, _, $, PostModel){
 
     var exports = React.createClass({
     
@@ -7,7 +7,6 @@ define(['react', 'underscore', 'jquery', 'models/post', 'datetimepicker'], funct
         },
         
         componentWillMount: function(){
-            _.bindAll(this, 'postModelChanged');
             this.state.post.on('all', this.postModelChanged);
         },
         
@@ -18,14 +17,30 @@ define(['react', 'underscore', 'jquery', 'models/post', 'datetimepicker'], funct
                 this.setState({ajaxing: false});
             }, this));
             
-            $('#post_postedon').datetimepicker();
+            $('#post_postedon').datetimepicker(
+                _.extend({onChangeDateTime: this.datetimepickerChangeDateTime}, globals.SETTINGS.datetimepicker)
+            );
         },
- 
+    
         linkedValueChanged: function(e){
             this.state.post.set(e.target.name, e.target.value);
         },
         
-        postModelChanged: function(){
+        datetimepickerChangeDateTime: function(dp, $input){
+            if(moment($input.val().trim()).isValid){
+                this.state.post.set('postedOn', dp);
+            }
+            else{
+               this.state.post.set('postedOn', null);
+            }
+        },
+        
+        postModelChanged: function(event, post){
+            if(event==='change:postedOn'){
+                $('#post_postedon').val(
+                    post.get('postedOn')?post.get('postedOn').dateFormat(globals.SETTINGS.datetimepicker.format):''
+                );
+            }
             this.forceUpdate();
         },
         
@@ -78,10 +93,10 @@ define(['react', 'underscore', 'jquery', 'models/post', 'datetimepicker'], funct
                         </div>
                         <div className="row">
                             <div className="large-2 column">
-                                <label for="post_postedon" className="inline">Schedule:</label>
+                                <label htmlFor="post_postedon" className="inline">Schedule:</label>
                             </div>
                             <div className="large-4 column">
-                                <input id="post_postedon" type="datetime"/>
+                                <input id="post_postedon" type="datetime" />
                             </div>
                             <div className="large-6 column text-right">
                                 <button onClick={_.bind(this.buttonClicked, this, 'save')}>Save</button>
