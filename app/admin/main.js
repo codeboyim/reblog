@@ -15,8 +15,6 @@ define(['underscore', 'backbone', 'react', 'parse', 'globals',
             var options = _.compact([].slice.apply(arguments, [1])),
                 container = document.getElementById('site-content');
 
-            _.extend(this, Backbone.Events);
-
             if (!this.requireLogin('admin' + (area ? ('/' + area) : ''))) {
                 return;
             }
@@ -27,11 +25,14 @@ define(['underscore', 'backbone', 'react', 'parse', 'globals',
                 case 'posts':
 
                     if (options.length === 0) {
-                        React.renderComponent(new Posts(), container);
+                        React.renderComponent(new Posts({
+                            onAddPostClicked: _.bind(exports._onAddPostClicked, this)
+                        }), container);
                     } else {
                         React.renderComponent(new Post({
-                            id: options[0],
-                            editView: true
+                            id: options[0] === 'create' ? 0 : options[0],
+                            editView: true,
+                            onSaved: _.bind(exports._onPostSaved, this, options[0] === 'create')
                         }), container);
                     }
 
@@ -43,7 +44,6 @@ define(['underscore', 'backbone', 'react', 'parse', 'globals',
 
                 case 'users':
                     React.renderComponent(new Users(), container);
-
                     break;
 
                 default:
@@ -53,7 +53,20 @@ define(['underscore', 'backbone', 'react', 'parse', 'globals',
 
             }
 
+        };
 
+        exports._onAddPostClicked = function () {
+            this.navigate('admin/posts/create', {
+                trigger: true
+            });
+        };
+
+        exports._onPostSaved = function (isCreate, post) {
+            if (isCreate) {
+                this.navigate('admin/posts/' + post.objectId, {
+                    trigger: true
+                });
+            }
         };
 
         return exports;

@@ -1,6 +1,6 @@
-define(['globals', 'react', 'underscore', 'jquery', 'models/post', 'jsx!modal', '_datetimepicker'],
+define(['globals', 'react', 'underscore', 'jquery', 'markdown', 'models/post', 'jsx!modal', '_datetimepicker'],
     
-    function(globals, React, _, $, PostModel, Modal){
+    function(globals, React, _, $, markdown, PostModel, Modal){
 
         var exports = Post = React.createClass({
 
@@ -43,13 +43,13 @@ define(['globals', 'react', 'underscore', 'jquery', 'models/post', 'jsx!modal', 
             },
 
             postModelChanged: function(event, post){
+            
                 if(event==='change:postedOn'){
                     $('#post_postedon').val(
                         post.get('postedOn')?post.get('postedOn').dateFormat(globals.SETTINGS.datetimepicker.format):''
                     );
                 }
                 
-                console.log(event, this.isMounted());
                 if(this.isMounted()){
                     this.forceUpdate();
                 }
@@ -63,14 +63,25 @@ define(['globals', 'react', 'underscore', 'jquery', 'models/post', 'jsx!modal', 
                     case 'save':
                         this.setState({ajaxing: true}); 
 
-                        this.state.post.save().always(_.bind(function(){
+                        this.state.post.save()
+                            .done(_.bind(function(post){
+                                    
+                                    if(this.props.onSaved && _.isFunction(this.props.onSaved)){
+                                        this.props.onSaved(post.toJSON());
+                                    }
 
-                            if(this.isMounted()){
-                                this.setState({ajaxing: false});
-                            }
+                                }, this)
+                            )
+                            .always(_.bind(function(){
 
-                        }, this));
+                                    if(this.isMounted()){
+                                        this.setState({ajaxing: false});
+                                    }
 
+                                }, this)
+                            );
+                        
+                        
                         break;
 
                     case 'preview':
@@ -130,7 +141,7 @@ define(['globals', 'react', 'underscore', 'jquery', 'models/post', 'jsx!modal', 
                                     <p><time></time></p>
                                 </header>
                                 <main>
-                                    <div dangerouslySetInnerHTML={{__html:post.get('body')}}/>
+                                    <div dangerouslySetInnerHTML={{__html:markdown.toHTML(post.get('body'))}}/>
                                 </main>
                             </article>
                 );
