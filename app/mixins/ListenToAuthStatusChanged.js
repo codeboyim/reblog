@@ -1,6 +1,11 @@
-define(['react', 'globals', 'underscore'], function (React, globals, _) {
+define(['react', 'parse', 'globals', 'underscore'], function (React, Parse, globals, _) {
 
     var exports = {
+        getInitialState: function () {
+            return {
+                admin: !!Parse.User.current().admin
+            };
+        },
         componentWillMount: function () {
             _.bindAll(this, '_authStatusChanged');
             globals.events.on(globals.EVENT.authStatusChanged, this._authStatusChanged);

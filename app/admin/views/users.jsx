@@ -1,4 +1,4 @@
-define(['react', 'parse', 'globals'], function(React, Parse, globals){
+define(['react', 'parse', 'globals', 'jsx!./_layout'], function(React, Parse, globals, Layout){
 
     var exports = React.createClass({
     
@@ -44,21 +44,23 @@ define(['react', 'parse', 'globals'], function(React, Parse, globals){
                 return null;
             }
             return (
-                <section>
-                    <h3>Users</h3>
-                    <ul>
-                    {_.map(this.state.users, function(user){
-                        return (
-                            <li key={user.id}>
-                                <label>
-                                    <input type="checkbox" checked={user.isAdmin} onChange={_.bind(this.onCheckboxChanged, this, user)} />
-                                    {user.get('name')}
-                                </label>
-                            </li>
-                            );
-                    }, this)}
-                    </ul>
-                </section>
+                <Layout>
+                    <section>
+                        <h3>Users</h3>
+                        <ul>
+                        {_.map(this.state.users, function(user){
+                            return (
+                                <li key={user.id}>
+                                    <label>
+                                        <input type="checkbox" checked={user.isAdmin} onChange={_.bind(this.onCheckboxChanged, this, user)} />
+                                        {user.get('name')}
+                                    </label>
+                                </li>
+                                );
+                        }, this)}
+                        </ul>
+                    </section>
+                </Layout>
             );
 
         },

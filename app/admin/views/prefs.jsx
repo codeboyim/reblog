@@ -1,19 +1,18 @@
-define(['react', 'parse', 'globals'], function(React, Parse, globals){
+define(['react', 'parse', 'globals', 'jsx!./_layout'], function(React, Parse, globals, Layout){
 
 
     var exports = React.createClass({
-   
-        componentDidMount:function(){
-        },
-        
+
         render: function(){
 
             return (
+                <Layout>
                     <section>
                         <h3>Preferences</h3>
                         <div><button onClick={this.buttonDeleteClicked}>Delete my account</button></div>
                     </section>
-                    );
+                </Layout>
+            );
 
         },
         

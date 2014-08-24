@@ -1,9 +1,10 @@
-define(['react', 'parse', 'underscore', 'models/PostCollection'], function(React, Parse, _, PostCollection){
+define(['react', 'parse', 'underscore', 'jsx!./_layout', 'models/PostCollection'], function(React, Parse, _, Layout, PostCollection){
 
 
     var exports = React.createClass({
+    
         getInitialState:function(){
-            return { posts:null};
+            return { posts: null};
         },
         componentWillMount:function(){
             this.posts = new PostCollection;
@@ -15,7 +16,9 @@ define(['react', 'parse', 'underscore', 'models/PostCollection'], function(React
         
         render: function(){
 
-            return (<section>
+            return (
+                <Layout>
+                    <section>
                         <header>
                             <h3>Posts</h3>
                         </header>
@@ -24,7 +27,8 @@ define(['react', 'parse', 'underscore', 'models/PostCollection'], function(React
                                 return <li key={post.id}><a href={"#admin/posts/"+post.id}>{post.get('title')}</a></li>;
                             })}
                         </ul>
-                    </section>);
+                    </section>
+                </Layout>);
 
         },
         

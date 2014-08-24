@@ -36,6 +36,14 @@
                 'name': 'moment',
                 'main': 'moment',
                 'location': vendors + 'moment'
+            },
+            {
+                'name': 'modal',
+                'location': root + 'lib/modal'
+            },
+            {
+                'name': 'admin',
+                'location': root + 'app/admin'
             }
 
         ],

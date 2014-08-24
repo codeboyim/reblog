@@ -1,4 +1,4 @@
-    define(['require', 'backbone', 'underscore', 'parse', 'globals', 'loginController', 'admin/adminController', 'homeController'],
+    define(['require', 'backbone', 'underscore', 'parse', 'globals', 'loginController', 'admin', 'homeController'],
         function (require, Backbone, _, Parse, globals) {
 
             /** 
@@ -24,7 +24,7 @@
 
                     home: require('homeController'),
 
-                    admin: require('admin/adminController'),
+                    admin: require('admin'),
 
                     login: require('loginController'),
 
