@@ -19,6 +19,7 @@ define(['underscore', 'react', 'jquery'], function(_, React, $){
         },
         
         statics: {
+        
             open: function(content){
                 this._bg = this._bg || $('.reveal-modal-bg');
                 this._modals = this._modals || [];
@@ -26,7 +27,7 @@ define(['underscore', 'react', 'jquery'], function(_, React, $){
                 if(!this._bg[0]){
                     this._bg = $('<div class="reveal-modal-bg" style="display:block"></div>').appendTo(document.body);
                     this._bg.on('click', _.bind(this.close, this));
-                    $(document).on('keydown', _.bind(this._docKeyDown, this));
+                    $(document).on('keydown', this._docKeyDown);
                 }
                 else{
                     this._bg.show();
@@ -55,9 +56,10 @@ define(['underscore', 'react', 'jquery'], function(_, React, $){
                 if(this._modals.length === 0){
                     this._bg.remove();
                     this._bg = null;
-                    
+                    $(document).off('keydown', this._docKeyDown);
                 }
             },
+            
             _docKeyDown:function(e){
                 
                 if(e.keyCode === 27){
