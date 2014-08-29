@@ -19,39 +19,37 @@ define(['underscore', 'backbone', 'react', 'parse', 'globals',
                 return;
             }
 
-            if (arguments.length > 1) {
 
-                switch (area) {
-                case 'posts':
+            switch (area) {
+            case 'posts':
 
-                    if (options.length === 0) {
-                        React.renderComponent(new Posts({
-                            onAddPostClicked: _.bind(exports._onAddPostClicked, this)
-                        }), container);
-                    } else {
-                        React.renderComponent(new Post({
-                            id: options[0] === 'create' ? 0 : options[0],
-                            editView: true,
-                            onSaved: _.bind(exports._onPostSaved, this, options[0] === 'create')
-                        }), container);
-                    }
-
-                    break;
-
-                case 'prefs':
-                    React.renderComponent(new Prefs(), container);
-                    break;
-
-                case 'users':
-                    React.renderComponent(new Users(), container);
-                    break;
-
-                default:
-                    React.renderComponent(new Home(), container);
-                    break;
+                if (options.length === 0) {
+                    React.renderComponent(new Posts({
+                        onAddPostClicked: _.bind(exports._onAddPostClicked, this)
+                    }), container);
+                } else {
+                    React.renderComponent(new Post({
+                        id: options[0] === 'create' ? 0 : options[0],
+                        editView: true,
+                        onSaved: _.bind(exports._onPostSaved, this, options[0] === 'create')
+                    }), container);
                 }
 
+                break;
+
+            case 'prefs':
+                React.renderComponent(new Prefs(), container);
+                break;
+
+            case 'users':
+                React.renderComponent(new Users(), container);
+                break;
+
+            default:
+                React.renderComponent(new Home(), container);
+                break;
             }
+
 
         };
 

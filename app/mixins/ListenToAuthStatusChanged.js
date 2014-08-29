@@ -3,7 +3,7 @@ define(['react', 'parse', 'globals', 'underscore'], function (React, Parse, glob
     var exports = {
         getInitialState: function () {
             return {
-                admin: !!Parse.User.current().admin
+                admin: !!(Parse.User && Parse.User.current() && Parse.User.current().admin)
             };
         },
         componentWillMount: function () {
