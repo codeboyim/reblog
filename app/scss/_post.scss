@@ -1,1 +1,18 @@
 /* app/scss/post */
+
+$image_placeholder_background:  #e0e0e0;
+$image_placeholder_margin:  rem-calc(5) auto;
+
+.post-edit-panel-image{
+    height:160px;
+    width:350px;
+    background-color: $image_placeholder_background;
+    margin: $image_placeholder_margin;
+}
+
+.post-edit-side-image{
+    width:320px;
+    height: 320px;
+    background-color: $image_placeholder_background;
+    margin: $image_placeholder_margin;
+}

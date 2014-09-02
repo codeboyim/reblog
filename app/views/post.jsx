@@ -116,6 +116,24 @@ define(['globals', 'react', 'underscore', 'jquery', 'markdown', 'models/post', '
                             </div>
                             <div className="row">
                                 <div className="large-2 column">
+                                    <label htmlFor="" className="inline">Panel Image:</label>
+                                </div>
+                                <div className="large-10 column">
+                                    <div className="post-edit-panel-image">
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="large-2 column">
+                                    <label htmlFor="" className="inline">Side Image:</label>
+                                </div>
+                                <div className="large-10 column">
+                                    <div className="post-edit-side-image">
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row">                            
+                                <div className="large-2 column">
                                     <label htmlFor="post_postedon" className="inline">Schedule:</label>
                                 </div>
                                 <div className="large-4 column">

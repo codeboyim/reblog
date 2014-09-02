@@ -1,4 +1,4 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     grunt.initConfig({
         sass: {
             dev: {
@@ -9,7 +9,7 @@ module.exports = function(grunt) {
                     compass: true
                 },
                 files: {
-                    'public/css/site.css': ['src/scss/site.scss', 'app/**/*.scss', '!app/app.scss']
+                    'public/css/site.css': ['src/scss/site.scss', 'app/**/*.scss']
                 }
             }
         },
