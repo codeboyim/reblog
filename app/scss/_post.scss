@@ -1,18 +1,24 @@
 /* app/scss/post */
 
-$image_placeholder_background:  #e0e0e0;
-$image_placeholder_margin:  rem-calc(5) auto;
+$image_placeholder_background: #e0e0e0;
+$image_placeholder_margin: rem-calc(5) auto;
 
-.post-edit-panel-image{
-    height:160px;
-    width:350px;
+.post-edit-image-uploader {
     background-color: $image_placeholder_background;
     margin: $image_placeholder_margin;
+    &.dragover {
+        background-color: red;
+    }
 }
 
-.post-edit-side-image{
-    width:320px;
+.post-edit-panel-image {
+    @extend .post-edit-image-uploader;
+    height: 160px;
+    width: 350px;
+}
+
+.post-edit-side-image {
+    @extend .post-edit-image-uploader;
+    width: 320px;
     height: 320px;
-    background-color: $image_placeholder_background;
-    margin: $image_placeholder_margin;
 }
