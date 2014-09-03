@@ -3,6 +3,11 @@ define(['globals', 'react', 'underscore', 'jquery', 'markdown', 'models/post', '
     function(globals, React, _, $, markdown, PostModel, Modal, moment){
 
         var exports = Post = React.createClass({
+            acceptImageTypes:{
+                'image/png': true,
+                'image/jpeg': true,
+                'image/gif': true
+            },
 
             getInitialState: function(){
                 var initialPost = this.props.post || {id:(this.props.id||0)};
@@ -11,7 +16,6 @@ define(['globals', 'react', 'underscore', 'jquery', 'markdown', 'models/post', '
             },
 
             componentDidMount: function (){
-                
                 
                 if(!this.props.post){
                 
@@ -56,48 +60,111 @@ define(['globals', 'react', 'underscore', 'jquery', 'markdown', 'models/post', '
                 }
             },
 
-            _onClick: function(type, e){     
+            onClick: function(type, e){     
+                var post = this.state.post,
+                    panelImage,
+                    oldPanelImage,
+                    sideImage,
+                    oldSideImage;
+                    
                 e.preventDefault();
 
                 switch(type){
 
                     case 'save':
-                        this.setState({ajaxing: true}); 
-                        this.model.save(this.state.post)
-                            .done(_.bind(function(post){
-                                    this.setState({post: _.clone(post.attributes)});
-                                    if(this.props.onSaved && _.isFunction(this.props.onSaved)){
-                                        this.props.onSaved(_.clone(this.state.post));
-                                    }
-
-                                }, this)
-                            )
-                            .always(_.bind(function(){
-
-                                    if(this.isMounted()){
-                                        this.setState({ajaxing: false});
-                                    }
-
-                                }, this)
-                            );
+                    
+                        this.setState({ajaxing: true}, _.bind(function (){
                         
+                            if(post.panelImage && post.panelImage.file){
+                                panelImage = new Parse.File(post.panelImage.file.name, post.panelImage.file);
+
+                                if((oldPanelImage=this.model.get('panelImage')) && oldPanelImage.destroy){
+                                    oldPanelImage.destroy();
+                                }
+
+                                post.panelImage = panelImage;
+                            }
+                            else{
+                                this.model.unset('panelImage');
+                            }
+
+                            if(post.sideImage && post.sideImage.file){
+                                sideImage = new Parse.File(post.sideImage.file.name, post.sideImage.file);
+
+                                if((oldSideImage=this.model.get('panelImage')) && oldSideImage.destroy){
+                                    oldSideImage.destroy();
+                                }
+
+                                post.sideImage = sideImage;
+                            }
+                            else{
+                                this.model.unset('sideImage');
+                            }
+
+                            this.model.save(post)
+                                .done(_.bind(function(post){
+                                        this.setState({post: _.clone(post.attributes)});
+                                        if(this.props.onSaved && _.isFunction(this.props.onSaved)){
+                                            this.props.onSaved(_.clone(this.state.post));
+                                        }
+
+                                    }, this)
+                                )
+                                .always(_.bind(function(){
+
+                                        if(this.isMounted()){
+                                            this.setState({ajaxing: false});
+                                        }
+
+                                    }, this)
+                                );
+                        
+                        }, this));
+                                               
                         
                         break;
 
                     case 'preview':
                         Modal.open(<Post post={this.state.post} />);
                         break;
+                        
+                    case 'del-panelImage':
+                        delete post.panelImage;
+                        this.setState({post:post});
+                        break;
+                    
+                    case 'del-sideImage':
+                        delete post.sideImage;
+                        this.setState({post:post});
+                        break;
 
                 }
             },
-            
-            _onDrop: function(type, e){
+                    
+            onDrop: function(type, e){
+                var reader,
+                    file = e.dataTransfer.files[0],
+                    post = this.state.post;
+                
                 e.preventDefault();
                 $(e.currentTarget).removeClass('dragover');
-                console.info(e);
+                
+                if(file && this.acceptImageTypes[file.type]){
+                    reader = new FileReader();
+                    reader.onload = _.bind(function(_file, _type, evt){
+                        post[_type] = {
+                            file: _file,
+                            dataURL: evt.target.result
+                        }
+                        this.setState({post: post});
+                    }, this, file, type);
+                    
+                    reader.readAsDataURL(file);
+                }
+                
             },
             
-            _onDragOver: function(e){               
+            onDragOver: function(e){               
                 var $t = $(e.currentTarget);
                  e.preventDefault();
                  
@@ -106,22 +173,44 @@ define(['globals', 'react', 'underscore', 'jquery', 'markdown', 'models/post', '
                 }
             },
             
-            _onDragLeave: function(e){
+            onDragLeave: function(e){
               $(e.currentTarget).removeClass('dragover');
             },
             
 
             renderEditView:function(){
                 var post = this.state.post,
-                    postedOn='';
+                    postedOn='',
+                    panelImage = null,
+                    sideImage = null;
                 
-
                 postedOn = post.postedOn && _.isDate(post.postedOn)?post.postedOn.dateFormat(globals.SETTINGS.datetimepicker.format):'';
 
                 if(!post){
                     return null;
                 }
                 else{
+                    
+                    if(post.panelImage){
+                    
+                        if(_.isFunction(post.panelImage.url)){
+                            panelImage = <img src={post.panelImage.url()} />;
+                        }
+                        else if(post.panelImage.dataURL){
+                            panelImage = <img src={post.panelImage.dataURL} />;
+                        }
+                    }
+                    
+                   if(post.sideImage){
+                    
+                        if(_.isFunction(post.sideImage.url)){
+                            sideImage = <img src={post.sideImage.url()} />;
+                        }
+                        else if(post.sideImage.dataURL){
+                            sideImage = <img src={post.sideImage.dataURL} />;
+                        }
+                    }
+                
                     return (
                         <section>
                             <h3>Edit Post</h3>
@@ -143,17 +232,21 @@ define(['globals', 'react', 'underscore', 'jquery', 'markdown', 'models/post', '
                                     <label htmlFor="" className="inline">Panel Image:</label>
                                 </div>
                                 <div className="large-10 column">
-                                    <div className="post-edit-panel-image" onDragOver={this._onDragOver} onDragLeave={this._onDragLeave} onDrop={_.bind(this._onDrop, this, 'panelImage')}>
+                                    <div className="post-edit-panel-image" onDragOver={this.onDragOver} onDragLeave={this.onDragLeave} onDrop={_.bind(this.onDrop, this, 'panelImage')}>
+                                       {panelImage}
                                     </div>
+                                    <a className="button tiny radius alert" onClick={_.bind(this.onClick, this, 'del-panelImage')}>remove</a>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="large-2 column">
-                                    <label htmlFor="" className="inline">Side Image:</label>
+                                    <label htmlFor="" className="inline">Post Image:</label>
                                 </div>
                                 <div className="large-10 column">
-                                    <div className="post-edit-side-image" onDragOver={this._onDragOver} onDragLeave={this._onDragLeave} onDrop={_.bind(this._onDrop, this, 'sideImage')}>
+                                    <div className="post-edit-side-image" onDragOver={this.onDragOver} onDragLeave={this.onDragLeave} onDrop={_.bind(this.onDrop, this, 'sideImage')}>
+                                        {sideImage}
                                     </div>
+                                    <a className="button tiny radius alert" onClick={_.bind(this.onClick, this, 'del-sideImage')}>remove</a>
                                 </div>
                             </div>
                             <div className="row">                            
@@ -164,9 +257,9 @@ define(['globals', 'react', 'underscore', 'jquery', 'markdown', 'models/post', '
                                     <input id="post_postedon" type="datetime" value={postedOn} readOnly />
                                 </div>
                                 <div className="large-6 column text-right">
-                                    <button disabled={this.state.ajaxing} onClick={_.bind(this._onClick, this, 'save')}>Save</button>
-                                    <button disabled={this.state.ajaxing} onClick={_.bind(this._onClick, this, 'preview')}>Preview</button>
-                                    <button disabled={this.state.ajaxing} onClick={_.bind(this._onClick, this, 'delete')}>Delete</button>
+                                    <button disabled={this.state.ajaxing} onClick={_.bind(this.onClick, this, 'save')}>Save</button>
+                                    <button disabled={this.state.ajaxing} onClick={_.bind(this.onClick, this, 'preview')}>Preview</button>
+                                    <button disabled={this.state.ajaxing} onClick={_.bind(this.onClick, this, 'delete')}>Delete</button>
                                 </div>
                             </div>
                         </section>

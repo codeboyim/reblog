@@ -10,7 +10,9 @@ define(['parse'], function (Parse) {
             body: '',
             postedOn: null,
             createdBy: '',
-            modifiedBy: ''
+            modifiedBy: '',
+            panelImage: null,
+            sideImage: null
         }
     });
 });
