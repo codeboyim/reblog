@@ -7,6 +7,7 @@
         "console": false,
         "window": false,
         "FB": false,
-        "module": false
+        "module": false,
+        "__dirname": false
     }
 }
