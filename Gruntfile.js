@@ -16,7 +16,8 @@ module.exports = function (grunt) {
             },
             'build-dev': {
                 devtool: 'sourcemap',
-                debug: true
+                debug: true,
+                watch: true
             }
         },
         'webpack-dev-server': {
@@ -40,19 +41,27 @@ module.exports = function (grunt) {
                     trace: true,
                     compass: true
                 },
-                files: {
-                    'public/css/site.css': ['src/scss/site.scss', 'app/**/*.scss']
-                }
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'app/',
+                        src: '**/*.scss',
+                        dest: 'public/css'
+                    },
+                    {
+                        'public/css/site.css': ['src/scss/site.scss']
+                    }
+                ]
             }
         },
         watch: {
-            app: {
-                files: ['app/**/*', 'src/**/*'],
-                tasks: ['webpack:build-dev'],
-                options: {
-                    spawn: false
-                }
-            },
+            //            webpack: {
+            //                files: ['app/**/*', 'src/**/*'],
+            //                tasks: ['webpack:build-dev'],
+            //                options: {
+            //                    spawn: false
+            //                }
+            //            },
             sass: {
                 files: ['src/scss/*.scss', 'app/**/*.scss'],
                 tasks: ['newer:sass:dev'],
@@ -64,5 +73,5 @@ module.exports = function (grunt) {
     });
 
 
-    grunt.registerTask('default', ['webpack-dev-server:start']);
+    grunt.registerTask('default', ['newer:sass:dev', 'webpack-dev-server:start', 'watch']);
 };

@@ -1,8 +1,7 @@
 module.exports = {
     entry: {
-        main: ['./src/js/main.js'],
-        app: './app/main.js'
-
+        main: ['./app/main.js'],
+        home: ['./app/home']
     },
     output: {
         path: __dirname + '/public/js/',
@@ -12,23 +11,22 @@ module.exports = {
     module: {
         loaders: [
             {
-                test: /\.js|.jsx$/,
-                loader: 'jsx-loader'
+                test: /\.jsx$/,
+                loader: 'jsx'
             },
             {
                 test: /\.scss$/,
-                loader: 'sass-loader'
+                loader: 'style!css!sass?outputStyle=expanded'
             }
         ]
     },
     resolve: {
-        extensions: ['', '.js', '.json', '.scss'],
+        extensions: ['', '.js', '.jsx', '.json'],
         modulesDirectories: ['node_modules', 'lib/vendors']
-
     },
     externals: [
         {
-            parse: 'Parse'
+            parse: 'Parse'            
         }
     ],
     plugins: []

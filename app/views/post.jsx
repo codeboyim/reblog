@@ -51,15 +51,6 @@ define(['globals', 'react', 'underscore', 'jquery', 'markdown', 'models/post', '
                 this.setState({post:_.extend(this.state.post, {'postedOn': dp})});
             },
 
-            postModelChanged: function(event, post){
-            
-                if(event==='change:postedOn'){
-                    $('#post_postedon').val(
-                        post.get('postedOn')?post.get('postedOn').dateFormat(globals.SETTINGS.datetimepicker.format):''
-                    );
-                }
-            },
-
             onClick: function(type, e){     
                 var post = this.state.post,
                     panelImage,
@@ -226,7 +217,11 @@ define(['globals', 'react', 'underscore', 'jquery', 'markdown', 'models/post', '
                                             value={post.body} onChange={this.linkedValueChanged}/>
                                     </label>
                                 </div>
+                                <div className="clearfix">
+                                    <a href="#" className="small right" disabled={this.state.ajaxing} onClick={_.bind(this.onClick, this, 'preview')}>Preview</a>
+                                </div>
                             </div>
+                            
                             <div className="row">
                                 <div className="large-2 column">
                                     <label htmlFor="" className="inline">Panel Image:</label>
@@ -258,7 +253,6 @@ define(['globals', 'react', 'underscore', 'jquery', 'markdown', 'models/post', '
                                 </div>
                                 <div className="large-6 column text-right">
                                     <button disabled={this.state.ajaxing} onClick={_.bind(this.onClick, this, 'save')}>Save</button>
-                                    <button disabled={this.state.ajaxing} onClick={_.bind(this.onClick, this, 'preview')}>Preview</button>
                                     <button disabled={this.state.ajaxing} onClick={_.bind(this.onClick, this, 'delete')}>Delete</button>
                                 </div>
                             </div>
