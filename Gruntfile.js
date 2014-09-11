@@ -23,7 +23,8 @@ module.exports = function (grunt) {
         'webpack-dev-server': {
             options: {
                 webpack: webpackConfig,
-                publicPath: webpackConfig.output.publicPath
+                publicPath: webpackConfig.output.publicPath,
+                port: 7593
             },
             start: {
                 keepAlive: true,
@@ -46,10 +47,15 @@ module.exports = function (grunt) {
                         expand: true,
                         cwd: 'app/',
                         src: '**/*.scss',
-                        dest: 'public/css'
+                        dest: 'public/css',
+                        ext: '.css'
                     },
                     {
-                        'public/css/site.css': ['src/scss/site.scss']
+                        expand: true,
+                        cwd: 'src/scss',
+                        src: '**/*.scss',
+                        dest: 'public/css',
+                        ext: '.css'
                     }
                 ]
             }
@@ -69,9 +75,17 @@ module.exports = function (grunt) {
                     spawn: false
                 }
             }
+        },
+        concurrent: {
+            target: {
+                tasks: ['watch', 'webpack-dev-server:start'],
+                options: {
+                    logConcurrentOutput: true
+                }
+            }
         }
     });
 
 
-    grunt.registerTask('default', ['newer:sass:dev', 'webpack-dev-server:start', 'watch']);
+    grunt.registerTask('default', ['newer:sass:dev', 'concurrent:target']);
 };

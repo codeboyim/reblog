@@ -1,34 +1,32 @@
-define(['underscore', 'backbone'], function (_, Backbone) {
-    'use strict';
-    /**     
-     * @module app/globals
-     */
+var _ = require('underscore'),
+    Backbone = require('backbone');
 
-    var exports = {},
-        locale = 'en-au';
 
-    /** global observable */
-    exports.events = _.extend({}, Backbone.Events);
 
-    /** @const */
-    exports.EVENT = {
-        authStatusChanged: 'auth.statusChanged',
-        viewLoaded: 'view.loaded',
-        viewUnloaded: 'view.unloaded'
-    };
+/**     
+ * @module app/globals
+ */
 
-    /** @const */
-    exports.SETTINGS = {
-        datetimepicker: {
-            format: 'L H:mm',
-            formatDate: 'L',
-            formatTime: 'H:mm',
-            defaultDate: new Date()
-        },
-        moment: {
-            locale: locale
-        }
-    };
 
-    return exports;
-});
+/** global observable */
+module.exports.events = _.extend({}, Backbone.Events);
+
+/** @const */
+module.exports.EVENT = {
+    authStatusChanged: 'auth.statusChanged',
+    viewLoaded: 'view.loaded',
+    viewUnloaded: 'view.unloaded'
+};
+
+/** @const */
+module.exports.SETTINGS = {
+    datetimepicker: {
+        format: 'L H:mm',
+        formatDate: 'L',
+        formatTime: 'H:mm',
+        defaultDate: new Date()
+    },
+    moment: {
+        locale: 'en-au'
+    }
+};

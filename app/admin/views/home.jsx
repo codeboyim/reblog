@@ -1,21 +1,10 @@
-define(['react', 'jsx!./_layout'], 
+/** @jsx React.DOM */
 
-    function(React, Layout){
+var React = require('react');
 
+module.exports = React.createClass({
 
-        var exports = React.createClass({
-
-            render: function(){
-                
-                return (
-                    <Layout>
-                        <div></div>
-                    </Layout>
-                );
-            }
-        });
-
-        return exports;
-
+    render: function(){
+        return <div></div>;
     }
-);
+});

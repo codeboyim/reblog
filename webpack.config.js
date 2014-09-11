@@ -11,12 +11,16 @@ module.exports = {
     module: {
         loaders: [
             {
-                test: /\.jsx$/,
+                test: /\.js$|\.jsx$/,
                 loader: 'jsx'
             },
             {
                 test: /\.scss$/,
                 loader: 'style!css!sass?outputStyle=expanded'
+            },
+            {
+                test:/\.css$/,
+                loader:'style!css'
             }
         ]
     },

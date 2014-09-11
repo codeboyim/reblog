@@ -1,58 +1,57 @@
-define(['react', 'parse', 'backbone', 'underscore', 'globals'], function (React, Parse, Backbone, _, globals) {
+/** @jsx React.DOM */
 
-    /**
-     * @constructor
-     */
-    var exports = React.createClass({
-        
-        render: function(){
-            return <button onClick={this._loginClicked}>login</button>
-        
-        },
-        
-        _loginClicked:function (e) {
-            var self=this;
-            e.preventDefault();
+var globals = require('../globals'),
+    Parse = require('parse'),
+    Backbone = require('backbone'),
+    _ = require('underscore'),
+    React = require('react');
 
-            Parse.FacebookUtils.logIn(null, {
+module.exports = require('react').createClass({
 
-                success: function (user) {
+    render: function () {
+        return <button onClick={this._loginClicked}>login</button>;
+    },
 
-                    FB.api(user.get('authData').facebook.id, function (res) {
-                        var acl;
+    _loginClicked:function (e) {
+        var self=this;
+        e.preventDefault();
 
-                        if (user.get('name') !== res.name) {
-                            user.set('name', res.name);
-                        }
+        Parse.FacebookUtils.logIn(null, {
 
-                        if (!user.existed()) {
-                            acl = new Parse.ACL();
-                            acl.setRoleReadAccess('Administrators', true);
-                            acl.setPublicReadAccess(false);
-                            user.setACL(acl);
-                        }
+            success: function (user) {
 
-                        user.save();
+                FB.api(user.get('authData').facebook.id, function (res) {
+                    var acl;
 
-                    });
+                    if (user.get('name') !== res.name) {
+                        user.set('name', res.name);
+                    }
 
-                    (new Parse.Query(Parse.Role)).equalTo('users', Parse.User.current()).first().done(_.bind(function (u) {
+                    if (!user.existed()) {
+                        acl = new Parse.ACL();
+                        acl.setRoleReadAccess('Administrators', true);
+                        acl.setPublicReadAccess(false);
+                        user.setACL(acl);
+                    }
 
-                        if (u) {
-                            Parse.User.current().admin = true;
-                        }
-                        
-                        self.props.onLoggedIn();
+                    user.save();
 
-                    }, this));
-                },
-                error: function (user, error) {
-                    console.error("User cancelled the Facebook login or did not fully authorize.");
-                }
-            });
-        }
-        
-    });
+                });
 
-    return exports;
+                (new Parse.Query(Parse.Role)).equalTo('users', Parse.User.current()).first().done(_.bind(function (u) {
+
+                    if (u) {
+                        Parse.User.current().admin = true;
+                    }
+
+                    self.props.onLoggedIn();
+
+                }, this));
+            },
+            error: function (user, error) {
+                console.error("User cancelled the Facebook login or did not fully authorize.");
+            }
+        });
+    }
+
 });

@@ -1,27 +1,23 @@
-define(['react', 'jsx!./_sidebar'], 
+/** @jsx React.DOM */
 
-    function(React, Sidebar){
+var Sidebar = require('./_sidebar'),
+    React = require('react');
 
-        var exports = React.createClass({
-            
-            render: function(){
+module.exports = React.createClass({
 
-                return (
-                    <div className="row">
-                        <article>
-                            <h2 className="hide">Admin</h2>
-                            <div className="large-3 column">
-                                <Sidebar area={this.props.area} />
-                            </div>
-                            <div className="large-9 column">
-                                {this.props.children}
-                            </div>
-                        </article>
-                    </div>);
-            }
-        });
+    render: function(){
 
-        return exports;
-
+        return (
+            <div className="row">
+                <article>
+                    <h2 className="hide">Admin</h2>
+                    <div className="large-3 column">
+                        <Sidebar area={this.props.area} />
+                    </div>
+                    <div className="large-9 column">
+                        {this.props.children}
+                    </div>
+                </article>
+            </div>);
     }
-);
+});

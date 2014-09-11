@@ -1,8 +1,8 @@
 var React = require('react'),
-    Home = require('./home');
+    Home = require('./view');
 
 module.exports = function () {
 
     React.renderComponent(Home(), document.getElementById('site-content'));
 
-}
+};

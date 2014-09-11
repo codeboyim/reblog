@@ -1,5 +1,5 @@
 var Parse = require('parse');
-
+require('/public/css/app.css');
 
 window.fbAsyncInit = function () {
 
