@@ -22,7 +22,7 @@ module.exports = function (grunt) {
         'webpack-dev-server': {
             options: {
                 webpack: webpackConfig,
-                publicPath: '/' + webpackConfig.output.publicPath
+                publicPath: webpackConfig.output.publicPath
             },
             start: {
                 keepAlive: true,
