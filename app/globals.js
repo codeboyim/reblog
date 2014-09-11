@@ -11,6 +11,18 @@ var _ = require('underscore'),
 /** global observable */
 module.exports.events = _.extend({}, Backbone.Events);
 
+module.exports.broadcast = function () {
+    this.events.trigger.apply(this.events, [].slice.apply(arguments));
+};
+
+module.exports.subscribe = function () {
+    this.events.on.apply(this.events, [].slice.apply(arguments));
+};
+
+module.exports.unsubscribe = function () {
+    this.events.off.apply(this.events, [].slice.apply(arguments));
+};
+
 /** @const */
 module.exports.EVENT = {
     authStatusChanged: 'auth.statusChanged',

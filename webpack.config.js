@@ -1,7 +1,6 @@
 module.exports = {
     entry: {
-        main: ['./app/main.js'],
-        home: ['./app/home']
+        main: './app/main.js'
     },
     output: {
         path: __dirname + '/public/js/',
@@ -19,8 +18,8 @@ module.exports = {
                 loader: 'style!css!sass?outputStyle=expanded'
             },
             {
-                test:/\.css$/,
-                loader:'style!css'
+                test: /\.css$/,
+                loader: 'style!css'
             }
         ]
     },
@@ -30,7 +29,7 @@ module.exports = {
     },
     externals: [
         {
-            parse: 'Parse'            
+            parse: 'Parse'
         }
     ],
     plugins: []

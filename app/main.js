@@ -42,7 +42,7 @@ if (Parse.User.current()) {
 
         if (u) {
             Parse.User.current().admin = true;
-            globals.events.trigger(globals.EVENT.authStatusChanged, true);
+            globals.broadcast(globals.EVENT.authStatusChanged, true);
         }
 
     }, this));

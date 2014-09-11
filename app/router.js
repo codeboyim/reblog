@@ -47,7 +47,7 @@ module.exports = Backbone.Router.extend(
                 });
             } else {
                 require('react').renderComponent(Login({
-                    onLoggedIn: _.bind(onLoggedIn, this, returnUrl)
+                    onLoggedin: _.bind(this._onLoggedin, this, returnUrl)
                 }), document.getElementById('site-content'));
             }
 
@@ -57,12 +57,12 @@ module.exports = Backbone.Router.extend(
         initialize: function (options) {
             _.bindAll(this, '_authStatusChanged');
 
-            this.listenTo(globals.events, globals.EVENT.authStatusChanged, this._authStatusChanged);
+            globals.subscribe(globals.EVENT.authStatusChanged, this._authStatusChanged);
             this.route('admin/posts/:id', _.bind(this.admin, this, 'posts'));
         },
 
 
-        _authStatusChanged: function (authenticated) {
+        _authStatusChanged: function (authenticated, returnUrl) {
 
             if (!authenticated) {
                 this.navigate('', {
@@ -70,6 +70,14 @@ module.exports = Backbone.Router.extend(
                 });
             }
 
+        },
+
+        _onLoggedin: function (returnUrl) {
+            this.navigate(returnUrl || '', {
+                trigger: true
+            });
+            
+            globals.broadcast(globals.EVENT.authStatusChanged, true);
         },
 
         isAuthenticated: function (returnUrl) {
@@ -86,6 +94,3 @@ module.exports = Backbone.Router.extend(
 
     }
 );
-
-
-function onLoggedIn() {}

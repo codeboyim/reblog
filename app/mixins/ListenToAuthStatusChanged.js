@@ -12,16 +12,17 @@ module.exports = {
     },
     componentWillMount: function () {
         _.bindAll(this, '_authStatusChanged');
-        globals.events.on(globals.EVENT.authStatusChanged, this._authStatusChanged);
+        globals.subscribe(globals.EVENT.authStatusChanged, this._authStatusChanged);
     },
     componentWillUnmount: function () {
-        globals.events.off(globals.EVENT.authStatusChanged, this._authStatusChanged);
+        globals.unsubscribe(globals.EVENT.authStatusChanged, this._authStatusChanged);
     },
     _authStatusChanged: function (authenticated) {
-        this.setState({
-            authenticated: authenticated,
-            admin: !!Parse.User.current().admin
-        });
+        if (this.isMounted()) {
+            this.setState({
+                authenticated: authenticated,
+                admin: Parse.User.current() && !!Parse.User.current().admin
+            });
+        }
     }
 };
-

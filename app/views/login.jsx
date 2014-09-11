@@ -6,14 +6,14 @@ var globals = require('../globals'),
     _ = require('underscore'),
     React = require('react');
 
-module.exports = require('react').createClass({
+module.exports = React.createClass({
 
     render: function () {
         return <button onClick={this._loginClicked}>login</button>;
     },
 
     _loginClicked:function (e) {
-        var self=this;
+        var that = this;
         e.preventDefault();
 
         Parse.FacebookUtils.logIn(null, {
@@ -38,15 +38,17 @@ module.exports = require('react').createClass({
 
                 });
 
-                (new Parse.Query(Parse.Role)).equalTo('users', Parse.User.current()).first().done(_.bind(function (u) {
+                (new Parse.Query(Parse.Role)).equalTo('users', Parse.User.current()).first().done(function (u) {
 
                     if (u) {
                         Parse.User.current().admin = true;
                     }
 
-                    self.props.onLoggedIn();
-
-                }, this));
+                    if(_.isFunction(that.props.onLoggedin)){
+                        that.props.onLoggedin();
+                    }
+                    
+                });
             },
             error: function (user, error) {
                 console.error("User cancelled the Facebook login or did not fully authorize.");

@@ -15,7 +15,7 @@ module.exports = React.createClass({
     logoutClicked : function (e){
         e.preventDefault();
         Parse.User.logOut();
-        globals.events.trigger(globals.EVENT.authStatusChanged, false);
+        globals.broadcast(globals.EVENT.authStatusChanged, false);
     },
 
     render: function(){

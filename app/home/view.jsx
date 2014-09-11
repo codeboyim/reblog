@@ -13,9 +13,13 @@ module.exports = React.createClass({
     
     componentDidMount: function(){
 
-         (new PostCollection).fetch().done(_.bind(function(posts){
-            this.setState({posts:posts});
-         }, this));
+        (new PostCollection).fetch().done(_.bind(function(posts){
+            
+            if(this.isMounted()){
+                this.setState({posts:posts});
+            }
+            
+        }, this));
     },
     
     render: function() {
