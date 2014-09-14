@@ -3,7 +3,7 @@ var Parse = require('parse'),
     Backbone = require('backbone'),
     React = require('react'),
     _ = require('underscore'),
-    globals = require('./globals');
+    globals = require('globals');
 
 
 window.fbAsyncInit = function () {

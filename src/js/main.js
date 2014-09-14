@@ -24,7 +24,6 @@ window.fbAsyncInit = function () {
 }(document, 'script', 'facebook-jssdk'));
 
 Parse.initialize("yxD2tY5w6WEVJg2Dd8a566sUI6j1xGKHVOLzRkKl", "Ii4UZXR5rMGKmo5Og36lThmXcWnw3xyvN053kC4Z");
-
 /*
     
      var root = '../../',

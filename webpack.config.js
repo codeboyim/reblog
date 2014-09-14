@@ -1,3 +1,5 @@
+var webpack = require('webpack');
+
 module.exports = {
     entry: {
         main: './app/main.js'
@@ -25,12 +27,23 @@ module.exports = {
     },
     resolve: {
         extensions: ['', '.js', '.jsx', '.json'],
-        modulesDirectories: ['node_modules', 'lib/vendors']
+        modulesDirectories: ['node_modules', 'lib', 'lib/vendors', 'app'],
+        alias: {
+            'globals': __dirname + '/app/globals'
+        }
     },
     externals: [
         {
             parse: 'Parse'
         }
     ],
-    plugins: []
+    plugins: [
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+            _: 'underscore',
+            Backbone: 'backbone',
+            Parse: 'parse'
+        })
+    ]
 };

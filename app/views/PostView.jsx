@@ -1,122 +1,153 @@
-define(['globals', 'react', 'underscore', 'jquery', 'markdown', 'models/post', 'jsx!modal', '_moment', '_datetimepicker'],
-    
-    function(globals, React, _, $, markdown, PostModel, Modal, moment){
+/** @jsx React.DOM */
 
-        var exports = Post = React.createClass({
-            acceptImageTypes:{
+
+var globals =require('globals'),
+    React = require('react'),
+    _ = require('underscore'),
+    $ = require('jquery'),
+    markdow = require('markdown'),
+    Post = require('models/PostModel'),
+    Modal = require('Modal'),
+    moment = require('moment'),
+    datetimepicker = require('datetimepicker');
+
+var exports = React.createClass({
+            
+            acceptImageTypes: {
                 'image/png': true,
                 'image/jpeg': true,
                 'image/gif': true
             },
 
-            getInitialState: function(){
-                var initialPost = this.props.post || {id:(this.props.id||0)};
+            getInitialState: function () {
+                var initialPost = this.props.post || {
+                    id: (this.props.id || 0)
+                };
                 this.model = new PostModel(initialPost);
-                return {post:initialPost, ajaxing:false}
-            },
-
-            componentDidMount: function (){
-                
-                if(!this.props.post){
-                
-                    this.model.fetch()
-                        .done(_.bind(function (post){
-                                            
-                            if(this.isMounted()){
-                                this.setState({post:_.clone(post.attributes)});
-                            }
-                            
-                            
-                        }, this))
-                        .always(_.bind(function (){
-                            this.setState({ajaxing: false});
-                        }, this));
-
-                    if(this.props.editView){
-                        $('#post_postedon').datetimepicker(
-                            _.extend({onChangeDateTime: this.datetimepickerChangeDateTime}, globals.SETTINGS.datetimepicker)
-                        );
-                    }
+                return {
+                    post: initialPost,
+                    ajaxing: false
                 }
-                
             },
 
-            linkedValueChanged: function(e){
-                var post = this.state.post;
-                post[e.target.name] = e.target.value;
-                this.setState({post:post});
-            },
+            componentDidMount: function () {
 
-            datetimepickerChangeDateTime: function(dp, $input){
-                this.setState({post:_.extend(this.state.post, {'postedOn': dp})});
-            },
+                if (!this.props.post) {
+                    this.model.fetch()
+                        .done(_.bind(function (post) {
 
-            onClick: function(type, e){     
-                var post = this.state.post,
-                    panelImage,
-                    oldPanelImage,
-                    sideImage,
-                    oldSideImage;
-                    
-                e.preventDefault();
-
-                switch(type){
-
-                    case 'save':
-                    
-                        this.setState({ajaxing: true}, _.bind(function (){
-                        
-                            if(post.panelImage && post.panelImage.file){
-                                panelImage = new Parse.File(post.panelImage.file.name, post.panelImage.file);
-
-                                if((oldPanelImage=this.model.get('panelImage')) && oldPanelImage.destroy){
-                                    oldPanelImage.destroy();
-                                }
-
-                                post.panelImage = panelImage;
-                            }
-                            else{
-                                this.model.unset('panelImage');
+                            if (this.isMounted()) {
+                                this.setState({
+                                    post: _.clone(post.attributes)
+                                });
                             }
 
-                            if(post.sideImage && post.sideImage.file){
-                                sideImage = new Parse.File(post.sideImage.file.name, post.sideImage.file);
 
-                                if((oldSideImage=this.model.get('panelImage')) && oldSideImage.destroy){
-                                    oldSideImage.destroy();
-                                }
-
-                                post.sideImage = sideImage;
-                            }
-                            else{
-                                this.model.unset('sideImage');
-                            }
-
-                            this.model.save(post)
-                                .done(_.bind(function(post){
-                                        this.setState({post: _.clone(post.attributes)});
-                                        if(this.props.onSaved && _.isFunction(this.props.onSaved)){
-                                            this.props.onSaved(_.clone(this.state.post));
-                                        }
-
-                                    }, this)
-                                )
-                                .always(_.bind(function(){
-
-                                        if(this.isMounted()){
-                                            this.setState({ajaxing: false});
-                                        }
-
-                                    }, this)
-                                );
-                        
+                        }, this))
+                        .always(_.bind(function () {
+                            this.setState({
+                                ajaxing: false
+                            });
                         }, this));
-                                               
-                        
-                        break;
 
-                    case 'preview':
-                        Modal.open(<Post post={this.state.post} />);
+                          if (this.props.editView) {
+                              $('#post_postedon').datetimepicker(
+                                  _.extend({
+                                      onChangeDateTime: this.datetimepickerChangeDateTime
+                                  }, globals.SETTINGS.datetimepicker)
+                              );
+                          }
+                      }
+
+                  },
+
+                  linkedValueChanged: function (e) {
+                      var post = this.state.post;
+                      post[e.target.name] = e.target.value;
+                      this.setState({
+                          post: post
+                      });
+                  },
+
+                  datetimepickerChangeDateTime: function (dp, $input) {
+                      this.setState({
+                          post: _.extend(this.state.post, {
+                              'postedOn': dp
+                          })
+                      });
+                  },
+
+                  onClick: function (type, e) {
+                      var post = this.state.post,
+                          panelImage,
+                          oldPanelImage,
+                          sideImage,
+                          oldSideImage;
+
+                      e.preventDefault();
+
+                      switch (type) {
+
+                      case 'save':
+
+                          this.setState({
+                              ajaxing: true
+                          }, _.bind(function () {
+
+                              if (post.panelImage && post.panelImage.file) {
+                                  panelImage = new Parse.File(post.panelImage.file.name, post.panelImage.file);
+
+                                  if ((oldPanelImage = this.model.get('panelImage')) && oldPanelImage.destroy) {
+                                      oldPanelImage.destroy();
+                                  }
+
+                                  post.panelImage = panelImage;
+                              } else {
+                                  this.model.unset('panelImage');
+                              }
+
+                              if (post.sideImage && post.sideImage.file) {
+                                  sideImage = new Parse.File(post.sideImage.file.name, post.sideImage.file);
+
+                                  if ((oldSideImage = this.model.get('panelImage')) && oldSideImage.destroy) {
+                                      oldSideImage.destroy();
+                                  }
+
+                                  post.sideImage = sideImage;
+                              } else {
+                                  this.model.unset('sideImage');
+                              }
+
+                              this.model.save(post)
+                                  .done(_.bind(function (post) {
+                                      this.setState({
+                                          post: _.clone(post.attributes)
+                                      });
+                                      if (this.props.onSaved && _.isFunction(this.props.onSaved)) {
+                                          this.props.onSaved(_.clone(this.state.post));
+                                      }
+
+                                  }, this))
+                                  .always(_.bind(function () {
+
+                                      if (this.isMounted()) {
+                                          this.setState({
+                                              ajaxing: false
+                                          });
+                                      }
+
+                                  }, this));
+
+                          }, this));
+
+
+                          break;
+
+                      case 'preview':
+                          Modal.open( < Post post = {
+                                  this.state.post
+                              }
+                              />);
                         break;
                         
                     case 'del-panelImage':
@@ -167,8 +198,6 @@ define(['globals', 'react', 'underscore', 'jquery', 'markdown', 'models/post', '
             onDragLeave: function(e){
               $(e.currentTarget).removeClass('dragover');
             },
-            
-
             renderEditView:function(){
                 var post = this.state.post,
                     postedOn='',
@@ -285,7 +314,3 @@ define(['globals', 'react', 'underscore', 'jquery', 'markdown', 'models/post', '
 
             }
         });
-
-        return exports;
-    }
-);

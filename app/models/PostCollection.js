@@ -1,9 +1,9 @@
 /**
  * @module post collection
  */
-define(['parse', './Post'], function(Parse, Post) {
 
-    return Parse.Collection.extend({
-        model: Post
-    });
+
+
+module.exports = require('parse').Collection.extend({
+    model: require('models/PostModel')
 });
