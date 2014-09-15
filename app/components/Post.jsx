@@ -1,17 +1,12 @@
 /** @jsx React.DOM */
 
-
-var globals =require('globals'),
-    React = require('react'),
-    _ = require('underscore'),
-    $ = require('jquery'),
-    markdow = require('markdown'),
-    Post = require('models/PostModel'),
+var markdow = require('markdown'),
+    PostModel = require('models/PostModel'),
     Modal = require('Modal'),
     moment = require('moment'),
     datetimepicker = require('datetimepicker');
 
-var exports = React.createClass({
+module.exports = React.createClass({
             
             acceptImageTypes: {
                 'image/png': true,

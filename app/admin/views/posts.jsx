@@ -1,11 +1,6 @@
 /** @jsx React.DOM */
 // jshint ignore: start
-var React = require('react'),
-    Parse = require('parse'),
-    _ = require('underscore'),
-    Backbone = require('backbone'),
-    globals = require('globals'),
-    Layout = require('./_layout'),
+var Layout = require('./_layout'),
     PostCollection = require('models/PostCollection');
 
 
@@ -30,19 +25,18 @@ module.exports = React.createClass({
     render: function () {
 
         return (
-            <Layout>
-                <section>
-                    <header>
-                        <h3>Posts</h3>
-                    </header>
-                    <button onClick={this._addPost}>Add a new Post</button>
-                    <ul role="list">
-                        {_.map(this.state.posts, function(post){
-                            return <li key={post.id}><a href={"#admin/posts/"+post.id}>{post.get('title')}</a></li>;
-                        })}
-                    </ul>
-                </section>
-            </Layout>);
+            <section>
+                <header>
+                    <h3>Posts</h3>
+                </header>
+                <button onClick={this._addPost}>Add a new Post</button>
+                <ul role="list">
+                    {_.map(this.state.posts, function(post){
+                        return <li key={post.id}><a href={"#admin/posts/"+post.id}>{post.get('title')}</a></li>;
+                    })}
+                </ul>
+            </section>
+        );
     },
 
     _addPost: function (e) {

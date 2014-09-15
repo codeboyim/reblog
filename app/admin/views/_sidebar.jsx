@@ -1,7 +1,5 @@
 /** @jsx React.DOM */
 
-var React = require('react');
-
 module.exports = React.createClass({
     mixins: [require('../../mixins/ListenToAuthStatusChanged')],
 
@@ -25,6 +23,6 @@ module.exports = React.createClass({
     },
 
     isActive:function(name){
-        return  (this.props.area||'home')===name;
+        return  (this.props.area||'home') === name;
     }
 });

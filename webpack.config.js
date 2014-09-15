@@ -2,7 +2,7 @@ var webpack = require('webpack');
 
 module.exports = {
     entry: {
-        main: './app/main.js'
+        main: ['./app/main.js']
     },
     output: {
         path: __dirname + '/public/js/',
@@ -29,7 +29,8 @@ module.exports = {
         extensions: ['', '.js', '.jsx', '.json'],
         modulesDirectories: ['node_modules', 'lib', 'lib/vendors', 'app'],
         alias: {
-            'globals': __dirname + '/app/globals'
+            'globals': __dirname + '/app/globals',
+            'components': __dirname + '/app/components'
         }
     },
     externals: [
@@ -43,7 +44,9 @@ module.exports = {
             jQuery: 'jquery',
             _: 'underscore',
             Backbone: 'backbone',
-            Parse: 'parse'
+            Parse: 'parse',
+            globals: 'globals',
+            React: 'react'
         })
     ]
 };

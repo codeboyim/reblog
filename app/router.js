@@ -1,8 +1,4 @@
-var Backbone = require('backbone'),
-    _ = require('underscore'),
-    Parse = require('parse'),
-    Login = require('./views/login'),
-    globals = require('./globals');
+var Login = require('components/login');
 
 
 module.exports = Backbone.Router.extend(
@@ -76,7 +72,7 @@ module.exports = Backbone.Router.extend(
             this.navigate(returnUrl || '', {
                 trigger: true
             });
-            
+
             globals.broadcast(globals.EVENT.authStatusChanged, true);
         },
 

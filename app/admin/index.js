@@ -3,10 +3,8 @@
 
 var Layout = require('./views/_layout'),
     Home = require('./views/home'),
-    React = require('react'),
     Posts = require('./views/posts'),
-    _ = require('underscore'),
-    PostView = require('views/PostView');
+    Post = require('components/Post');
 
 
 function onAddPostClicked() {
@@ -30,18 +28,24 @@ module.exports = function (area, arg1) {
 
     case 'posts':
         if (_.isNull(arg1) || _.isUndefined(arg1)) {
-            React.renderComponent(<Layout><Posts onAddPostClicked={_.bind(onAddPostClicked, this)}/></Layout>, container);
+            React.renderComponent(
+                <Layout area={area}>
+                    <Posts onAddPostClicked={_.bind(onAddPostClicked, this)}/>
+                </Layout>
+            , container);
         } else {
-            React.renderComponent(<Layout><Post id={options[0] === 'create' ? 0 : arg1}
-                editView={true}  onSaved={_.bind(onPostSaved, this, options[0] === 'create')} /></Layout>
+            React.renderComponent(<Layout area={area}><Post id={arg1 === 'create' ? 0 : arg1}
+                editView={true}  onSaved={_.bind(onPostSaved, this, arg1 === 'create')} /></Layout>
             , container);
         }
         break;
 
-    case '':
+    default:
+        React.renderComponent(<Layout><Home /></Layout>, container);
         break;
+
     }
     
-    React.renderComponent(<Layout><Home /></Layout>, document.getElementById('site-content'));
+    
     
 };
