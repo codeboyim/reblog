@@ -1,6 +1,6 @@
-define(['react', 'parse', 'globals', 'jsx!./_layout'], function(React, Parse, globals, Layout){
+/** @jsx React.DOM */
 
-    var exports = React.createClass({
+module.exports = React.createClass({
     
         getInitialState:function(){
             return {users:null};
@@ -44,23 +44,21 @@ define(['react', 'parse', 'globals', 'jsx!./_layout'], function(React, Parse, gl
                 return null;
             }
             return (
-                <Layout>
-                    <section>
-                        <h3>Users</h3>
-                        <ul>
-                        {_.map(this.state.users, function(user){
-                            return (
-                                <li key={user.id}>
-                                    <label>
-                                        <input type="checkbox" checked={user.isAdmin} onChange={_.bind(this.onCheckboxChanged, this, user)} />
-                                        {user.get('name')}
-                                    </label>
-                                </li>
-                                );
-                        }, this)}
-                        </ul>
-                    </section>
-                </Layout>
+                <section>
+                    <h3>Users</h3>
+                    <ul>
+                    {_.map(this.state.users, function(user){
+                        return (
+                            <li key={user.id}>
+                                <label>
+                                    <input type="checkbox" checked={user.isAdmin} onChange={_.bind(this.onCheckboxChanged, this, user)} />
+                                    {user.get('name')}
+                                </label>
+                            </li>
+                            );
+                    }, this)}
+                    </ul>
+                </section>
             );
 
         },
@@ -73,6 +71,3 @@ define(['react', 'parse', 'globals', 'jsx!./_layout'], function(React, Parse, gl
 
     });
     
-    return exports;
-
-});
