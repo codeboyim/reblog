@@ -45,16 +45,16 @@ module.exports = function (grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: 'app/',
+                        cwd: 'src/scss',
                         src: '**/*.scss',
                         dest: 'public/css',
                         ext: '.css'
                     },
                     {
                         expand: true,
-                        cwd: 'src/scss',
+                        cwd: 'app',
                         src: '**/*.scss',
-                        dest: 'public/css',
+                        dest: 'app',
                         ext: '.css'
                     }
                 ]

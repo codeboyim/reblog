@@ -1,5 +1,7 @@
 var router = require('./router');
 
+require('./styles/app.css');
+
 window.fbAsyncInit = function () {
 
     Parse.FacebookUtils.init({

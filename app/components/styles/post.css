@@ -1,0 +1,30 @@
+/* app/scss/post */
+.post-edit-image-uploader, .post-edit-panel-image, .post-edit-side-image {
+  background-color: #efefef;
+  margin: 0 rem-calc(15px) rem-calc(21) 0;
+  overflow: hidden;
+  text-align: center;
+  border: 5px dashed rgba(155, 155, 155, 0);
+  display: inline-block;
+  vertical-align: bottom;
+  width: 350px;
+  -webkit-border-radius: 10px 10px;
+  -moz-border-radius: 10px 10px;
+  -ms-border-radius: 10px 10px;
+  -o-border-radius: 10px 10px;
+  border-radius: 10px 10px;
+  -webkit-box-shadow: #efefef 0 0 0 5px;
+  -moz-box-shadow: #efefef 0 0 0 5px;
+  box-shadow: #efefef 0 0 0 5px;
+}
+.post-edit-image-uploader.dragover, .dragover.post-edit-panel-image, .dragover.post-edit-side-image {
+  border-color: rgba(155, 155, 155, 0.9);
+}
+
+.post-edit-panel-image {
+  height: 160px;
+}
+
+.post-edit-side-image {
+  height: 320px;
+}

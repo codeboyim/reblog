@@ -29,8 +29,9 @@ module.exports = {
         extensions: ['', '.js', '.jsx', '.json'],
         modulesDirectories: ['node_modules', 'lib', 'lib/vendors', 'app'],
         alias: {
-            'globals': __dirname + '/app/globals',
-            'components': __dirname + '/app/components'
+            'globals$': __dirname + '/app/globals',
+            'components': __dirname + '/app/components',
+            'css': __dirname + '/public/css'
         }
     },
     externals: [

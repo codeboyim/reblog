@@ -6,6 +6,8 @@ var markdow = require('markdown'),
     moment = require('moment'),
     datetimepicker = require('datetimepicker');
 
+require('./styles/post.css');
+
 module.exports = React.createClass({
             
             acceptImageTypes: {
