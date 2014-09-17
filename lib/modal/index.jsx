@@ -4,7 +4,7 @@ var _ = require('underscore'),
     React = require('react'), 
     $ = require('jquery');
         
-module.exports = React.createClass({
+module.exports = Modal = React.createClass({
 
     componentWillMount: function(){
 

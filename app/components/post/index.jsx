@@ -1,14 +1,12 @@
 /** @jsx React.DOM */
 
-var markdow = require('markdown'),
+var markdown = require('markdown').markdown,
     PostModel = require('models/PostModel'),
     Modal = require('Modal'),
     moment = require('moment'),
     datetimepicker = require('datetimepicker');
 
-require('./styles/post.css');
-
-module.exports = React.createClass({
+module.exports = Post = React.createClass({
             
             acceptImageTypes: {
                 'image/png': true,
@@ -17,10 +15,15 @@ module.exports = React.createClass({
             },
 
             getInitialState: function () {
-                var initialPost = this.props.post || {
+                var initialPost;
+                require('./post.css');
+                
+                initialPost = this.props.post || {
                     id: (this.props.id || 0)
                 };
+                
                 this.model = new PostModel(initialPost);
+                
                 return {
                     post: initialPost,
                     ajaxing: false
@@ -141,10 +144,7 @@ module.exports = React.createClass({
                           break;
 
                       case 'preview':
-                          Modal.open( < Post post = {
-                                  this.state.post
-                              }
-                              />);
+                          Modal.open(<Post post={this.state.post}/>);
                         break;
                         
                     case 'del-panelImage':
