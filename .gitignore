@@ -1,6 +1,7 @@
 # css compiled from scss
 public/css/
 public/js/
+components/**/*.css
 
 # bower
 
