@@ -3,7 +3,7 @@
 var PostCollection = require('../models/PostCollection'),
     React = require('react'),
     _ = require('underscore'),
-    markdown = require('markdown').markdown;
+    converter = new (require('showdown').converter)();
 
 module.exports = React.createClass({
 
@@ -35,7 +35,7 @@ module.exports = React.createClass({
                             <p><time></time></p>
                         </header>
                         <main>
-                            <div dangerouslySetInnerHTML={{__html:markdown.toHTML(post.get('body'))}}/>
+                            <div dangerouslySetInnerHTML={{__html:converter.makeHtml(post.get('body'))}}/>
                         </main>
                     </article>
                 );

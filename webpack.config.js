@@ -30,7 +30,7 @@ module.exports = {
         modulesDirectories: ['node_modules', 'lib', 'lib/vendors', 'app'],
         alias: {
             'globals$': __dirname + '/app/globals',
-            'components': __dirname + '/app/components',
+            'shared': __dirname + '/app/components',
             'css': __dirname + '/public/css'
         }
     },
@@ -49,5 +49,8 @@ module.exports = {
             globals: 'globals',
             React: 'react'
         })
-    ]
+    ],
+    node: {
+        'fs': 'empty'
+    }
 };

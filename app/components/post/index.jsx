@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-var markdown = require('markdown').markdown,
+var converter = new (require('showdown').converter)(),
     PostModel = require('models/PostModel'),
     Modal = require('Modal'),
     moment = require('moment'),
@@ -296,7 +296,7 @@ module.exports = Post = React.createClass({
                                     <p><time></time></p>
                                 </header>
                                 <main>
-                                    <div dangerouslySetInnerHTML={{__html:markdown.toHTML(post.body)}}/>
+                                    <div dangerouslySetInnerHTML={{__html:converter.makeHtml(post.body)}}/>
                                 </main>
                             </article>
                 );

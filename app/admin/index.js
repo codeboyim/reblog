@@ -4,7 +4,7 @@
 var Layout = require('./components/_layout'),
     Home = require('./components/home'),
     Posts = require('./components/posts'),
-    Post = require('components/Post'),
+    Post = require('shared/Post'),
     Prefs = require('./components/prefs'),
     Users = require('./components/users');
 
