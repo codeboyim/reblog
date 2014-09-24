@@ -31,7 +31,7 @@ Backbone.history.start({
     pushState: false
 });
 
-React.renderComponent(require('components/headerNav')(), document.getElementById('header-nav'));
+React.renderComponent(require('shared/headerNav')(), document.getElementById('header-nav'));
 
 if (Parse.User.current()) {
     (new Parse.Query(Parse.Role)).equalTo('users', Parse.User.current()).first().done(_.bind(function (u) {

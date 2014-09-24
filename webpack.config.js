@@ -31,7 +31,7 @@ module.exports = {
         modulesDirectories: ['node_modules', 'lib', 'lib/vendors', 'app'],
         alias: {
             'globals$': __dirname + '/app/globals',
-            'shared': __dirname + '/app/components',
+            'shared': __dirname + '/app/_shared',
             'css': __dirname + '/public/css'
         }
     },

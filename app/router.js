@@ -1,4 +1,4 @@
-var Login = require('components/login');
+var Login = require('shared/login');
 
 
 module.exports = Backbone.Router.extend(
