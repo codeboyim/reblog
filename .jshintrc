@@ -9,6 +9,11 @@
         "FB": false,
         "module": false,
         "__dirname": false,
-        "exports": false
+        "exports": false,
+        "Parse": false,
+        "Backbone": false,
+        "_": false,
+        "globals": false,
+        "React": false
     }
 }
