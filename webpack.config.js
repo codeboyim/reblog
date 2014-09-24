@@ -2,7 +2,8 @@ var webpack = require('webpack');
 
 module.exports = {
     entry: {
-        main: ['./app/main.js']
+        main: ['script!parse', './app/main.js']
+
     },
     output: {
         path: __dirname + '/public/js/',
