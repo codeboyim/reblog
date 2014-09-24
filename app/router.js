@@ -1,4 +1,5 @@
-var Login = require('shared/login');
+var Login = require('shared/login'),
+    Layout = require('shared/_layout');
 
 
 module.exports = Backbone.Router.extend(
@@ -21,7 +22,7 @@ module.exports = Backbone.Router.extend(
 
         home: function () {
             require.ensure([], function () {
-                require('./home')();
+                React.renderComponent(require('./home')(), document.body);
             });
         },
 

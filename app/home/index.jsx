@@ -1,7 +1,8 @@
 var PostCollection = require('../models/PostCollection'),
     React = require('react'),
     _ = require('underscore'),
-    converter = new (require('showdown').converter)();
+    converter = new (require('showdown').converter)(),
+    Layout = require('shared/_layout');
 
 module.exports = React.createClass({
 
@@ -23,7 +24,7 @@ module.exports = React.createClass({
     render: function() {
         var self = this;
         return (
-        <article>
+        <Layout>
         {this.state.posts.map(
             function(post){
                 return (
@@ -38,7 +39,7 @@ module.exports = React.createClass({
                     </article>
                 );
         })}
-        </article>
+        </Layout>
         );
 
     }

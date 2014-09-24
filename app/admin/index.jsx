@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 // jshint ignore: start
 
-var Layout = require('./components/_layout'),
+var AdminLayout = require('./components/_layout'),
     Home = require('./components/home'),
     Posts = require('./components/posts'),
     Post = require('shared/Post'),
@@ -31,27 +31,27 @@ module.exports = function (area, arg1) {
         case 'posts':
             if (_.isNull(arg1) || _.isUndefined(arg1)) {
                 React.renderComponent(
-                    <Layout area='posts'>
+                    <AdminLayout area='posts'>
                         <Posts onAddPostClicked={_.bind(onAddPostClicked, this)}/>
-                    </Layout>
+                    </AdminLayout>
                 , container);
             } else {
-                React.renderComponent(<Layout area='posts'><Post id={arg1 === 'create' ? 0 : arg1}
-                    editView={true}  onSaved={_.bind(onPostSaved, this, arg1 === 'create')} /></Layout>
+                React.renderComponent(<AdminLayout area='posts'><Post id={arg1 === 'create' ? 0 : arg1}
+                    editView={true}  onSaved={_.bind(onPostSaved, this, arg1 === 'create')} /></AdminLayout>
                 , container);
             }
             break;
 
        case 'prefs':
-            React.renderComponent(<Layout area='prefs'><Prefs /></Layout>, container);
+            React.renderComponent(<AdminLayout area='prefs'><Prefs /></AdminLayout>, container);
             break;
 
         case 'users':
-            React.renderComponent(<Layout area='users'><Users /></Layout>, container);
+            React.renderComponent(<AdminLayout area='users'><Users /></AdminLayout>, container);
             break;
 
         default:
-            React.renderComponent(<Layout><Home /></Layout>, container);
+            React.renderComponent(<AdminLayout><Home /></AdminLayout>, container);
             break;
 
     }
