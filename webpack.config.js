@@ -13,6 +13,10 @@ module.exports = {
     module: {
         loaders: [
             {
+                test: /showdown\.js$/,
+                loader:'imports?exports=>undefined'
+            },
+            {
                 test: /\.js$|\.jsx$/,
                 loader: 'jsx?harmony&insertPragma=React.DOM'
             },
@@ -24,6 +28,9 @@ module.exports = {
                 test: /\.css$/,
                 loader: 'style!css'
             }
+        ],
+        noParse:[
+            /showdown\.js/
         ]
     },
     resolve: {
