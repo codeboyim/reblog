@@ -13,7 +13,7 @@ module.exports = {
         loaders: [
             {
                 test: /\.js$|\.jsx$/,
-                loader: 'jsx'
+                loader: 'jsx?harmony&insertPragma=React.DOM'
             },
             {
                 test: /\.scss$/,

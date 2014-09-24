@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 var PostCollection = require('../models/PostCollection'),
     React = require('react'),
     _ = require('underscore'),
