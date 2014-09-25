@@ -3,8 +3,9 @@
 var converter = new (require('showdown').converter)(),
     PostModel = require('models/PostModel'),
     Modal = require('Modal'),
-    moment = require('moment'),
-    datetimepicker = require('datetimepicker');
+    moment = require('moment');
+
+require('datetimepicker');
 
 module.exports = Post = React.createClass({
             
