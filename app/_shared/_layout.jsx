@@ -1,15 +1,46 @@
-var TopNav = require('./_topNav');
+require('react/addons');
 
 module.exports = React.createClass({
+
+    mixins:[require('../mixins/ListenToAuthStatusChanged')],
+
+    getInitialState(){
+        return {authenticated: !!Parse.User.current(), hover:false}
+    },
+    
+    componentDidUpdate(){
+        $(window)[this.state.hover?'on':'off']('click', this.windowClicked);
+    },
+    
     render(){
+        var cx = React.addons.classSet;
+        
+    
         return (
             <div className="root">
                 <div id="fb-root"></div>
                 <div className="fixed contain-to-grid">
-                    <header className="top-bar">
-                        <h1 className="left site-logo-name">re/blog</h1>
-                        <div id="header-nav" className="right"><TopNav /></div>
-                    </header>
+                    <nav className="top-bar" role="navigation">
+                        <ul className="title-area">
+                            <li className="name"><h1 className="left site-logo-name"><a href="#">re/blog</a></h1></li>
+                        </ul>
+                        <section className="top-bar-section">
+                            <ul className="right">
+                                {this.state.authenticated?
+                                <li ref="liDropdown" className={cx({'has-dropdown':true, 'hover':this.state.hover})} onClick={this.dropdownClicked}>
+                                    <a href="javascript:void(0);" ref="buttonName">{Parse.User.current().get('name')}</a>
+                                    <ul ref="listDropdown" className="dropdown">
+                                        {Parse.User.current().admin?
+                                        <li><a href="#admin">Admin</a></li>:null
+                                        }
+                                        <li><a href="#admin/prefs">Profile</a></li>
+                                        <li><a href="javascript:void(0);" onClick={this.logoutClicked}>Log out</a></li>
+                                    </ul>
+                                </li>
+                                :null}
+                            </ul>
+                        </section>
+                    </nav>
                 </div>
                 <main>
                     <div id="site-content" className="row">
@@ -20,5 +51,23 @@ module.exports = React.createClass({
                 <script src="lib/vendors/fastclick/lib/fastclick.js"></script>
             </div>
         );
+    },
+    
+    
+    logoutClicked(e){
+        e.preventDefault();
+        Parse.User.logOut();
+        globals.broadcast(globals.EVENT.authStatusChanged, false);
+    },
+    
+    dropdownClicked(){
+        this.setState({hover:!this.state.hover});
+    },
+    
+    windowClicked(e){
+        
+        if(this.refs.liDropdown && e.target!==this.refs.liDropdown.getDOMNode() && !$.contains(this.refs.liDropdown.getDOMNode(), e.target)){
+            this.setState({hover:false});
+        }
     }
 });

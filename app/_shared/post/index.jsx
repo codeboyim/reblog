@@ -2,10 +2,11 @@
 
 var converter = new (require('showdown').converter)(),
     PostModel = require('models/PostModel'),
-    Modal = require('Modal'),
+    Modal = require('shared/modal'),
     moment = require('moment');
 
 require('datetimepicker');
+require('./post.css');
 
 module.exports = Post = React.createClass({
             
@@ -17,7 +18,6 @@ module.exports = Post = React.createClass({
 
             getInitialState: function () {
                 var initialPost;
-                require('./post.css');
                 
                 initialPost = this.props.post || {
                     id: (this.props.id || 0)
@@ -91,61 +91,59 @@ module.exports = Post = React.createClass({
 
                       case 'save':
 
-                          this.setState({
-                              ajaxing: true
-                          }, _.bind(function () {
+                          this.setState({ajaxing: true});
 
-                              if (post.panelImage && post.panelImage.file) {
-                                  panelImage = new Parse.File(post.panelImage.file.name, post.panelImage.file);
+                          if (post.panelImage && post.panelImage.file) {
+                              panelImage = new Parse.File(post.panelImage.file.name, post.panelImage.file);
 
-                                  if ((oldPanelImage = this.model.get('panelImage')) && oldPanelImage.destroy) {
-                                      oldPanelImage.destroy();
-                                  }
-
-                                  post.panelImage = panelImage;
-                              } else {
-                                  this.model.unset('panelImage');
+                              if ((oldPanelImage = this.model.get('panelImage')) && oldPanelImage.destroy) {
+                                  oldPanelImage.destroy();
                               }
 
-                              if (post.sideImage && post.sideImage.file) {
-                                  sideImage = new Parse.File(post.sideImage.file.name, post.sideImage.file);
+                              post.panelImage = panelImage;
+                          } else {
+                              this.model.unset('panelImage');
+                          }
 
-                                  if ((oldSideImage = this.model.get('panelImage')) && oldSideImage.destroy) {
-                                      oldSideImage.destroy();
-                                  }
+                          if (post.sideImage && post.sideImage.file) {
+                              sideImage = new Parse.File(post.sideImage.file.name, post.sideImage.file);
 
-                                  post.sideImage = sideImage;
-                              } else {
-                                  this.model.unset('sideImage');
+                              if ((oldSideImage = this.model.get('panelImage')) && oldSideImage.destroy) {
+                                  oldSideImage.destroy();
                               }
 
-                              this.model.save(post)
-                                  .done(_.bind(function (post) {
+                              post.sideImage = sideImage;
+                          } else {
+                              this.model.unset('sideImage');
+                          }
+
+                          this.model.save(post)
+                              .done(_.bind(function (post) {
+                                  this.setState({
+                                      post: _.clone(post.attributes)
+                                  });
+                                  if (this.props.onSaved && _.isFunction(this.props.onSaved)) {
+                                      this.props.onSaved(_.clone(this.state.post));
+                                  }
+
+                              }, this))
+                              .always(_.bind(function () {
+
+                                  if (this.isMounted()) {
                                       this.setState({
-                                          post: _.clone(post.attributes)
+                                          ajaxing: false
                                       });
-                                      if (this.props.onSaved && _.isFunction(this.props.onSaved)) {
-                                          this.props.onSaved(_.clone(this.state.post));
-                                      }
+                                  }
 
-                                  }, this))
-                                  .always(_.bind(function () {
-
-                                      if (this.isMounted()) {
-                                          this.setState({
-                                              ajaxing: false
-                                          });
-                                      }
-
-                                  }, this));
-
-                          }, this));
+                              }, this));
 
 
                           break;
 
-                      case 'preview':
-                          Modal.open(<Post post={this.state.post}/>);
+                    case 'preview':
+                        if(post.body && post.title){
+                            Modal.open(<Post post={post}/>);
+                        }
                         break;
                         
                     case 'del-panelImage':
@@ -196,7 +194,8 @@ module.exports = Post = React.createClass({
             onDragLeave: function(e){
               $(e.currentTarget).removeClass('dragover');
             },
-            renderEditView:function(){
+            
+            renderEditView: function(){
                 var post = this.state.post,
                     postedOn='',
                     panelImage = null,
