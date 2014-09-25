@@ -1,4 +1,4 @@
-var router = require('./router');
+var Router = require('./router');
 
 require('./styles/app.css');
 
@@ -25,14 +25,6 @@ window.fbAsyncInit = function () {
 
 Parse.initialize("yxD2tY5w6WEVJg2Dd8a566sUI6j1xGKHVOLzRkKl", "Ii4UZXR5rMGKmo5Og36lThmXcWnw3xyvN053kC4Z");
 
-new router();
-
-Backbone.history.start({
-    pushState: false
-});
-
-//React.renderComponent(require('shared/headerNav')(), document.getElementById('header-nav'));
-
 if (Parse.User.current()) {
     (new Parse.Query(Parse.Role)).equalTo('users', Parse.User.current()).first().done(_.bind(function (u) {
 
@@ -43,3 +35,9 @@ if (Parse.User.current()) {
 
     }, this));
 }
+
+new Router();
+
+Backbone.history.start({
+    pushState: false
+});

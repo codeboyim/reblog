@@ -1,15 +1,12 @@
-/** @jsx React.DOM */
-
-var globals = require('../globals'),
-    Parse = require('parse'),
-    Backbone = require('backbone'),
-    _ = require('underscore'),
-    React = require('react');
+var Layout = require( 'shared/_layout' );
 
 module.exports = React.createClass({
 
     render: function () {
-        return <button onClick={this._loginClicked}>login</button>;
+        return (
+            <Layout>
+                <button onClick={this._loginClicked}>login</button>
+            </Layout>);
     },
 
     _loginClicked:function (e) {

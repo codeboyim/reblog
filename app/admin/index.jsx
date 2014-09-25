@@ -24,7 +24,6 @@ function onPostSaved(isCreate, post){
 }
 
 module.exports = function (area, arg1) {
-    var container = document.getElementById('site-content');
  
     switch (area) {
 
@@ -34,24 +33,24 @@ module.exports = function (area, arg1) {
                     <AdminLayout area='posts'>
                         <Posts onAddPostClicked={_.bind(onAddPostClicked, this)}/>
                     </AdminLayout>
-                , container);
+                , document.body);
             } else {
                 React.renderComponent(<AdminLayout area='posts'><Post id={arg1 === 'create' ? 0 : arg1}
                     editView={true}  onSaved={_.bind(onPostSaved, this, arg1 === 'create')} /></AdminLayout>
-                , container);
+                , document.body);
             }
             break;
 
        case 'prefs':
-            React.renderComponent(<AdminLayout area='prefs'><Prefs /></AdminLayout>, container);
+            React.renderComponent(<AdminLayout area='prefs'><Prefs /></AdminLayout>, document.body);
             break;
 
         case 'users':
-            React.renderComponent(<AdminLayout area='users'><Users /></AdminLayout>, container);
+            React.renderComponent(<AdminLayout area='users'><Users /></AdminLayout>, document.body);
             break;
 
         default:
-            React.renderComponent(<AdminLayout><Home /></AdminLayout>, container);
+            React.renderComponent(<AdminLayout><Home /></AdminLayout>, document.body);
             break;
 
     }

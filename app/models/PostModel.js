@@ -1,7 +1,3 @@
-/**
- * Post Model
- **/
-
 module.exports = require('parse').Object.extend({
     className: 'Post',
     defaults: {

@@ -1,7 +1,3 @@
-var Login = require('shared/login'),
-    Layout = require('shared/_layout');
-
-
 module.exports = Backbone.Router.extend(
     /** @lends Router.prototype */
     {
@@ -43,9 +39,11 @@ module.exports = Backbone.Router.extend(
                     trigger: true
                 });
             } else {
-                require('react').renderComponent(Login({
-                    onLoggedin: _.bind(this._onLoggedin, this, returnUrl)
-                }), document.getElementById('site-content'));
+                require.ensure(['./login'], require=>
+                    React.renderComponent(require('./login')({
+                        onLoggedin: _.bind(this._onLoggedin, this, returnUrl)
+                    }), document.body)
+                );
             }
 
         },
