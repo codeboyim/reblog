@@ -38,7 +38,7 @@ module.exports = React.createClass({
                     });
         },
         
-        render: function(){
+        render(){
             var self = this;
             if(!Parse.User.current().admin){
                 return null;
@@ -51,7 +51,7 @@ module.exports = React.createClass({
                         return (
                             <li key={user.id}>
                                 <label>
-                                    <input type="checkbox" checked={user.isAdmin} onChange={_.bind(this.onCheckboxChanged, this, user)} />
+                                    <input type="checkbox" checked={user.isAdmin} onChange={_.bind(this.onCheckboxChanged, this, user)} disabled={user.id===Parse.User.current().id} />
                                     {user.get('name')}
                                 </label>
                             </li>
@@ -63,9 +63,30 @@ module.exports = React.createClass({
 
         },
         
-        onCheckboxChanged:function(user, e){
-            user.isAdmin = !user.isAdmin;
-            this.setState({users:this.state.users});
+        onCheckboxChanged(user, e){
+            var isAdmin = false;
+            
+           (new Parse.Query(Parse.Role)).equalTo('name', 'Administrators').first( role => {
+                
+                if(role){
+                    role.getUsers().query().get(user.id).done( _user => {
+                        role.getUsers().remove(user);
+                    }).fail( err =>{
+                        if(err.code === Parse.Error.OBJECT_NOT_FOUND){
+                            role.getUsers().add(user);
+                        }
+                        
+                    }).always((r)=>{
+                                              
+                        role.save().done(()=>{
+                            user.isAdmin = !user.isAdmin;
+                            this.setState({users:this.state.users});
+                        });
+                    });
+                }
+                
+            });
+            
         }
         
 

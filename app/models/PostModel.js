@@ -1,4 +1,4 @@
-module.exports = require('parse').Object.extend({
+module.exports = Parse.Object.extend({
     className: 'Post',
     
     defaults: {

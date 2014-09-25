@@ -15,25 +15,27 @@ module.exports = React.createClass({
 
         Parse.FacebookUtils.logIn(null, {
 
-            success: function (user) {
+            success(user) {
 
-                FB.api(user.get('authData').facebook.id, function (res) {
-                    var acl;
+                if(!user.existed()){
 
-                    if (user.get('name') !== res.name) {
-                        user.set('name', res.name);
-                    }
+                    FB.api(user.get('authData').facebook.id, function (res) {
+                        var acl;
 
-                    if (!user.existed()) {
+                        if (user.get('name') !== res.name) {
+                            user.set('name', res.name);
+                        }
+
+                        
                         acl = new Parse.ACL();
                         acl.setRoleReadAccess('Administrators', true);
                         acl.setPublicReadAccess(false);
                         user.setACL(acl);
-                    }
 
-                    user.save();
+                        user.save();
 
-                });
+                    });
+                }
 
                 (new Parse.Query(Parse.Role)).equalTo('users', Parse.User.current()).first().done(function (u) {
 
@@ -47,7 +49,7 @@ module.exports = React.createClass({
                     
                 });
             },
-            error: function (user, error) {
+            error(user, error) {
                 console.error("User cancelled the Facebook login or did not fully authorize.");
             }
         });
