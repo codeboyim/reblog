@@ -1,6 +1,19 @@
+@import "compass/css3/transition";
+
 .buttons-wrap {
     .button, button{
         margin-left:10px;
         margin-right:10px;
     }
+}
+.navDropDown-enter, .navDropDown-leave{
+      @include transition(opacity 0.2s ease-in);
+}
+
+.navDropDown-enter, .navDropDown-leave.navDropDown-leave-active {
+  opacity: 0;
+}
+
+.navDropDown-enter.navDropDown-enter-active, .navDropDown-leave {
+  opacity: 1;
 }

@@ -13,7 +13,14 @@ module.exports = React.createClass({
     },
     
     render(){
-        var cx = React.addons.classSet;
+        var cx = React.addons.classSet,
+            CSSTransitionGroup = React.addons.CSSTransitionGroup,
+            navDropDownItems = [<li key="profile"><a href="#admin/prefs">Profile</a></li>,
+                                <li key="logout"><a href="javascript:void(0);" onClick={this.logoutClicked}>Log out</a></li>];
+        
+        if(Parse.User.current() && Parse.User.current().admin){
+            navDropDownItems.unshift(<li key="admin"><a href="#admin">Admin</a></li>);
+        }
         
     
         return (
@@ -27,15 +34,11 @@ module.exports = React.createClass({
                         <section className="top-bar-section">
                             <ul className="right">
                                 {this.state.authenticated?
-                                <li ref="liDropdown" className={cx({'has-dropdown':true, 'hover':this.state.hover})} onClick={this.dropdownClicked}>
+                                <li ref="liDropdown" className={cx({'has-dropdown':true, 'hover':true})} onClick={this.dropdownClicked}>
                                     <a href="javascript:void(0);" ref="buttonName">{Parse.User.current().get('name')}</a>
-                                    <ul ref="listDropdown" className="dropdown">
-                                        {Parse.User.current().admin?
-                                        <li><a href="#admin">Admin</a></li>:null
-                                        }
-                                        <li><a href="#admin/prefs">Profile</a></li>
-                                        <li><a href="javascript:void(0);" onClick={this.logoutClicked}>Log out</a></li>
-                                    </ul>
+                                    <CSSTransitionGroup transitionName="navDropDown" className="dropdown" component={React.DOM.ul}>
+                                    {this.state.hover?navDropDownItems:null}
+                                    </CSSTransitionGroup>
                                 </li>
                                 :null}
                             </ul>

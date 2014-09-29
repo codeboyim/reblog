@@ -1,3 +1,5 @@
+/* jshint esnext: true */
+
 module.exports = Backbone.Router.extend(
     /** @lends Router.prototype */
     {

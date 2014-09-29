@@ -2,3 +2,18 @@
   margin-left: 10px;
   margin-right: 10px;
 }
+
+.navDropDown-enter, .navDropDown-leave {
+  -webkit-transition: opacity 0.2s ease-in;
+  -moz-transition: opacity 0.2s ease-in;
+  -o-transition: opacity 0.2s ease-in;
+  transition: opacity 0.2s ease-in;
+}
+
+.navDropDown-enter, .navDropDown-leave.navDropDown-leave-active {
+  opacity: 0;
+}
+
+.navDropDown-enter.navDropDown-enter-active, .navDropDown-leave {
+  opacity: 1;
+}
