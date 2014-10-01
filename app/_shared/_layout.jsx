@@ -36,8 +36,11 @@ module.exports = React.createClass({
                                 {this.state.authenticated?
                                 <li ref="liDropdown" className={cx({'has-dropdown':true, 'hover':true})} onClick={this.dropdownClicked}>
                                     <a href="javascript:void(0);" ref="buttonName">{Parse.User.current().get('name')}</a>
-                                    <CSSTransitionGroup transitionName="navDropDown" className="dropdown" component={React.DOM.ul}>
-                                    {this.state.hover?navDropDownItems:null}
+                                    <CSSTransitionGroup transitionName="topbarNavDropDown" component={React.DOM.div}>
+                                    {this.state.hover?
+                                        <ul key="navDropDown" className="dropdown topbarNavDropDown">
+                                            {navDropDownItems}
+                                        </ul>:null}
                                     </CSSTransitionGroup>
                                 </li>
                                 :null}
