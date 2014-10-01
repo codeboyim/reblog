@@ -15,16 +15,18 @@ module.exports = Backbone.Router.extend(
             'admin/:area(/:arg1)': 'admin',
 
             'login?returnUrl=:returnUrl': 'login',
-            'login': 'login'
+            'login': 'login',
+            
+            'me':'me'
         },
 
-        home: function () {
+        home () {
             require.ensure([], function () {
                 React.renderComponent(require('./home')(), document.body);
             });
         },
 
-        admin: function (area) {
+        admin (area) {
             var args = _.compact([].slice.apply(arguments)),
                 that = this;
 
@@ -35,7 +37,7 @@ module.exports = Backbone.Router.extend(
             }
         },
 
-        login: function (returnUrl) {
+        login(returnUrl) {
             if (Parse.User.current()) {
                 this.navigate(returnUrl || '', {
                     trigger: true
@@ -49,9 +51,11 @@ module.exports = Backbone.Router.extend(
             }
 
         },
-
+        
+        me: require('./me'),
+        
         /** @constructs */
-        initialize: function (options) {
+        initialize (options) {
             _.bindAll(this, '_authStatusChanged');
 
             globals.subscribe(globals.EVENT.authStatusChanged, this._authStatusChanged);
@@ -59,7 +63,7 @@ module.exports = Backbone.Router.extend(
         },
 
 
-        _authStatusChanged: function (authenticated, returnUrl) {
+        _authStatusChanged (authenticated, returnUrl) {
 
             if (!authenticated) {
                 this.navigate('', {
@@ -69,7 +73,7 @@ module.exports = Backbone.Router.extend(
 
         },
 
-        _onLoggedin: function (returnUrl) {
+        _onLoggedin (returnUrl) {
             this.navigate(returnUrl || '', {
                 trigger: true
             });
@@ -77,7 +81,7 @@ module.exports = Backbone.Router.extend(
             globals.broadcast(globals.EVENT.authStatusChanged, true);
         },
 
-        isAuthenticated: function (returnUrl) {
+        isAuthenticated (returnUrl) {
 
             if (!Parse.User.current()) {
                 this.navigate('login?returnUrl=' + encodeURIComponent(returnUrl), {

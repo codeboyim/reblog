@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 // jshint ignore: start
 
 var AdminLayout = require('./components/_layout'),
