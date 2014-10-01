@@ -38,7 +38,7 @@ module.exports = function (grunt) {
             dev: {
                 options: {
                     style: 'expanded',
-                    loadPath: ['lib/vendors/foundation/scss/', 'app'],
+                    loadPath: ['lib/vendors/foundation/scss/', 'app', 'src/scss/'],
                     trace: true,
                     compass: true
                 },

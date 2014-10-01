@@ -39,7 +39,8 @@ module.exports = {
         alias: {
             'globals$': __dirname + '/app/globals',
             'shared': __dirname + '/app/_shared',
-            'css': __dirname + '/public/css'
+            'css': __dirname + '/public/css',
+            'images':__dirname + '/public/img'
         }
     },
     externals: [

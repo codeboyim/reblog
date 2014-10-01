@@ -26,13 +26,11 @@ module.exports = Backbone.Router.extend(
             });
         },
 
-        admin (area) {
-            var args = _.compact([].slice.apply(arguments)),
-                that = this;
+        admin (...args) {
 
             if (this.isAuthenticated('admin' + args.join('/'))) {
-                require.ensure([], function () {
-                    require('./admin').apply(that, args);
+                require.ensure([], ()=> {
+                    require('./admin').apply(this, args);
                 });
             }
         },
@@ -52,7 +50,9 @@ module.exports = Backbone.Router.extend(
 
         },
         
-        me: require('./me'),
+        me (...args){
+            require.ensure(['./me'], require=>require('./me').apply(this, args));
+        },
         
         /** @constructs */
         initialize (options) {

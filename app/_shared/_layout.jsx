@@ -15,7 +15,7 @@ module.exports = React.createClass({
     render(){
         var cx = React.addons.classSet,
             CSSTransitionGroup = React.addons.CSSTransitionGroup,
-            navDropDownItems = [<li key="profile"><a href="#admin/prefs">Profile</a></li>,
+            navDropDownItems = [<li key="profile"><a href="#me">Profile</a></li>,
                                 <li key="logout"><a href="javascript:void(0);" onClick={this.logoutClicked}>Log out</a></li>];
         
         if(Parse.User.current() && Parse.User.current().admin){
