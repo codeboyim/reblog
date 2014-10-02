@@ -2,7 +2,7 @@ var webpack = require('webpack');
 
 module.exports = {
     entry: {
-        main: ['script!parse', './app/main.js']
+        main: ['webpack/hot/dev-server', 'script!parse', './app/main.js']
 
     },
     output: {
@@ -14,11 +14,11 @@ module.exports = {
         loaders: [
             {
                 test: /showdown\.js$/,
-                loader:'imports?exports=>undefined'
+                loader: 'imports?exports=>undefined'
             },
             {
                 test: /\.js$|\.jsx$/,
-                loader: 'jsx?harmony&insertPragma=React.DOM'
+                loaders: ['react-hot', 'jsx?harmony&insertPragma=React.DOM']
             },
             {
                 test: /\.scss$/,
@@ -29,18 +29,20 @@ module.exports = {
                 loader: 'style!css'
             }
         ],
-        noParse:[
+        noParse: [
             /showdown\.js/
         ]
     },
     resolve: {
         extensions: ['', '.js', '.jsx', '.json'],
-        modulesDirectories: ['node_modules', 'lib', 'lib/vendors', 'app'],
+        modulesDirectories: ['node_modules', 'lib/vendors', 'app'],
         alias: {
             'globals$': __dirname + '/app/globals',
             'shared': __dirname + '/app/_shared',
             'css': __dirname + '/public/css',
-            'images':__dirname + '/public/img'
+            'images': __dirname + '/public/img',
+            'moment$': __dirname + '/lib/moment',
+            'datetimepicker$': __dirname + '/lib/datetimepicker'
         }
     },
     externals: [
@@ -57,7 +59,8 @@ module.exports = {
             Parse: 'parse',
             globals: 'globals',
             React: 'react'
-        })
+        }),
+        new webpack.HotModuleReplacementPlugin()
     ],
     node: {
         'fs': 'empty'

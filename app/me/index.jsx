@@ -3,5 +3,6 @@ var Home = require('./components/home'),
 
 
 module.exports = function(...args){
+    require('./me.css');
     React.renderComponent(<Layout><Home/></Layout>, document.body);
 }

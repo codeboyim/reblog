@@ -24,7 +24,8 @@ module.exports = function (grunt) {
             options: {
                 webpack: webpackConfig,
                 publicPath: webpackConfig.output.publicPath,
-                port: 7593
+                port: 7593,
+                hot: true
             },
             start: {
                 keepAlive: true,
