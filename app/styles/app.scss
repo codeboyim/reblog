@@ -25,3 +25,16 @@
     transform:scaleY(1);
     opacity:1;
 }
+
+
+/*transition*/
+.fadeInOut-enter, .fadeInOut-leave{
+    @include transition(opacity 0.5s);
+}
+.fadeInOut-enter, .fadeInOut-leave.fadeInOut-leave-active{
+    opacity:0;
+}
+
+.fadeInOut-enter.fadeInOut-enter-active, .fadeInOut-leave{
+    opacity:1;
+}
