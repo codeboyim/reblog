@@ -24,7 +24,8 @@ module.exports = Modal = React.createClass({
 
     statics: {
 
-        open: function(content){
+        open: function(content, className){
+            var container, modal;
             this._bg = this._bg || $('.reveal-modal-bg');
             this._modals = this._modals || [];
 
@@ -36,9 +37,17 @@ module.exports = Modal = React.createClass({
             else{
                 this._bg.show();
             }
-
-            this._modals.push(React.renderComponent(<Modal>{content}</Modal>, 
-                $('<div class="reveal-modal" style="visibility: visible; display: block; opacity:1"></div>').appendTo(document.body)[0]));
+            
+            container = $('<div class="reveal-modal radius" style="visibility: visible; display: block; opacity:1"></div>').appendTo(document.body);
+            
+            if(className){
+                container.addClass(className);
+            }
+            
+            modal = React.renderComponent(<Modal>{content}</Modal>, container[0]);
+            modal.container = container[0];
+            this._modals.push(modal);
+            return modal;
         },
 
         close: function(){

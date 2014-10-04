@@ -1,32 +1,64 @@
-@import "compass/css3/border-radius",
-        "settings";
+@import "compass/css3/border-radius";
+@import "settings";
 
-body{
-    padding-top:100px;
+body {
+    padding-top: 100px;
 }
 
-@media #{$medium-up} { 
-    .profileAvatar{
-        width:200px;
+@media #{$medium-up} {
+    .profileAvatar {
+        width: 200px;
         height: 200px;
         @include border-radius(100px);
     }
 }
 
-.profileTitleWrap{
+.profileTitleWrap {
     height: 200px;
-    
-    &::before{
-        display:inline-block;
-        height:100%;
-        content:"";
+    &::before {
+        display: inline-block;
+        height: 100%;
+        content: "";
         vertical-align: middle;
     }
 }
 
-
-.profileTitle
-{
-    display:inline-block;
+.profileTitle {
+    display: inline-block;
     vertical-align: middle;
+}
+
+.profileChangeAvatar {
+    position: absolute;
+    bottom: 0;
+    right: $column-gutter / 2;
+    margin: 0;
+    visibility: hidden;
+}
+
+.profileAvatarWrap:hover .profileChangeAvatar{
+    visibility: visible;
+}
+
+
+$profileAvatarUploadWrap-width:400px;
+$profileAvatarUploadWrap-height:100px;
+.profileAvatarUploadWrap{
+    width:$profileAvatarUploadWrap-width;
+    min-height:$profileAvatarUploadWrap-height;
+    margin-left:-$profileAvatarUploadWrap-width/2;
+    top:50%;
+    margin-top:-300px;
+}
+
+@media #{$small-only} {
+    .profileAvatarUploadWrap {
+        width: 100vh;
+        top:0;
+        margin:0;
+    }
+}
+
+.profileAvatarUpload{
+    margin-bottom:0;
 }
