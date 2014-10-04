@@ -58,7 +58,7 @@ module.exports = {
             Backbone: 'backbone',
             Parse: 'parse',
             globals: 'globals',
-            React: 'react'
+            React: 'react/addons'
         }),
         new webpack.HotModuleReplacementPlugin()
     ],
