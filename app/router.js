@@ -51,7 +51,10 @@ module.exports = Backbone.Router.extend(
         },
         
         me (...args){
-            require.ensure(['./me'], require=>require('./me').apply(this, args));
+            
+            if (this.isAuthenticated('me' + args.join('/'))) {            
+                require.ensure(['./me'], require=>require('./me').apply(this, args));
+            }
         },
         
         /** @constructs */
