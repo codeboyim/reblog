@@ -2,7 +2,7 @@ var Modal = require('shared/modal');
 
 var Uploader = React.createClass({
     getInitialState(){
-        return {error:false, message:null};
+        return {error:false, message:null, disableUpload:true};
     },
     render(){
         var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
@@ -20,7 +20,7 @@ var Uploader = React.createClass({
                     :null}
                 </ReactCSSTransitionGroup>
                 <div>
-                    <button className="right radius small profileAvatarUpload" disabled={this.error} onClick={this.uploadClicked}>Upload</button>
+                    <button className="right radius small profileAvatarUpload" disabled={this.state.disableUpload} onClick={this.uploadClicked}>Upload</button>
                 </div>
             </div>
         );
@@ -36,32 +36,55 @@ var Uploader = React.createClass({
             return;
         }
         
-        this.setState({error:false, message:null});
+        this.setState({error:false, message:null, disableUpload:false});
         
         if(!imageType.test(file.type)){
-            this.setState({error:true, message:'choose an image only'});
+            this.setState({error:true, message:'choose an image only', disableUpload:true});
         }
         else if(file.size > maxSize){
-            this.setState({error:true, message: 'choose an image smaller than 100kb'});
+            this.setState({error:true, message: 'choose an image smaller than 100kb', disableUpload:true});
         }
         
     },
     
     uploadClicked(e){
+        var file;
         e.preventDefault();
         
-        if(!this.refs.fileInput.file){
-            this.setState({error:true, message:'choose an image to upload'});
+        if(this.refs.fileInput.getDOMNode().files){
+            this.setState({error:false, message:null, disableUpload:true});
+            file = this.refs.fileInput.getDOMNode().files[0];
+            Parse.User.current().set('avatar', new Parse.File(file.name, file)).save()
+                .done((user)=>{
+                    if(_.isFunction(this.props.onSaved)){
+                        this.props.onSaved(user.get('avatar').url());
+                    }
+                })
+                .fail((err)=>{
+                    console.log(err);
+                });
+            
+        }
+        else{
+            this.setState({error:true, message:'choose an image to upload', disableUpload:true});
         }
     }
 });
 
 module.exports = React.createClass({
     getInitialState(){
-        return {editName:false}
+        return {editName:false, avatarUrl:require('url?limit=10000!images/medium-avatar.jpg')};
+    },
+    componentWillMount(){
+        var avatar = Parse.User.current().get('avatar');
+
+        if(avatar){
+            this.setState({'avatarUrl':avatar.url()});
+        }
     },
     render(){
-        var avatarUrl = require('url?limit=10000!images/medium-avatar.jpg');
+        var avatarUrl = this.state.avatarUrl;
+        
         return (
             <div>
                 <div className="row">
@@ -81,9 +104,13 @@ module.exports = React.createClass({
     },
     
     changeAvatarClicked(e){
-         this._modal = Modal.open(<Uploader />, 'profileAvatarUploadWrap');
+         this._modal = Modal.open(<Uploader onSaved={this.avatarSaved} />, 'profileAvatarUploadWrap');
     },
     
+    avatarSaved(url){
+        this.setState({'avatarUrl':url});
+        Modal.close();
+    }
 
 
 });
