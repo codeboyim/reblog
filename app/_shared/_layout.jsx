@@ -12,6 +12,19 @@ module.exports = React.createClass({
         $(window)[this.state.hover?'on':'off']('click', this.windowClicked);
     },
     
+    componentDidMount(){
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "//connect.facebook.net/en_US/all.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    },
+    
     render(){
         var cx = React.addons.classSet,
             CSSTransitionGroup = React.addons.CSSTransitionGroup,

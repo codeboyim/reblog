@@ -1,43 +1,35 @@
+/* jshint esnext: true */
+
 var Router = require('./router');
 
 require('./styles/app.css');
 
-window.fbAsyncInit = function () {
 
+Parse.initialize("nL7qxG42xhdthyxFTgfPz7yjbm5up7O9abWx7EdN", "ZP02hz8DuVh9cBhA7aZ8AjFTirh95j9kQHSBZrN2");
+
+window.fbAsyncInit = function () {
     Parse.FacebookUtils.init({
         appId: '880425675305915', // Facebook App ID
         channelUrl: '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel File
         cookie: true, // enable cookies to allow Parse to access the session
         xfbml: false // parse XFBML
     });
+
 };
-
-(function (d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) {
-        return;
-    }
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "//connect.facebook.net/en_US/all.js";
-    fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
-
-Parse.initialize("yxD2tY5w6WEVJg2Dd8a566sUI6j1xGKHVOLzRkKl", "Ii4UZXR5rMGKmo5Og36lThmXcWnw3xyvN053kC4Z");
-
-if (Parse.User.current()) {
-    (new Parse.Query(Parse.Role)).equalTo('users', Parse.User.current()).first().done(_.bind(function (u) {
-
-        if (u) {
-            Parse.User.current().admin = true;
-            globals.broadcast(globals.EVENT.authStatusChanged, true);
-        }
-
-    }, this));
-}
 
 new Router();
 
 Backbone.history.start({
     pushState: false
 });
+
+if (Parse.User.current()) {
+    (new Parse.Query(Parse.Role)).equalTo('users', Parse.User.current()).first().done((u)=>{
+
+        if (u) {
+            Parse.User.current().admin = true;
+            globals.broadcast(globals.EVENT.authStatusChanged, true);
+        }
+
+    });
+}
