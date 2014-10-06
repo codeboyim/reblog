@@ -1,83 +1,78 @@
 /** @jsx React.DOM */
-
-var _ = require('underscore'),
-    React = require('react'), 
-    $ = require('jquery');
-        
+    
 module.exports = Modal = React.createClass({
 
-    componentWillMount: function(){
+    componentWillMount(){
 
     },
 
-    componentDidMount: function(){
-
+    componentDidMount(){
+        $(document).on('keydown', this._docKeyDown);
+    },
+    
+    componentDidUnmount(){
+        $(document).off('keydown', this._docKeyDown);
     },
 
-    render: function(){
+    render(){
+       
         return (
             <div>
-                {this.props.children}
+                <div className="reveal-modal-bg" style={{display:'block'}} onClick={this.close} ></div>
+                {_.map(this.props.contents, (content, idx)=>{
+                return (<div key={'modal-'+idx} className="reveal-modal radius" style={{visibility: 'visible', display: 'block', opacity:1}}>
+                    {content}
+                </div>);
+                })}
             </div>
         );
     },
+    
+    close(){
+        Modal.close();
+    },
+    
+    _docKeyDown(e){
+        if(e.keyCode === 27){
+            this.close();
+        }
+    },
 
     statics: {
-
+    
         open: function(content, className){
-            var container, modal;
-            this._bg = this._bg || $('.reveal-modal-bg');
-            this._modals = this._modals || [];
-
-            if(!this._bg[0]){
-                this._bg = $('<div class="reveal-modal-bg" style="display:block"></div>').appendTo(document.body);
-                this._bg.on('click', _.bind(this.close, this));
-                $(document).on('keydown', this._docKeyDown);
+            var contents;
+            
+            if(!this._modal){
+                this._modal = React.renderComponent(
+                    <Modal className={className} contents={[content]}></Modal>, 
+                    document.getElementById('rootModalWrap'));
             }
             else{
-                this._bg.show();
+                contents = this._modal.props.contents;
+                contents.push(content);
+                this._modal.setProps({ contents: contents });
             }
             
-            container = $('<div class="reveal-modal radius" style="visibility: visible; display: block; opacity:1"></div>').appendTo(document.body);
-            
-            if(className){
-                container.addClass(className);
-            }
-            
-            modal = React.renderComponent(<Modal>{content}</Modal>, container[0]);
-            modal.container = container[0];
-            this._modals.push(modal);
-            return modal;
         },
 
-        close: function(){
-            var container;
-
-            if(this._modals.length>0){
-                container = this._modals.pop().getDOMNode().parentNode;
-                React.unmountComponentAtNode(container);
-
-                if(container.remove){
-                    container.remove(); 
-                }
-                else{
-                    container.parentNode.removeChild(container);
-                }
-
+        close: function(i){
+            var contents = this._modal.props.contents;
+            
+            if(i === null || typeof i === 'undefined'){
+                i=contents.length-1;
             }
-
-            if(this._modals.length === 0){
-                this._bg.remove();
-                this._bg = null;
-                $(document).off('keydown', this._docKeyDown);
+            
+            contents.splice(i, 1);
+            
+            if(contents.length){
+                this._modal.setProps({contents:contents});
             }
-        },
-
-        _docKeyDown:function(e){
-
-            if(e.keyCode === 27){
-                Modal.close();
+            else{
+                React.unmountComponentAtNode(document.getElementById('rootModalWrap'));
+                this._modal = null;
             }
+                
         }
     }
 

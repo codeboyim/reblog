@@ -5,7 +5,7 @@ var Router = require('./router');
 require('./styles/app.css');
 
 
-Parse.initialize("nL7qxG42xhdthyxFTgfPz7yjbm5up7O9abWx7EdN", "ZP02hz8DuVh9cBhA7aZ8AjFTirh95j9kQHSBZrN2");
+Parse.initialize('yxD2tY5w6WEVJg2Dd8a566sUI6j1xGKHVOLzRkKl', 'Ii4UZXR5rMGKmo5Og36lThmXcWnw3xyvN053kC4Z');
 
 window.fbAsyncInit = function () {
     Parse.FacebookUtils.init({

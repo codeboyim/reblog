@@ -67,6 +67,7 @@ module.exports = React.createClass({
                     </div>
                 </main>
                 <footer></footer>
+                <div id="rootModalWrap"></div>
                 <script src="lib/vendors/fastclick/lib/fastclick.js"></script>
             </div>
         );
