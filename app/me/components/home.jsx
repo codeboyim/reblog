@@ -1,8 +1,13 @@
 var Modal = require('shared/modal');
 
 var Uploader = React.createClass({
+    propTypes:{
+        initDisableDelete: React.PropTypes.bool,
+        onSaved: React.PropTypes.func.isRequired,
+        onDeleting: React.PropTypes.func.isRequired
+    },
     getInitialState(){
-        return {error:false, message:null, disableUpload:true};
+        return {error:false, message:null, disableUpload:true, disableDelete:!!this.props.initDisableDelete};
     },
     render(){
         var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
@@ -19,8 +24,9 @@ var Uploader = React.createClass({
                     </div>
                     :null}
                 </ReactCSSTransitionGroup>
-                <div>
-                    <button className="right radius small profileAvatarUpload" disabled={this.state.disableUpload} onClick={this.uploadClicked}>Upload</button>
+                <div className="text-right">
+                    <button className="radius small profileAvatarUpload" disabled={this.state.disableUpload} onClick={this.uploadClicked}>Upload</button>
+                    <button className="radius small alert profileAvatarDelete" disabled={this.state.disableDelete} onClick={this.deleteClicked}>remove</button>
                 </div>
             </div>
         );
@@ -68,6 +74,28 @@ var Uploader = React.createClass({
         else{
             this.setState({error:true, message:'choose an image to upload', disableUpload:true});
         }
+    },
+    
+    deleteClicked(e){
+        this.props.onDeleting();
+    }
+});
+
+
+var ConfirmBox = React.createClass({
+    render(){
+        return (
+            <div>
+                <div>
+                    {this.props.message}
+                </div>
+                <div>
+                    <button>OK</button>
+                    <button>Cancel</button>
+                </div>
+            </div>
+            
+        );
     }
 });
 
@@ -104,12 +132,16 @@ module.exports = React.createClass({
     },
     
     changeAvatarClicked(e){
-         this._modal = Modal.open(<Uploader onSaved={this.avatarSaved} />, 'profileAvatarUploadWrap');
+         this._modal = Modal.open(<Uploader onSaved={this.avatarSaved} onDeleting={this.avatarDeleting} />, 'profileAvatarUploadWrap');
     },
     
     avatarSaved(url){
         this.setState({'avatarUrl':url});
-        Modal.close();
+        this._modal.close();
+    },
+    
+    avatarDeleting(){
+        Modal.open(<ConfirmBox message="test" />);
     }
 
 

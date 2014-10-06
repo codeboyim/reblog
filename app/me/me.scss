@@ -59,6 +59,10 @@ $profileAvatarUploadWrap-height:100px;
     }
 }
 
-.profileAvatarUpload{
-    margin-bottom:0;
+.profileAvatarUpload, .profileAvatarDelete{
+    margin-bottom: 0;
+}
+
+.profileAvatarDelete {
+    margin-left: rem-calc(20);
 }
