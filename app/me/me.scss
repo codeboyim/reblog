@@ -47,8 +47,7 @@ $profileAvatarUploadWrap-height:100px;
     width:$profileAvatarUploadWrap-width;
     min-height:$profileAvatarUploadWrap-height;
     margin-left:-$profileAvatarUploadWrap-width/2;
-    top:50%;
-    margin-top:-300px;
+    top:calc( 50% - 150px );
 }
 
 @media #{$small-only} {

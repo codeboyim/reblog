@@ -1,0 +1,5 @@
+@import "compass/css3/transition";
+
+.reveal-modal-bg{
+    @include transition(opacity 0.3s);
+}

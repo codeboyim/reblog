@@ -1,35 +1,54 @@
 /** @jsx React.DOM */
-    
+
+require('./modal.css');
+
 module.exports = Modal = React.createClass({
 
-    componentWillMount(){
-
+    getInitialState(){
+        return { showModal:false };
     },
 
     componentDidMount(){
         $(document).on('keydown', this._docKeyDown);
+        window.setTimeout(()=>{
+         this.setState({ showModal: true});}, 1);
     },
     
-    componentDidUnmount(){
+    componentWillUnmount(){
         $(document).off('keydown', this._docKeyDown);
+    },
+    
+    componentWillReceiveProps(nextProps){
+        
+        if(!_.isUndefined(nextProps.showModal)){
+            this.setState({ showModal: nextProps.showModal });
+        }
+    },
+    
+    componentDidUpdate(){
+       
     },
 
     render(){
-       
+        var CSSTransitionGroup = React.addons.CSSTransitionGroup;
         return (
-            <div>
-                <div className="reveal-modal-bg" style={{display:'block'}} onClick={this.close} ></div>
-                {_.map(this.props.contents, (content, idx)=>{
-                return (<div key={'modal-'+idx} className="reveal-modal radius" style={{visibility: 'visible', display: 'block', opacity:1}}>
-                    {content}
-                </div>);
-                })}
+            <div style={{display:!this.props.hidden?'block':'none'}}>
+                <div className="reveal-modal-bg" style={{display:'block', visibility:'visible', opacity:this.state.showModal?1:0}} onClick={this.close}></div>
+                <CSSTransitionGroup transitionName="scaleInOut">
+                {
+                    this.state.showModal?
+                            <div className={'reveal-modal radius'+(this.props.className?' '+this.props.className:'')} 
+                                style={{visibility: 'visible', display: 'block', opacity: 1}}>
+                                {this.props.children}
+                            </div>:null
+                }
+                </CSSTransitionGroup>
             </div>
         );
     },
     
     close(){
-        Modal.close();
+        Modal.close(this);
     },
     
     _docKeyDown(e){
@@ -41,38 +60,50 @@ module.exports = Modal = React.createClass({
     statics: {
     
         open: function(content, className){
-            var contents;
+            var container = document.createElement('DIV'),
+                modal, len;
+                
+            this._modals = this._modals || [];
+            document.getElementById('rootModalWrap').appendChild(container);
             
-            if(!this._modal){
-                this._modal = React.renderComponent(
-                    <Modal className={className} contents={[content]}></Modal>, 
-                    document.getElementById('rootModalWrap'));
-            }
-            else{
-                contents = this._modal.props.contents;
-                contents.push(content);
-                this._modal.setProps({ contents: contents });
+            modal = React.renderComponent(<Modal className={className}>{content}</Modal>, container);
+            
+            this._modals.push(modal);
+            
+            if((len=this._modals.length)>1){
+                window.setTimeout(()=>{
+                this._modals[len-2].setProps({hidden:true});
+                }, 100);
             }
             
+            return modal;
         },
 
-        close: function(i){
-            var contents = this._modal.props.contents;
+        close: function(modal){
+            var container;
             
-            if(i === null || typeof i === 'undefined'){
-                i=contents.length-1;
-            }
-            
-            contents.splice(i, 1);
-            
-            if(contents.length){
-                this._modal.setProps({contents:contents});
+            if(!modal){
+                modal = this._modals.pop();
             }
             else{
-                React.unmountComponentAtNode(document.getElementById('rootModalWrap'));
-                this._modal = null;
+                this._modals.splice(this._modals.indexOf(modal), 1);
             }
-                
+            
+            modal.setProps({showModal:false});
+            
+            window.setTimeout(()=>{
+                if((len=this._modals.length)>0){
+                    this._modals[len-1].setProps({ hidden: false});
+                }
+            }, 150);
+            
+            window.setTimeout(()=>{
+                container = modal.getDOMNode().parentNode;
+            
+                React.unmountComponentAtNode(container);
+                container.parentNode.removeChild(container);
+            }, 300);
+          
         }
     }
 

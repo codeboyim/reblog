@@ -1,4 +1,5 @@
-@import "compass/css3/transition";
+@import "compass/css3/transition",
+        "compass/css3/transform";
 
 .buttons-wrap {
     .button, button{
@@ -37,4 +38,15 @@
 
 .fadeInOut-enter.fadeInOut-enter-active, .fadeInOut-leave{
     opacity:1;
+}
+
+.scaleInOut-enter, .scaleInOut-leave{
+    @include transition(transform 0.2s ease);
+}
+.scaleInOut-enter, .scaleInOut-leave.scaleInOut-leave-active{
+    @include transform(scale(0.8));
+}
+
+.scaleInOut-enter.scaleInOut-enter-active, .scaleInOut-leave{
+    @include transform(scale(1));
 }
