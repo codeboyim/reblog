@@ -1,55 +1,42 @@
-var webpack = require('webpack');
+var webpack = require('webpack'),
+    bourbon = require('node-bourbon'),
+    neat = require('node-neat'),
+    path = require('path');
 
 module.exports = {
+    cache: true,
     entry: {
-        main: ['webpack/hot/dev-server', 'script!parse', './app/main.js']
-
+        main: './src/app/main.js'
     },
     output: {
-        path: __dirname + '/public/js/',
-        publicPath: '/public/js/',
-        filename: '[name].js'
+        path: path.join(__dirname, 'dist/scripts'),
+        publicPath: '/scripts',
+        filename: '[name].js',
+        chunkFilename: '[chunkhash].js'
     },
     module: {
-        loaders: [
-            {
-                test: /showdown\.js$/,
-                loader: 'imports?exports=>undefined'
-            },
-            {
-                test: /\.js$|\.jsx$/,
-                loaders: ['react-hot', 'jsx?harmony&insertPragma=React.DOM']
-            },
-            {
-                test: /\.scss$/,
-                loader: 'style!css!sass?outputStyle=expanded'
-            },
-            {
-                test: /\.css$/,
-                loader: 'style!css'
-            }
-        ],
+        loaders: [{
+        //     test: /showdown\.js$/,
+        //     loader: 'imports?exports=>undefined'
+        // }, {
+            test: /\.js$|\.jsx$/,
+            loaders: ['react-hot', 'jsx?harmony&insertPragma=React.DOM']
+        }, {
+            test: /\.scss$/,
+            loader: 'style!css!sass?outputStyle=expanded&includePaths[]=' +
+                (bourbon.includePaths.concat(neat.includePaths))
+        }],
         noParse: [
             /showdown\.js/
         ]
     },
     resolve: {
         extensions: ['', '.js', '.jsx', '.json'],
-        modulesDirectories: ['node_modules', 'lib/vendors', 'app'],
-        alias: {
-            'globals$': __dirname + '/app/globals',
-            'shared': __dirname + '/app/_shared',
-            'css': __dirname + '/public/css',
-            'images': __dirname + '/public/img',
-            'moment$': __dirname + '/lib/moment',
-            'datetimepicker$': __dirname + '/lib/datetimepicker'
-        }
+        modulesDirectories: ['node_modules', 'lib', 'app'],
     },
-    externals: [
-        {
-            parse: 'Parse'
-        }
-    ],
+    externals: [{
+        xmlhttprequest: 'XMLHttpRequest'
+    }],
     plugins: [
         new webpack.ProvidePlugin({
             $: 'jquery',
@@ -57,12 +44,8 @@ module.exports = {
             _: 'underscore',
             Backbone: 'backbone',
             Parse: 'parse',
-            globals: 'globals',
             React: 'react/addons'
         }),
         new webpack.HotModuleReplacementPlugin()
-    ],
-    node: {
-        'fs': 'empty'
-    }
+    ]
 };

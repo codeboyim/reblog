@@ -1,0 +1,63 @@
+body {
+  padding-top: 100px;
+}
+
+@media only screen and (min-width: 40.063em) {
+  .profileAvatar {
+    width: 200px;
+    height: 200px;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    -ms-border-radius: 100px;
+    -o-border-radius: 100px;
+    border-radius: 100px;
+  }
+}
+.profileTitleWrap {
+  height: 200px;
+}
+.profileTitleWrap::before {
+  display: inline-block;
+  height: 100%;
+  content: "";
+  vertical-align: middle;
+}
+
+.profileTitle {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.profileChangeAvatar {
+  position: absolute;
+  bottom: 0;
+  right: 0.9375rem;
+  margin: 0;
+  visibility: hidden;
+}
+
+.profileAvatarWrap:hover .profileChangeAvatar {
+  visibility: visible;
+}
+
+.profileAvatarUploadWrap {
+  width: 400px;
+  min-height: 100px;
+  margin-left: -200px;
+  top: calc(50% - 150px );
+}
+
+@media only screen and (max-width: 40em) {
+  .profileAvatarUploadWrap {
+    width: 100vh;
+    top: 0;
+    margin: 0;
+  }
+}
+.profileAvatarUpload, .profileAvatarDelete {
+  margin-bottom: 0;
+}
+
+.profileAvatarDelete {
+  margin-left: 1.25rem;
+}

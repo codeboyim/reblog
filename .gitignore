@@ -1,12 +1,3 @@
-# css compiled from scss
-public/css/
-public/js/
-**/*.css
-
-# bower
-
-lib/vendors/
-
 # node_modules
 node_modules/
 
