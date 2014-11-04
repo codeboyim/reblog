@@ -1,100 +1,24 @@
-/* jshint esnext: true */
+var appRoutes = {
+    '/': function() {
+        require(['home'], function() {
 
-module.exports = Backbone.Router.extend(
-    /** @lends Router.prototype */
-    {
-
-        routes: {
-            '': 'home',
-            'posts/create': 'posts',
-            'posts/:id': 'posts',
-            'posts/:id/:action': 'posts',
-
-            'admin(/)': 'admin',
-            'admin/:area(/)': 'admin',
-            'admin/:area(/:arg1)': 'admin',
-
-            'login?returnUrl=:returnUrl': 'login',
-            'login': 'login',
-            
-            'me':'me'
-        },
-
-        home () {
-            require.ensure([], function () {
-                React.renderComponent(require('./home')(), document.body);
-            });
-        },
-
-        admin (...args) {
-
-            if (this.isAuthenticated('admin' + args.join('/'))) {
-                require.ensure([], ()=> {
-                    require('./admin').apply(this, args);
-                });
-            }
-        },
-
-        login(returnUrl) {
-            if (Parse.User.current()) {
-                this.navigate(returnUrl || '', {
-                    trigger: true
-                });
-            } else {
-                require.ensure(['./login'], require=>
-                    React.renderComponent(require('./login')({
-                        onLoggedin: _.bind(this._onLoggedin, this, returnUrl)
-                    }), document.body)
-                );
-            }
-
-        },
-        
-        me (...args){
-            
-            if (this.isAuthenticated('me' + args.join('/'))) {            
-                require.ensure(['./me'], require=>require('./me').apply(this, args));
-            }
-        },
-        
-        /** @constructs */
-        initialize (options) {
-            _.bindAll(this, '_authStatusChanged');
-
-            globals.subscribe(globals.EVENT.authStatusChanged, this._authStatusChanged);
-            this.route('admin/posts/:id', _.bind(this.admin, this, 'posts'));
-        },
-
-
-        _authStatusChanged (authenticated, returnUrl) {
-
-            if (!authenticated) {
-                this.navigate('', {
-                    trigger: true
-                });
-            }
-
-        },
-
-        _onLoggedin (returnUrl) {
-            this.navigate(returnUrl || '', {
-                trigger: true
-            });
-
-            globals.broadcast(globals.EVENT.authStatusChanged, true);
-        },
-
-        isAuthenticated (returnUrl) {
-
-            if (!Parse.User.current()) {
-                this.navigate('login?returnUrl=' + encodeURIComponent(returnUrl), {
-                    trigger: true
-                });
-                return false;
-            } else {
-                return true;
-            }
-        }
-
+        });
+    },
+    '/signin':function(){
+    	console.log('login');
     }
-);
+};
+
+var router = require('director').Router(appRoutes);
+router.init('/');
+
+document.body.addEventListener('click', function(e) {
+    var url = document.location.origin + document.location.pathname,
+        hash = '',
+        href = e.target.getAttribute('href');
+
+    if (e.target.tagName === 'A' && /^\/.*/.test(href)) {
+        e.preventDefault();
+        router.setRoute(href);
+    }
+})

@@ -1,12 +1,12 @@
 var webpack = require('webpack'),
-    bourbon = require('node-bourbon'),
-    neat = require('node-neat'),
+    bourbon = require('node-bourbon').includePaths,
+    neat = require('node-neat').includePaths,
     path = require('path');
 
 module.exports = {
     cache: true,
     entry: {
-        main: './src/app/main.js'
+        main: ['webpack/hot/dev-server', './src/app/main.js']
     },
     output: {
         path: path.join(__dirname, 'dist/scripts'),
@@ -20,21 +20,23 @@ module.exports = {
             //     loader: 'imports?exports=>undefined'
             // }, {
             test: /\.js$|\.jsx$/,
-            loaders: ['react-hot', 'jsx?harmony&insertPragma=React.DOM']
+            loaders: ['react-hot', 'jsx?harmony']
         }, {
             test: /parse-latest.js$/,
             loader: 'exports?exports.Parse'
         }, {
+            test: /\.css$/,
+            loader: 'style!css'
+                // (bourbon.includePaths.concat(neat.includePaths)).concat([])
+        }, {
             test: /\.scss$/,
-            loader: 'style!css!sass?outputStyle=expanded&includePaths[]=' +
-                (bourbon.includePaths.concat(neat.includePaths))
+            loader: 'style!css!sass?includePaths[]=' + neat.join('&includePaths[]=') 
+                // (bourbon.includePaths.concat(neat.includePaths)).concat([])
         }],
         noParse: []
     },
     resolve: {
-        alias: {
-            // 'xmlhttprequest': __dirname + '/src/scripts/xmlhttprequest.js'
-        },
+        alias: {},
         extensions: ['', '.js', '.jsx', '.json'],
         modulesDirectories: ['node_modules', 'app'],
     },
@@ -48,7 +50,7 @@ module.exports = {
             // _: 'underscore',
             // Backbone: 'backbone',
             Parse: 'parse',
-            // React: 'react/addons'
+            React: 'react/addons'
         }),
         new webpack.HotModuleReplacementPlugin()
     ]

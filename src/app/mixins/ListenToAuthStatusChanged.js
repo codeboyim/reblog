@@ -1,9 +1,3 @@
-var globals = require('../globals'),
-    Parse = require('parse'),
-    _ = require('underscore');
-
-
-
 module.exports = {
     getInitialState: function () {
         return {

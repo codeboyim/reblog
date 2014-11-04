@@ -30,7 +30,8 @@ module.exports = function(grunt) {
                     devtool: 'eval',
                     debug: true
                 },
-                contentBase: 'src/'
+                contentBase: 'src/',
+                hot: true
             }
         }
 

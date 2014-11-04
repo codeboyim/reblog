@@ -1,0 +1,15 @@
+$visual-grid: true !global;
+@import"bourbon";
+@import"neat";
+.layoutNav {
+    list-style: none;
+    @include outer-container();
+    @include row();
+    padding: 0;
+    &>li:nth-child(1) {
+        @include span-columns(6);
+    }
+    &>li:last-child {
+        @include span-columns(6);
+    }
+}
