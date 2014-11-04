@@ -16,35 +16,39 @@ module.exports = {
     },
     module: {
         loaders: [{
-        //     test: /showdown\.js$/,
-        //     loader: 'imports?exports=>undefined'
-        // }, {
+            //     test: /showdown\.js$/,
+            //     loader: 'imports?exports=>undefined'
+            // }, {
             test: /\.js$|\.jsx$/,
             loaders: ['react-hot', 'jsx?harmony&insertPragma=React.DOM']
+        }, {
+            test: /parse-latest.js$/,
+            loader: 'exports?exports.Parse'
         }, {
             test: /\.scss$/,
             loader: 'style!css!sass?outputStyle=expanded&includePaths[]=' +
                 (bourbon.includePaths.concat(neat.includePaths))
         }],
-        noParse: [
-            /showdown\.js/
-        ]
+        noParse: []
     },
     resolve: {
+        alias: {
+            // 'xmlhttprequest': __dirname + '/src/scripts/xmlhttprequest.js'
+        },
         extensions: ['', '.js', '.jsx', '.json'],
-        modulesDirectories: ['node_modules', 'lib', 'app'],
+        modulesDirectories: ['node_modules', 'app'],
     },
     externals: [{
-        xmlhttprequest: 'XMLHttpRequest'
+        xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'
     }],
     plugins: [
         new webpack.ProvidePlugin({
-            $: 'jquery',
-            jQuery: 'jquery',
-            _: 'underscore',
-            Backbone: 'backbone',
+            // $: 'jquery',
+            // jQuery: 'jquery',
+            // _: 'underscore',
+            // Backbone: 'backbone',
             Parse: 'parse',
-            React: 'react/addons'
+            // React: 'react/addons'
         }),
         new webpack.HotModuleReplacementPlugin()
     ]

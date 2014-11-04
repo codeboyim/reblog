@@ -1,8 +1,4 @@
 /* jshint esnext: true */
-
-require('./styles/app.css');
-var Parse = require('parse');
-
 Parse.initialize('yxD2tY5w6WEVJg2Dd8a566sUI6j1xGKHVOLzRkKl', 'Ii4UZXR5rMGKmo5Og36lThmXcWnw3xyvN053kC4Z');
 
 window.fbAsyncInit = function () {
@@ -23,3 +19,13 @@ if (Parse.User.current()) {
 
     });
 }
+
+var director = require('director');
+
+router = director.Router({
+    '/':function(){
+        console.log('home');
+    }
+});
+
+router.init();
