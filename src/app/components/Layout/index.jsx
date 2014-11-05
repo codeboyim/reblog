@@ -12,15 +12,15 @@ var Layout = React.createClass({
     render() {
         return (
         	<div className="root">
-      			<nav>
-        			<ul className="layoutNav">
-        				<li className="layoutLogo"><a href="/">Re/blog</a></li>
-        				<li className="layoutNew"><a href="/post/new">Add a new post</a></li>
-        			</ul>
-      			</nav>
-        		<div className="layoutMain">
+        		<header className="rootHeader">
+        			<h1>Re/blog</h1>
+        		</header>
+        		<div className="rootMain">
         		{this.props.children}
         		</div>
+        		<footer className="rootFooter">
+	        		<p>Developed by codeboy</p>
+        		</footer>
           </div>
         );
     }

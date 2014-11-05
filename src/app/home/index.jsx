@@ -1,9 +1,10 @@
 var Layout = require('components/Layout');
 
-var Home = React.createClass({
-	render(){
-		return <Layout><h1>Home</h1></Layout>;
-	}
-});
+module.exports = function(title){
 
-React.render(<Home/>, document.body);
+	if(!title){
+		React.render(<Layout><h1>Home</h1></Layout>, document.body);
+	}else{
+		console.log(title);
+	}
+};

@@ -1,15 +1,33 @@
 var appRoutes = {
-    '/': function() {
-        require(['home'], function() {
-
+    '/': () => {
+        require(['home'], (home) => {
+            home();
         });
     },
-    '/signin':function(){
-    	console.log('login');
-    }
+    '/p/:title': (title) => {
+        require(['home'], (home) => {
+            home(title);
+        });
+    },
+    '/a': {
+        '/new': () => {
+            console.log('admin new post');
+        },
+        '/posts': {
+            '\/?(\d*)': (page) => {
+                console.log('admin posts');
+            }
+        },
+        '/drafts': () => {
+            console.log('admin drafts');
+        }
+    },
+    '/signin': () => {}
 };
 
-var router = require('director').Router(appRoutes);
+var router = require('director').Router(appRoutes).configure({
+    notfound: () => console.log('not found')
+});
 router.init('/');
 
 document.body.addEventListener('click', function(e) {
