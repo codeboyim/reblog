@@ -8,9 +8,9 @@ var Layout = React.createClass({
                 <aside className="adminSidebar">
                     <a href="/">Home</a>
                     <ul>
-                        <li><a href="/admin/new">New post</a></li>
-                        <li><a href="/admin/posts">Posts</a></li>
-                        <li><a href="/admin/drafts">Drafts</a></li>
+                        <li><a class="adminSidebarLink" href="/a/new">New post</a></li>
+                        <li><a class="adminSidebarLink" href="/a/posts">Posts</a></li>
+                        <li><a class="adminSidebarLink" href="/a/drafts">Drafts</a></li>
                     </ul>
                 </aside>
         		<div className="adminMain">

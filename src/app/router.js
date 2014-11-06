@@ -11,7 +11,9 @@ var appRoutes = {
     },
     '/a': {
         '/new': () => {
-            console.log('admin new post');
+            require(['admin'], (admin) => {
+            	admin('new');
+            })
         },
         '/posts': {
             '\/?(\d*)': (page) => {
