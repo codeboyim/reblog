@@ -1,6 +1,11 @@
 @import "reset";
 @import "settings";
+@import "bourbon";
+@import "neat";
 
+html, body{
+	height:100%;
+}
 body{
 	background-color:#e6e6e6;
 }

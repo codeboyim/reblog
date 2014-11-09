@@ -1,4 +1,4 @@
-require('./style.scss');
+require('./styles/layout.scss');
 
 var Layout = React.createClass({
 

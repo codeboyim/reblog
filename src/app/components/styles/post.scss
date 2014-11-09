@@ -1,0 +1,21 @@
+@import "bourbon";
+@import "neat";
+.post{
+	&>*{
+		margin: unpack(0.5em 0)
+	}
+}
+.postTitle, .postBody{
+	@include fill-parent();
+}
+.postEdit{
+	.postTitle, .postBody{
+		border:none;
+	}
+}
+
+#postBody{
+	@include fill-parent();
+	height:500px;
+	position: relative;
+}

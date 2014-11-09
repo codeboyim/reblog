@@ -1,6 +1,9 @@
 # node_modules
 node_modules/
 
+#bower 
+bower_components/
+
 #grunt cache
 .sass-cache/
 

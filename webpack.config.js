@@ -27,21 +27,20 @@ module.exports = {
         }, {
             test: /\.css$/,
             loader: 'style!css'
-                // (bourbon.includePaths.concat(neat.includePaths)).concat([])
         }, {
             test: /\.scss$/,
-            loader: 'style!css!sass?includePaths[]=' + neat.join('&includePaths[]=') 
-                // (bourbon.includePaths.concat(neat.includePaths)).concat([])
+            loader: 'style!css!sass?includePaths[]=' + neat.join('&includePaths[]=')
         }],
         noParse: []
     },
     resolve: {
         alias: {},
         extensions: ['', '.js', '.jsx', '.json'],
-        modulesDirectories: ['node_modules', 'app'],
+        modulesDirectories: ['node_modules', 'bower_components', 'app'],
     },
     externals: [{
-        xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'
+        xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}',
+        fs: 'null'
     }],
     plugins: [
         new webpack.ProvidePlugin({
@@ -53,5 +52,6 @@ module.exports = {
             React: 'react/addons'
         }),
         new webpack.HotModuleReplacementPlugin()
-    ]
+    ],
+    node: {}
 };

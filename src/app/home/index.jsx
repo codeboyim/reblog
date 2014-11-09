@@ -1,4 +1,4 @@
-var Layout = require('components/Layout');
+var Layout = require('components/layout');
 
 module.exports = function(title){
 

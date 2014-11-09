@@ -1,13 +1,26 @@
-module.exports = function(path){
-	var AdminNew,
-			docBody = document.body;
+require('./style.scss');
 
+module.exports = function(path, ...args){
+	var AdminElm,
+			Layout = require('./layout'),
+			docBody = document.body;
+			
 	switch(path){
 
 		case 'new':
-			AdminNew = require('./new');
-			React.render(<AdminNew />, docBody);
-		break;
+			AdminElm = require('./edit');
+			console.log('new');
+			React.render(<Layout activeMenuItemUid="new"><AdminElm /></Layout>, docBody);
+			break;
 
+		case 'posts':
+			// AdminElm = require('./posts');
+			React.render(<Layout activeMenuItemUid="new"><h2>Posts</h2></Layout>, docBody);
+			break	
+
+		case 'drafts':
+			// AdminElm = require('./drafts');
+			React.render(<Layout activeMenuItemUid="new"><h2>Drafts</h2></Layout>, docBody);
+			break	
 	}
 }

@@ -1,10 +1,49 @@
-.adminSidebar {
-    width: 280px;
-    position: fixed;
-    height: 100%;
-    background-color: #191918;
-    color: #eee;
+@import"bourbon";
+@import"neat";
+$adminSidebarWidth:280px;
+.admin {
+    width: 100%;
+    overflow: hidden;
+    padding-top: 1em;
+    &>aside {
+        width: $adminSidebarWidth;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        background-color: #191918;
+        color: #eee;
+        margin-right: 50px;
+        &.hide {
+            @include transform(translateX(-$adminSidebarWidth));
+        }
+        &>i {
+            position: absolute;
+            right: -50px;
+            color: #1e1e1e;
+            display: inline-block;
+            cursor: pointer;
+        }
+    }
+    &>main {
+        &.shift {
+            @include transform(translateX($adminSidebarWidth));
+        }
+    }
 }
-.adminSidebarLink {
-    color: rgba(255, 255, 255, 0.65);
+// a/new, a/edit/:id
+.adminPost {
+    @include row();
+    .adminPostEdit, .adminPostPreview {
+        @include media(min-width 800px, 24) {
+            @include span-columns(12);
+        }
+    }
+    .adminPostPreview {
+        @include media(max-width 800px) {
+            display: none;
+        }
+    }
+    .postBody{
+        min-height: 400px;
+    }
 }

@@ -12,15 +12,21 @@ var appRoutes = {
     '/a': {
         '/new': () => {
             require(['admin'], (admin) => {
-            	admin('new');
+                admin('new');
             })
         },
         '/posts': {
             '\/?(\d*)': (page) => {
+                require(['admin'], (admin) => {
+                    admin('posts', page);
+                })
                 console.log('admin posts');
             }
         },
         '/drafts': () => {
+            require(['admin'], (admin) => {
+                admin('drafts');
+            })
             console.log('admin drafts');
         }
     },

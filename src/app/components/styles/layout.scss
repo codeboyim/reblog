@@ -1,0 +1,36 @@
+@import"bourbon";
+@import"neat";
+$site-name-size:24px / $em-base * 1em;
+.root {
+    min-height: 100%;
+    position: relative;
+}
+.rootHeader {
+    @include pad(1em);
+    background-color: #fff;
+    @include media(max-width $max-width) {
+        @include outer-container();
+    }
+    h1 {
+        margin: 0;
+        font-size: $site-name-size;
+        font-weight: normal;
+        display: inline-block;
+    }
+}
+.rootMain {
+    @include outer-container();
+}
+.rootFooter {
+    @include pad(1em);
+    @include fill-parent();
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    color: #aaa;
+    font-size: 12px / $em-base * 1em;
+}
+.rootHeader, .rootFooter {
+    background-color: #fff;
+    box-shadow: 0 0 8px rgba(100, 100, 100, 0.8);
+}
