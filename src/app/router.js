@@ -1,3 +1,9 @@
+function adminPosts(page) {
+    require(['admin'], (admin) => {
+        admin('posts', page);
+    })
+}
+
 var appRoutes = {
     '/': () => {
         require(['home'], (home) => {
@@ -16,12 +22,8 @@ var appRoutes = {
             })
         },
         '/posts': {
-            '\/?(\d*)': (page) => {
-                require(['admin'], (admin) => {
-                    admin('posts', page);
-                })
-                console.log('admin posts');
-            }
+            '\/?(\d*)': adminPosts,
+            on: adminPosts
         },
         '/drafts': () => {
             require(['admin'], (admin) => {

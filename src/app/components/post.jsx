@@ -14,23 +14,11 @@ module.exports = React.createClass({
 		switch(this.props.mode){
 			case 'view':
 				postView = (
-					<article className="post postView">
-						<header>
-							<h1 className="postTitle">{post.get('title')}</h1>
-						</header>
-						<main className="postBody">
-							<div dangerouslySetInnerHTML={{__html:converter.makeHtml(post.get('body'))}} />
-						</main>
-					</article>
 				);
 				break;
 
 			case 'edit':
 				postView = (
-					<fieldset className="post postEdit">
-						<div><input type="text" className="postTitle" name="title" onChange={this._inputChanged} value={post.get('title')} /></div>
-						<div id="postBody" className="postBody"></div>
-					</fieldset>
 				);
 				break;
 

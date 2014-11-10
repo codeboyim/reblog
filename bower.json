@@ -18,6 +18,8 @@
     "tests"
   ],
   "devDependencies": {
-    "ace-builds": "~1.1.8"
+    "ace-builds": "~1.1.8",
+    "neat": "~1.7.0",
+    "bourbon": "~4.0.2"
   }
 }

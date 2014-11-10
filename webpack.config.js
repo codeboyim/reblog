@@ -1,7 +1,7 @@
 var webpack = require('webpack'),
-    bourbon = require('node-bourbon').includePaths,
-    neat = require('node-neat').includePaths,
-    path = require('path');
+    path = require('path'),
+    neatPath = path.join(__dirname, 'bower_components/neat/app/assets/stylesheets'),
+    bourbonPath = path.join(__dirname, 'bower_components/bourbon/dist');
 
 module.exports = {
     cache: true,
@@ -29,7 +29,7 @@ module.exports = {
             loader: 'style!css'
         }, {
             test: /\.scss$/,
-            loader: 'style!css!sass?includePaths[]=' + neat.join('&includePaths[]=')
+            loader: 'style!css!sass?includePaths[]=' + neatPath + '&includePaths[]=' + bourbonPath
         }],
         noParse: []
     },

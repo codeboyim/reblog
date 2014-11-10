@@ -1,49 +1,88 @@
 @import"bourbon";
 @import"neat";
-$adminSidebarWidth:280px;
+$sidebarWidth:280px;
+$divider: solid 1px #d9d9d9;
+$navBackColor:#4d5055;
+$sideBackColor:#2d323b;
 .admin {
     width: 100%;
     overflow: hidden;
-    padding-top: 1em;
+    padding-top: 3em;
     &>aside {
-        width: $adminSidebarWidth;
+        width: $sidebarWidth;
         position: fixed;
         top: 0;
         bottom: 0;
-        background-color: #191918;
+        background-color: $sideBackColor;
         color: #eee;
-        margin-right: 50px;
         &.hide {
-            @include transform(translateX(-$adminSidebarWidth));
+            @include transform(translateX(-$sidebarWidth));
         }
-        &>i {
-            position: absolute;
-            right: -50px;
-            color: #1e1e1e;
-            display: inline-block;
-            cursor: pointer;
+        a {
+            display: block;
+            padding: 1em;
+        }
+        .logo {
+            text-align: center;
+        }
+        &>ul li {
+            margin: 1px 0;
+        }
+        li a {
+            background-color: $navBackColor;
         }
     }
-    &>main {
-        &.shift {
-            @include transform(translateX($adminSidebarWidth));
-        }
+    &>.shift {
+        @include transform(translateX($sidebarWidth));
     }
 }
-// a/new, a/edit/:id
+.adminSidebarNav {
+}
+.adminHeader {
+    position: fixed;
+    background-color: $navBackColor;
+    top: 0;
+    width: 100%;
+    padding: 0.5em;
+    z-index: 9;
+    color: #ececec;
+}
+// // a/new, a/edit/:id
 .adminPost {
-    @include row();
-    .adminPostEdit, .adminPostPreview {
-        @include media(min-width 800px, 24) {
-            @include span-columns(12);
-        }
+    &>* {
+        @include pad(10px);
     }
-    .adminPostPreview {
-        @include media(max-width 800px) {
-            display: none;
-        }
+    &>*:nth-child(1) {
+        border-bottom: $divider;
     }
-    .postBody{
-        min-height: 400px;
+}
+.adminPostEdit, .adminPostView {
+    @include span-columns(12 of 24, block-collapse);
+}
+.adminPostView {
+    border-left: $divider;
+    @include media(max-width 800px) {
+        display: none;
     }
+}
+.adminPostTitle, .adminPostBody {
+    @include fill-parent();
+    @include margin(0.5em null null null);
+}
+.adminPostTitle {
+    border-width: 0;
+    font-size: 18px;
+    // @include selection{
+    //     border:none;
+    // }
+}
+.adminPostBody {
+    min-height: 1200px;
+    font-size: 16px;
+}
+.adminPostLabel {
+    font-size: 0.6em;
+    font-weight: bold;
+    color: #b6b6b6;
+    text-transform: uppercase;
 }

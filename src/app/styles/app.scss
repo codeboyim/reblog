@@ -1,12 +1,14 @@
-@import "reset";
-@import "settings";
-@import "bourbon";
-@import "neat";
-
-html, body{
-	height:100%;
+@import"reset";
+@import"settings";
+@import"bourbon";
+@import"neat";
+html, body {
+    height: 100%;
+    font-family:$helvetica;
 }
-body{
-	background-color:#e6e6e6;
+body {
+	background-color:#fbfbfb;
 }
-
+.logo{
+	font-size:1.5em;
+}

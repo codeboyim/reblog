@@ -1,12 +1,11 @@
 /* app/scss/post */
-@import "compass/css3/border-radius";
-@import "compass/css3/box-shadow";
-@import "foundation/functions";
 
+@import"compass/css3/border-radius";
+@import"compass/css3/box-shadow";
+@import"foundation/functions";
 $image_placeholder_background: #efefef;
 $image_placeholder_shadow_radius: 5px;
 $image_placeholder_margin: 0 rem-calc($image_placeholder_shadow_radius + 10px) rem-calc(21) 0;
-
 .post-edit-image-uploader {
     background-color: $image_placeholder_background;
     margin: $image_placeholder_margin;
@@ -22,12 +21,10 @@ $image_placeholder_margin: 0 rem-calc($image_placeholder_shadow_radius + 10px) r
         border-color: rgba(155, 155, 155, 0.9);
     }
 }
-
 .post-edit-panel-image {
     @extend .post-edit-image-uploader;
     height: 160px;
 }
-
 .post-edit-side-image {
     @extend .post-edit-image-uploader;
     height: 320px;
