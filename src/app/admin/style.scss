@@ -1,8 +1,11 @@
 @import"bourbon";
 @import"neat";
+$fa-font-path:"../../../node_modules/font-awesome/fonts";
+@import"font-awesome";
 $sidebarWidth:280px;
 $divider: solid 1px #d9d9d9;
 $navBackColor:#4d5055;
+$sidebarTransition:transform 0.2s ease;
 $sideBackColor:#2d323b;
 .admin {
     width: 100%;
@@ -15,6 +18,7 @@ $sideBackColor:#2d323b;
         bottom: 0;
         background-color: $sideBackColor;
         color: #eee;
+        @include transition($sidebarTransition);
         &.hide {
             @include transform(translateX(-$sidebarWidth));
         }
@@ -25,18 +29,26 @@ $sideBackColor:#2d323b;
         .logo {
             text-align: center;
         }
-        &>ul li {
-            margin: 1px 0;
-        }
         li a {
             background-color: $navBackColor;
         }
     }
-    &>.shift {
+}
+.adminMain, .adminHeader {
+    @include transition($sidebarTransition);
+    &.shift {
         @include transform(translateX($sidebarWidth));
     }
 }
 .adminSidebarNav {
+    .menuItemContent {
+        height: 1px;
+    }
+}
+.adminSidebarToggler {
+    @extend .fa;
+    @extend .fa-bars;
+    cursor: pointer;
 }
 .adminHeader {
     position: fixed;
@@ -46,6 +58,9 @@ $sideBackColor:#2d323b;
     padding: 0.5em;
     z-index: 9;
     color: #ececec;
+}
+.adminMenuItemContent{
+    @include transition(height 0.2s ease);
 }
 // // a/new, a/edit/:id
 .adminPost {
@@ -68,6 +83,7 @@ $sideBackColor:#2d323b;
 .adminPostTitle, .adminPostBody {
     @include fill-parent();
     @include margin(0.5em null null null);
+    background: transparent;
 }
 .adminPostTitle {
     border-width: 0;

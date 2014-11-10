@@ -8,6 +8,7 @@
     "director": "^1.2.3",
     "exports-loader": "^0.6.2",
     "file-loader": "*",
+    "font-awesome": "^4.2.0",
     "grunt": "^0.4.5",
     "grunt-webpack": "^1.0.8",
     "imports-loader": "^0.6.3",
