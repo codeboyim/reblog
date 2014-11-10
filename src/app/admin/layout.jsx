@@ -24,9 +24,8 @@ console.log(this.props.activeMenuItemUid);
                 <aside className={cxSidebar} ref="sidebar">
                     <a ref="logo" className="logo" href="/">Re/blog</a>
                     <ul ref="nav" className="adminSidebarNav">
-                        {this._renderMenuItem('new')}
-                        {this._renderMenuItem('posts')}
                         {this._renderMenuItem('drafts')}
+                        {this._renderMenuItem('posts')}
                     </ul>
                 </aside>
                 <div className={cxMain}>
@@ -38,15 +37,9 @@ console.log(this.props.activeMenuItemUid);
 
     _renderMenuItem(key){
         var menuItems = {
-                'new': {
-                    'href': '/a/new',
-                    'text': 'Write a post',
-                    'height': 1,
-
-                },
                 'posts': {
                     'href': '/a/posts',
-                    'text': 'Posts',
+                    'text': 'Published',
                     'height': 1
                 },
                 'drafts': {
@@ -101,7 +94,7 @@ console.log(this.props.activeMenuItemUid);
     },
 
     _resizeActiveMenuContent(){
-        var menuItemsCount = 3,
+        var menuItemsCount = 2,
             collapsedContentHeight = 1;
 
         this._fixedSize = this._fixedSize || 
