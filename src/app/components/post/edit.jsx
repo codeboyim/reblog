@@ -1,10 +1,11 @@
-var PostModel = require('components/models/post'),
-		converter = new (require('showdown').converter)();
+var PostModel = require('components/post/model'),
+		marked = require('marked');
 
-		require('ace-builds/src-noconflict/ace');
-		require('ace-builds/src-noconflict/mode-markdown');
+require('ace-builds/src-noconflict/ace');
+require('ace-builds/src-noconflict/mode-markdown');
 
-module.exports = React.createClass({
+class PostEdit {
+
 	render(){
 		var post = this.state.post;
 
@@ -21,24 +22,28 @@ module.exports = React.createClass({
 					<div className="adminPostView">
 						<label className="adminPostLabel">Preview</label>
 						<div className="adminPostBody">
-							<div dangerouslySetInnerHTML={{__html:converter.makeHtml(post.get('body'))}} />
+							<div dangerouslySetInnerHTML={{__html:marked(post.get('body'))}} />
 						</div>
 					</div>
 			</div>
 		);
-	},
+	}
 
 	getInitialState(){
 		return {
-			post: new PostModel({id: this.props.id})
+			post: new PostModel({id: this.props.id}),
+			saving: false
 		}
-	},
+	}
 
 	getDefaultProps(){
 		return {
-			id: null
+			id: null,
+			onPostChanged: ()=>{},
+			onSaving: ()=>{},
+			onSaved: ()=>{}
 		};
-	},
+	}
 
 	componentDidMount(){
 		var post = this.state.post,
@@ -53,14 +58,33 @@ module.exports = React.createClass({
 		editor.getSession().setMode('ace/mode/markdown');
 		editor.getSession().on('change', ()=>{
 			post.set({body: editor.getValue()});
+			this._autoSave();
 		});
-	},
+	}
 
-	_postChanged(){
+	_postChanged(post){
 		this.forceUpdate();
-	},
+		this.props.onPostChanged(post.toJSON());
+	}
 
 	_inputChanged(e){
 		this.state.post.set(e.target.name, e.target.value);	
+		this._autoSave();
 	}
-});
+
+	_autoSave(){
+
+		if(this._autoSave.timeoutId){
+			window.clearTimeout(this._autoSave.timeoutId);
+		}
+
+		this._autoSave.timeoutId = window.setTimeout(() => {
+			this.props.onSaving();
+			console.log('saving');
+			this.state.post.save().then(() => this.props.onSaved());
+		}, 5000);
+
+	}
+}
+
+module.exports = React.createClass(PostEdit.prototype);

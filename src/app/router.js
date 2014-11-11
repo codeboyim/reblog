@@ -10,9 +10,9 @@ var appRoutes = {
         });
     },
     '/a': {
-        '/(drafts|new)': () => {
+        '/(drafts|new)': (path) => {
             require(['admin'], (admin) => {
-                admin('drafts');
+                admin(path);
             })
         },
         '/posts': {

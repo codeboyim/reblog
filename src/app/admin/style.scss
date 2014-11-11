@@ -22,16 +22,20 @@ $sideBackColor:#2d323b;
         &.hide {
             @include transform(translateX(-$sidebarWidth));
         }
-        a {
-            display: block;
-            padding: 1em;
-        }
         .logo {
             text-align: center;
         }
         li a {
             background-color: $navBackColor;
         }
+    }
+}
+.adminLogo {
+    padding: 1rem;
+    text-align: center;
+    font-size: 1.5rem;
+    a {
+        display: inline-block;
     }
 }
 .adminMain, .adminHeader {
@@ -41,25 +45,66 @@ $sideBackColor:#2d323b;
     }
 }
 .adminSidebarNav {
-    .menuItemContent {
-        height: 1px;
+    a {
+        display: block;
+        padding: 1em;
     }
 }
-.adminSidebarToggler {
+.adminMenuItemContent {
+    height: 1px;
+}
+.adminSidebarButtonComposeWrap {
+    padding: 15px;
+}
+.adminSidebarButton {
+    text-transform: uppercase;
+    width: 100%;
+}
+.adminSidebarButtonCompose {
+    @include padding(1em null 1em null);
+}
+.adminSidebarToggler, .adminSettings, .adminShare {
     @extend .fa;
+}
+.adminSidebarToggler {
     @extend .fa-bars;
     cursor: pointer;
+}
+.adminSettings {
+    @extend .fa-cog;
+}
+.adminShare {
+    @extend .fa-share-alt-square;
 }
 .adminHeader {
     position: fixed;
     background-color: $navBackColor;
     top: 0;
     width: 100%;
-    padding: 0.5em;
+    font-size: 1.125rem;
+    height: 2em;
+    line-height: 2em;
+    padding: 0 1em;
     z-index: 9;
     color: #ececec;
 }
-.adminMenuItemContent{
+.adminHeaderNav {
+    float: right;
+    display: inline-block;
+    &>li {
+        float: left;
+        cursor: pointer;
+        min-width: 90px;
+        font-size: 1rem;
+        text-align: center;
+        i {
+            margin-right: 10px;
+            font-size: 1.125rem;
+            cursor: pointer;
+        }
+    }
+}
+.adminMenuItemContent {
     @include transition(height 0.2s ease);
 }
 // // a/new, a/edit/:id

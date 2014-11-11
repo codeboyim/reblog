@@ -10,8 +10,8 @@ module.exports = {
         main: ['webpack/hot/dev-server', './src/app/main.js']
     },
     output: {
-        path: path.join(__dirname, 'dist/scripts'),
-        publicPath: '/scripts',
+        path: path.join(__dirname, 'dist/scripts/'),
+        publicPath: '/scripts/',
         filename: '[name].js',
         chunkFilename: '[chunkhash].js'
     },
@@ -53,7 +53,7 @@ module.exports = {
         new webpack.ProvidePlugin({
             // $: 'jquery',
             // jQuery: 'jquery',
-            _: 'underscore',
+            // _: 'underscore',
             // Backbone: 'backbone',
             Parse: 'parse',
             React: 'react/addons'
