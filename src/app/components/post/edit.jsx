@@ -12,15 +12,15 @@ class PostEdit {
 		return (
 			<div className="adminPost">
 					<div>
-						<label className="adminPostLabel">Title</label>
+						<label>Title</label>
 						<input type="text" placeholder="Untitled" className="adminPostTitle" name="title" onChange={this._inputChanged} value={post.get('title')} />
 					</div>
 					<div className="adminPostEdit">
-							<label className="adminPostLabel">Post Content</label>
+							<label>Post Content</label>
 							<div ref="postBody" className="adminPostBody"></div>
 					</div>
 					<div className="adminPostView">
-						<label className="adminPostLabel">Preview</label>
+						<label>Preview</label>
 						<div className="adminPostBody">
 							<div dangerouslySetInnerHTML={{__html:marked(post.get('body'))}} />
 						</div>
