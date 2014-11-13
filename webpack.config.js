@@ -2,7 +2,8 @@ var webpack = require('webpack'),
     path = require('path'),
     neatPath = path.join(__dirname, 'bower_components/neat/app/assets/stylesheets'),
     bourbonPath = path.join(__dirname, 'bower_components/bourbon/dist'),
-    faPath = path.join(__dirname, 'node_modules/font-awesome/scss');
+    faPath = path.join(__dirname, 'node_modules/font-awesome/scss'),
+    appPath = path.join(__dirname, 'src/app');
 
 module.exports = {
     cache: true,
@@ -36,25 +37,20 @@ module.exports = {
             loader: "file-loader"
         }, {
             test: /\.scss$/,
-            loader: 'style!css!sass?includePaths[]=' + neatPath + '&includePaths[]=' + bourbonPath + '&includePaths[]=' + faPath
+            loader: 'style!css!sass?includePaths[]=' + [neatPath, bourbonPath, faPath, appPath].join('&includePaths[]=')
         }],
         noParse: []
     },
     resolve: {
         alias: {},
         extensions: ['', '.js', '.jsx', '.json'],
-        modulesDirectories: ['node_modules', 'bower_components', 'app'],
+        modulesDirectories: ['node_modules', 'app'],
     },
     externals: [{
-        xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}',
-        fs: 'null'
+        xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'
     }],
     plugins: [
         new webpack.ProvidePlugin({
-            // $: 'jquery',
-            // jQuery: 'jquery',
-            // _: 'underscore',
-            // Backbone: 'backbone',
             Parse: 'parse',
             React: 'react/addons'
         }),

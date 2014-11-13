@@ -1,12 +1,13 @@
 @import"bourbon";
 @import"neat";
+@import"styles/settings";
 $fa-font-path:"../../../node_modules/font-awesome/fonts";
 @import"font-awesome";
 $sidebarWidth:280px;
 $divider: solid 1px #d9d9d9;
-$navBackColor:#4d5055;
 $sidebarTransition:transform 0.2s ease;
-$sideBackColor:#2d323b;
+$navSecondaryBackColor:#4d5055;
+$navPrimaryBackColor:#2d323b;
 .admin {
     width: 100%;
     overflow: hidden;
@@ -16,7 +17,7 @@ $sideBackColor:#2d323b;
         position: fixed;
         top: 0;
         bottom: 0;
-        background-color: $sideBackColor;
+        background-color: $navPrimaryBackColor;
         color: #eee;
         @include transition($sidebarTransition);
         &.hide {
@@ -26,12 +27,12 @@ $sideBackColor:#2d323b;
             text-align: center;
         }
         li a {
-            background-color: $navBackColor;
+            background-color: $navSecondaryBackColor;
         }
     }
 }
 .adminLogo {
-    padding: 1rem;
+    padding: 3rem 0 2rem 0;
     text-align: center;
     font-size: 1.5rem;
     a {
@@ -40,6 +41,7 @@ $sideBackColor:#2d323b;
 }
 .adminMain, .adminHeader {
     @include transition($sidebarTransition);
+    padding: 0 2%;
     &.shift {
         @include transform(translateX($sidebarWidth));
     }
@@ -63,87 +65,114 @@ $sideBackColor:#2d323b;
 .adminSidebarButtonCompose {
     @include padding(1em null 1em null);
 }
-.adminSidebarToggler, .adminSettings, .adminShare {
-    @extend .fa;
-}
 .adminSidebarToggler {
+    @extend .fa;
     @extend .fa-bars;
     cursor: pointer;
 }
-.adminSettings {
-    @extend .fa-cog;
-}
-.adminShare {
-    @extend .fa-share-alt-square;
-}
 .adminHeader {
     position: fixed;
-    background-color: $navBackColor;
+    background-color: $navSecondaryBackColor;
     top: 0;
     width: 100%;
     font-size: 1.125rem;
     height: 2em;
     line-height: 2em;
-    padding: 0 1em;
     z-index: 9;
     color: #ececec;
 }
 .adminHeaderNav {
     float: right;
     display: inline-block;
-    &>li {
-        float: left;
-        cursor: pointer;
-        min-width: 90px;
-        font-size: 1rem;
-        text-align: center;
+    >li {}
+}
+.adminHeaderNavDropdown {
+    float: left;
+    cursor: pointer;
+    min-width: 90px;
+    font-size: 1rem;
+    text-align: center;
+    position: relative;
+    input[type=text] {
+        @include fill-parent();
+    }
+    .dropdownTitle {
         i {
+            @extend .fa;
             margin-right: 10px;
             font-size: 1.125rem;
-            cursor: pointer;
+            &.more {
+                @extend .fa-cog;
+            }
+            &.share {
+                @extend .fa-share-alt-square;
+            }
+            &.publish {
+                @extend .fa-cloud-upload;
+            }
+            &.preview {
+                @extend .fa-eye;
+            }
+        }
+        &.active, &:hover .adminHeaderNavDropdownTitle {
+            background-color: $navPrimaryBackColor;
+        }
+    }
+    .dropdownBody {
+        position: absolute;
+        right: 0;
+        // display: none;
+        background-color: $navPrimaryBackColor;
+        min-width: 300px;
+        text-align: left;
+        >* {
+            padding: 1em;
+        }
+        &.more {
+            width: 600px;
         }
     }
 }
 .adminMenuItemContent {
     @include transition(height 0.2s ease);
 }
-// // a/new, a/edit/:id
+// a/new, a/edit/:id
 .adminPost {
     &>* {
-        @include pad(10px);
+        @include pad(2% 0 2% 0);
     }
     &>*:nth-child(1) {
         border-bottom: $divider;
     }
 }
 .adminPostEdit, .adminPostView {
-    @include span-columns(12 of 24, block-collapse);
+    @include media($large, 24) {
+        @include span-columns(12 of 24);
+    }
 }
 .adminPostView {
     border-left: $divider;
-    @include media(max-width 800px) {
+    @include media($medium) {
         display: none;
+    }
+    @include media($large) {
+        padding-left: flex-gutter(24);
     }
 }
 .adminPostTitle, .adminPostBody {
     @include fill-parent();
     @include margin(0.5em null null null);
     background: transparent;
+    line-height: 1.5em;
+}
+.adminPostBody.ace_editor {
+    line-height: 1.5em;
 }
 .adminPostTitle {
     border-width: 0;
     font-size: 18px;
-    // @include selection{
-    //     border:none;
-    // }
 }
 .adminPostBody {
     min-height: 1200px;
     font-size: 16px;
-}
-.adminPostLabel {
-    font-size: 0.6em;
-    font-weight: bold;
-    color: #b6b6b6;
-    text-transform: uppercase;
 }

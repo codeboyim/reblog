@@ -19,7 +19,7 @@
   ],
   "devDependencies": {
     "ace-builds": "~1.1.8",
-    "neat": "~1.7.0",
+    "neat": "1.5.1",
     "bourbon": "~4.0.2"
   }
 }

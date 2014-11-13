@@ -3,7 +3,6 @@ var PostModel = require('components/post/model'),
 
 require('ace-builds/src-noconflict/ace');
 require('ace-builds/src-noconflict/mode-markdown');
-
 class PostEdit {
 
 	render(){
@@ -13,7 +12,7 @@ class PostEdit {
 			<div className="adminPost">
 					<div>
 						<label>Title</label>
-						<input type="text" placeholder="Untitled" className="adminPostTitle" name="title" onChange={this._inputChanged} value={post.get('title')} />
+						<input type="text" placeholder="Untitled" className="adminPostTitle" name="title" onChange={this._inputChanged} value={post.title} />
 					</div>
 					<div className="adminPostEdit">
 							<label>Post Content</label>
@@ -22,68 +21,59 @@ class PostEdit {
 					<div className="adminPostView">
 						<label>Preview</label>
 						<div className="adminPostBody">
-							<div dangerouslySetInnerHTML={{__html:marked(post.get('body'))}} />
+							<div dangerouslySetInnerHTML={{__html:marked(post.body)}} />
 						</div>
 					</div>
 			</div>
 		);
 	}
 
-	getInitialState(){
-		return {
-			post: new PostModel({id: this.props.id}),
-			saving: false
-		}
-	}
-
 	getDefaultProps(){
 		return {
-			id: null,
-			onPostChanged: ()=>{},
+			model: new PostModel,
+			onChange: ()=>{},
 			onSaving: ()=>{},
 			onSaved: ()=>{}
 		};
+	}
+
+	getInitialState(){
+		return {
+			post: this.props.model.toJSON(),
+			saving: false
+		}
 	}
 
 	componentDidMount(){
 		var post = this.state.post,
 				editor = ace.edit(this.refs.postBody.getDOMNode());
 
-		post.on('change', this._postChanged);
-
-		editor.setValue(post.get('body'));
+		this.props.model.on('change', this._modelChanged);
+		editor.setValue(post.body);
 		editor.setFontSize(16);
 		editor.renderer.setShowGutter(false);
 		editor.renderer.setShowPrintMargin(false);
 		editor.getSession().setMode('ace/mode/markdown');
+		
 		editor.getSession().on('change', ()=>{
-			post.set({body: editor.getValue()});
-			this._autoSave();
+			post.body = editor.getValue();
+			this.setState({ post: post });
 		});
 	}
 
-	_postChanged(post){
-		this.forceUpdate();
-		this.props.onPostChanged(post.toJSON());
+	componentWillUpdate(nextProps, nextState){
 	}
 
 	_inputChanged(e){
-		this.state.post.set(e.target.name, e.target.value);	
-		this._autoSave();
+		var post = this.state.post,
+				target = e.target;
+
+		post[target.name] = target.value;
+		this.props.model.set(post);
 	}
 
-	_autoSave(){
-
-		if(this._autoSave.timeoutId){
-			window.clearTimeout(this._autoSave.timeoutId);
-		}
-
-		this._autoSave.timeoutId = window.setTimeout(() => {
-			this.props.onSaving();
-			console.log('saving');
-			this.state.post.save().then(() => this.props.onSaved());
-		}, 5000);
-
+	_modelChanged(model){
+		this.setState({ post: model.toJSON() });
 	}
 }
 

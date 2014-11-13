@@ -1,4 +1,5 @@
-var Layout = React.createClass({
+
+class Layout{
 
     render() {
         var cx = React.addons.classSet,
@@ -12,15 +13,60 @@ var Layout = React.createClass({
             cxHeader = cx({
                 'shift': this.state.isSidebarVisible,
                 'adminHeader': true
-            });
+            }),
+            headerNavMenuItems = {
+                'publish': {
+                    title: 'Publish',
+                },
+                'preview': {
+                    title: 'Preview'
+                },
+                'share': {
+                    title: 'Share'
+                },
+                'more': {
+                    title: 'More',
+                    body: [
+                        <div>
+                            <label>Friendly URL</label><input type="text" value={this.state.data.seoUrl} readOnly={true}/>
+                        </div>,
+                        <div>
+                            <label>Attachments</label>
+                            <ul></ul>
+                        </div>,
+                        <div>
+                            <button onClick={ this._deleteClicked }>Delete</button>
+                        </div>
+                    ]
+                }
+            };
 
         return (
         	<div className="admin" onClick={this._documentBodyClicked}>
                 <header className={cxHeader}>
                     <i ref="toggle" className="adminSidebarToggler" onClick={this._toggleSidebar}></i>
                     <ul className="adminHeaderNav">
-                        <li><i className='adminShare' />Share</li>
-                        <li><i className="adminSettings" />More</li>
+                        {
+                            Object.keys(headerNavMenuItems).map((key) => {
+                                var item = headerNavMenuItems[key],
+                                    active = this.state.activeNavDropdownUid === key,
+                                    cxDropdown = cx({'adminHeaderNavDropdown': true, active: active});
+
+                                return (
+                                    <li className={cxDropdown + ' key'}>
+                                        <div className="dropdownTitle" onClick={this._toggleNavDropdown.bind(this, key)}>
+                                            <i className={key} /><span>{item.title}</span>
+                                        </div>
+                                        {
+                                            active && item.body? (
+                                            <div className={'dropdownBody ' + key}>{item.body}</div>
+                                            ):
+                                            null
+                                        }
+                                    </li>
+                                );
+                            })
+                        }
                     </ul>
                 </header>
                 <aside className={cxSidebar} ref="sidebar">
@@ -40,19 +86,17 @@ var Layout = React.createClass({
         		</div>
           </div>
         );
-    },
+    }
 
     _renderMenuItem(key){
         var menuItems = {
                 'posts': {
                     'href': '/a/posts',
                     'text': 'Published',
-                    'height': 1
                 },
                 'drafts': {
                     'href': '/a/drafts',
                     'text': 'Drafts',
-                    'height': 1
                 }
             },
             item = menuItems[key];
@@ -69,37 +113,43 @@ var Layout = React.createClass({
         return (
             <li key={key} className={item.cx}>
                 <a ref='menuItemTitle' className="adminSidebarButton" href={ item.href }>{ item.text }</a>
-                <div className='adminMenuItemContent' style={{ height: (item.height + 'px') }}>
+                <div className='adminMenuItemContent' style={{ height: item.height? (item.height + 'px') : null }}>
                     {item.content}
                 </div>
             </li>
         );
-    },
+    }
 
     getDefaultProps(){
         return {
-            activeMenuItemUid:'new'
+            activeMenuItemUid:'new',
+            dataModel: null
         };
-    },
+    }
 
     getInitialState(){
         return {
-            isSidebarVisible: true,
-            activeContentHeight: 1
+            isSidebarVisible: false,
+            activeContentHeight: 1,
+            activeNavDropdownUid: '',
+            data: this.props.dataModel? this.props.dataModel.toJSON() : null
         };
-    },
+    }
 
     componentDidMount(){
         this._resizeActiveMenuContent();
         window.addEventListener('resize', this._resizeActiveMenuContent);
         document.body.addEventListener('click', this._toggleSidebar);
-        console.log('did mount');
-    },
+
+        if(this.props.dataModel){
+            this.props.dataModel.on('change', this._dataModelChanged);
+        }
+    }
 
     componentWillUnmount(){
         window.removeEventListener('resize', this._resizeActiveMenuContent);
         document.body.removeEventListener('click', this._toggleSidebar)
-    },
+    }
 
     _resizeActiveMenuContent(){
         var menuItemsCount = 2,
@@ -117,13 +167,7 @@ var Layout = React.createClass({
         window.requestAnimationFrame(function(){
             this.setState({ activeContentHeight: sidebarHeight - this._fixedHeight });
         }.bind(this));
-    },
-
-    _hideSidebar(e){
-
-        //opt out toggle button
-        //if click on anywhere else except sidebar and its children, hide sidebar
-    },
+    }
 
     /**
      * toggle sidebar
@@ -150,6 +194,20 @@ var Layout = React.createClass({
 
         this.setState({isSidebarVisible:visible});
     }
-});
 
-module.exports = Layout;
+    _toggleNavDropdown(key, e){
+        var uid = '';
+
+        if(this.state.activeNavDropdownUid !== key && ~['more', 'share'].indexOf(key)){
+            uid = key;
+        }
+
+        this.setState({ activeNavDropdownUid: uid });
+    }
+
+    _dataModelChanged(data){
+        this.setState({ data: data.toJSON() });
+    } 
+}
+
+module.exports = React.createClass(Layout.prototype);
