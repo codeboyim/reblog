@@ -14,48 +14,70 @@ class Layout{
                 'shift': this.state.isSidebarVisible,
                 'adminHeader': true
             }),
-            headerNavMenuItems = {
-                'publish': {
-                    title: 'Publish',
-                },
-                'preview': {
-                    title: 'Preview'
-                },
-                'share': {
-                    title: 'Share'
-                },
-                'more': {
-                    title: 'More',
-                    body: [
-                        <div>
-                            <label>Friendly URL</label><input type="text" value={this.state.data.seoUrl} readOnly={true}/>
-                        </div>,
-                        <div>
-                            <label>Attachments</label>
-                            <ul></ul>
-                        </div>,
-                        <div>
-                            <button onClick={ this._deleteClicked }>Delete</button>
-                        </div>
-                    ]
+            headerNavMenuItems = [
+                {
+                    'publish': {
+                        title: 'Publish'
+                    }
+                }, {
+                    'withdraw': {
+                        title: 'Withdraw'
+                    }
+                }, {
+                    'preview': {
+                        title: 'Preview'
+                    }
+                }, {
+                    'share': {
+                        title: 'Share'
+                    }
+                }, {
+                    'more': {
+                        title: 'More',
+                        body: [
+                            <div>
+                                <label>Friendly URL</label><input type="text" value={this.state.data.seoUrl} readOnly={true}/>
+                            </div>,
+                            <div>
+                                <label>Attachments</label>
+                                <ul></ul>
+                            </div>,
+                            <div className="text-center">
+                                <button className="button alert" onClick={ this._deleteClicked }>Delete</button>
+                            </div>
+                        ]
+                    }
                 }
-            };
+            ];
 
         return (
         	<div className="admin" onClick={this._documentBodyClicked}>
                 <header className={cxHeader}>
                     <i ref="toggle" className="adminSidebarToggler" onClick={this._toggleSidebar}></i>
+                    {
+                        this.state.notification ?
+                        (
+                            <div className={'adminHeaderNotification ' + this.state.notification.type}>{this.state.notification.text}</div>
+                        )
+                        : null
+                    }
                     <ul className="adminHeaderNav">
                         {
-                            Object.keys(headerNavMenuItems).map((key) => {
-                                var item = headerNavMenuItems[key],
+                            headerNavMenuItems.map((menuItem) => {
+                                var key = Object.keys(menuItem)[0],
+                                    item = menuItem[key],
                                     active = this.state.activeNavDropdownUid === key,
-                                    cxDropdown = cx({'adminHeaderNavDropdown': true, active: active});
+                                    cxDropdown = cx({'adminHeaderNavDropdown': true, active: active}),
+                                    isDraft = this.props.dataModel.get('isDraft');
+
+                                if(isDraft && key === 'withdraw' || !isDraft && key === 'publish'){
+                                    return null;
+                                }
 
                                 return (
-                                    <li className={cxDropdown + ' key'}>
-                                        <div className="dropdownTitle" onClick={this._toggleNavDropdown.bind(this, key)}>
-                                            <i className={key} /><span>{item.title}</span>
+                                    <li key={key} className={cxDropdown + ' key'}>
+                                        <div className={ 'dropdownTitle ' + key } onClick={this._toggleNavDropdown.bind(this, key)}>
+                                            <i className="fa"/><span>{item.title}</span>
                                         </div>
                                         {
                                             active && item.body? (
@@ -132,7 +154,8 @@ class Layout{
             isSidebarVisible: false,
             activeContentHeight: 1,
             activeNavDropdownUid: '',
-            data: this.props.dataModel? this.props.dataModel.toJSON() : null
+            data: this.props.dataModel? this.props.dataModel.toJSON() : null,
+            notification: null //{ text: '', type: 'info' }
         };
     }
 
@@ -142,7 +165,7 @@ class Layout{
         document.body.addEventListener('click', this._toggleSidebar);
 
         if(this.props.dataModel){
-            this.props.dataModel.on('change', this._dataModelChanged);
+            this.props.dataModel.on('all', this._dataModelChanged);
         }
     }
 
@@ -205,8 +228,21 @@ class Layout{
         this.setState({ activeNavDropdownUid: uid });
     }
 
-    _dataModelChanged(data){
-        this.setState({ data: data.toJSON() });
+    _dataModelChanged(event, data){
+
+        switch(event){
+            case 'change':
+                this.setState({ data: data.toJSON() });
+                break;
+
+            case 'save':
+                this.setState({ notification: { text: 'saving', type: 'info' } });
+                break;
+
+            case 'sync':
+                this.setState({ notification: null });
+                break;
+        }
     } 
 }
 

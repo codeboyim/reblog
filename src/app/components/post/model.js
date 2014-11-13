@@ -1,4 +1,4 @@
-module.exports = Parse.Object.extend({
+var PostModel = Parse.Object.extend({
     className: 'Post',
 
     defaults: {
@@ -19,5 +19,11 @@ module.exports = Parse.Object.extend({
         if (!attrs.body.trim()) {
             msg.push('body required');
         }
+    },
+
+    save(...args){
+        this.trigger('save', this);
+        Parse.Object.prototype.save.apply(this, args);
     }
 });
+module.exports = PostModel;

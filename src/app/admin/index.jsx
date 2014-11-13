@@ -2,41 +2,50 @@ require('./style.scss');
 
 var PostModel = require('components/post/model'),
 		slug = require('slug'),
-		_post,
-		_path;
+		post,
+		path,
+		autoSaveTimeoutId;
 
-function render(path){
+function render(_path){
 	var PostEdit = require('components/post/edit'),
 			Layout = require('./layout'),
 			docBody = document.body;
 
-	_path = path;
+	 path = _path;
 
 	if(~['new', 'posts', 'drafts'].indexOf(path)){
 
-		if(!_post){
-			_post = new PostModel();
-			_post.on('change', postChanged)
+		if(!post){
+			post = new PostModel();
+			post.on('all', postChanged)
 		}
 
-		React.render(<Layout activeMenuItemUid={path} dataModel={_post}><PostEdit model={_post} /></Layout>, docBody);
+		React.render(<Layout activeMenuItemUid={path} dataModel={post}><PostEdit model={post} /></Layout>, docBody);
 	}
 }
 
-function postChanged(post){
-	if(post.hasChanged('title')){
-		post.set('seoUrl', slug(post.get('title')));
+function postChanged(event, _post){
+
+	switch(event){
+
+		case 'change:title':
+			_post.set('seoUrl', slug(_post.get('title')));
+			break;
+
+		case 'change':
+			autoSave(_post.changedAttributes);
+			break;
 	}
 }
 
-function autoSave(){
+function autoSave(attrs){
 
-	if(this._autoSave.timeoutId){
-		window.clearTimeout(this._autoSave.timeoutId);
+	if(autoSaveTimeoutId){
+		window.clearTimeout(autoSaveTimeoutId);
 	}
 
-	this._autoSave.timeoutId = window.setTimeout(() => {
-		this.props.model.save();
+	autoSaveTimeoutId = window.setTimeout(() => {
+		post.save(attrs);
 	}, 5000);
 }
 
