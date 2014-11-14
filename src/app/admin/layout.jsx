@@ -1,3 +1,5 @@
+var PostModel = require('components/post/model'),
+    PostList = require('components/post/list');
 
 class Layout{
 
@@ -61,6 +63,10 @@ class Layout{
                         )
                         : null
                     }
+                    {
+                        // this.props.dataModel instanceof PostModel 
+
+                    }
                     <ul className="adminHeaderNav">
                         {
                             headerNavMenuItems.map((menuItem) => {
@@ -68,7 +74,7 @@ class Layout{
                                     item = menuItem[key],
                                     active = this.state.activeNavDropdownUid === key,
                                     cxDropdown = cx({'adminHeaderNavDropdown': true, active: active}),
-                                    isDraft = this.props.dataModel.get('isDraft');
+                                    isDraft = this.props.model.get('isDraft');
 
                                 if(isDraft && key === 'withdraw' || !isDraft && key === 'publish'){
                                     return null;
@@ -100,7 +106,7 @@ class Layout{
                     </div>
                     <ul ref="nav" className="adminSidebarNav">
                         {this._renderMenuItem('drafts')}
-                        {this._renderMenuItem('posts')}
+                        {this._renderMenuItem('published')}
                     </ul>
                 </aside>
                 <div className={cxMain}>
@@ -112,22 +118,23 @@ class Layout{
 
     _renderMenuItem(key){
         var menuItems = {
-                'posts': {
+                'published': {
                     'href': '/a/posts',
-                    'text': 'Published',
+                    'text': 'Published'
                 },
                 'drafts': {
                     'href': '/a/drafts',
-                    'text': 'Drafts',
+                    'text': 'Drafts'
                 }
             },
-            item = menuItems[key];
+            item = menuItems[key],
+            posts = this.state[key];
 
-        if(!item){
+        if(!item || !posts){
             return null;
         }
 
-        if(this.props.activeMenuItemUid === key || this.props.activeMenuItemUid === 'new' && key === 'drafts'){
+        if(this.props.activeMenuItemUid === key) {
             item.cx = 'active';
             item.height = this.state.activeContentHeight
         }
@@ -136,7 +143,7 @@ class Layout{
             <li key={key} className={item.cx}>
                 <a ref='menuItemTitle' className="adminSidebarButton" href={ item.href }>{ item.text }</a>
                 <div className='adminMenuItemContent' style={{ height: item.height? (item.height + 'px') : null }}>
-                    {item.content}
+                    <PostList list={posts} /> 
                 </div>
             </li>
         );
@@ -144,8 +151,8 @@ class Layout{
 
     getDefaultProps(){
         return {
-            activeMenuItemUid:'new',
-            dataModel: null
+            activeMenuItemUid:'draft',
+            model: null
         };
     }
 
@@ -154,8 +161,10 @@ class Layout{
             isSidebarVisible: false,
             activeContentHeight: 1,
             activeNavDropdownUid: '',
-            data: this.props.dataModel? this.props.dataModel.toJSON() : null,
-            notification: null //{ text: '', type: 'info' }
+            data: this.props.model? this.props.model.toJSON() : null,
+            notification: null, //{ text: '', type: 'info' }
+            drafts: [],
+            published: []
         };
     }
 
@@ -164,9 +173,11 @@ class Layout{
         window.addEventListener('resize', this._resizeActiveMenuContent);
         document.body.addEventListener('click', this._toggleSidebar);
 
-        if(this.props.dataModel){
-            this.props.dataModel.on('all', this._dataModelChanged);
+        if(this.props.model){
+            this.props.model.on('all', this._dataModelChanged);
         }
+
+        this._loadPosts(this.props.activeMenuItemUid);
     }
 
     componentWillUnmount(){
@@ -244,6 +255,33 @@ class Layout{
                 break;
         }
     } 
+
+    _loadPosts(menuUid){
+        var promise,
+            newState;
+
+        if(typeof this.state[menuUid] === 'undefined'){
+            return;
+        }
+        switch(menuUid){
+            case 'drafts':
+                promise = PostModel.findDrafts();
+                break;
+            case 'published':
+                promise = PostModel.findPublished();
+                break;
+        }
+
+        if(promise){
+            promise.done((posts) => {
+                if(this.isMounted()){
+                    newState = {};
+                    newState[menuUid] = posts;
+                    this.setState(newState); 
+                }
+            })
+        }
+    }
 }
 
 module.exports = React.createClass(Layout.prototype);

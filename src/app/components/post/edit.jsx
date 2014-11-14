@@ -30,10 +30,7 @@ class PostEdit {
 
 	getDefaultProps(){
 		return {
-			model: new PostModel,
-			onChange: ()=>{},
-			onSaving: ()=>{},
-			onSaved: ()=>{}
+			model: new PostModel
 		};
 	}
 

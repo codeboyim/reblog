@@ -15,10 +15,10 @@ var appRoutes = {
                 admin(path);
             })
         },
-        '/posts': {
+        '/published': {
             '\/?(\\d*)': (page) => {
                 require(['admin'], (admin) => {
-                    admin('posts', page);
+                    admin('published', page);
                 })
             },
         }
