@@ -1,18 +1,18 @@
-var PostCollection = require('./collection');
+var path = require('path');
 
 class PostList{
 
 	getDefaultProps(){
 		return {
 			mode:'compact',	
-			initialActivePostId:'',
-			list: []
+			activePostId:'',
+			list: [],
+			path: '/a/drafts/'
 		};
 	}
 
 	getInitialState(){
 		return{
-			activePostId: this.props.initialActivePostId,
 		};
 	}
 
@@ -23,8 +23,8 @@ class PostList{
 			return (
 				<ul>
 					{
-						list.map(function(post){
-							return <li key={post.id}><a href={ '/a/posts/' + post.id }>{ post.get('title') }</a></li>
+						list.map((post) => {
+							return <li key={post.id} className={this.props.activePostId===post.id?'active':''}><a href={path.join(this.props.path, post.id)}>{ post.get('title') }</a></li>
 						})
 					}
 				</ul>

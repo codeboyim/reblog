@@ -143,7 +143,7 @@ class Layout{
             <li key={key} className={item.cx}>
                 <a ref='menuItemTitle' className="adminSidebarButton" href={ item.href }>{ item.text }</a>
                 <div className='adminMenuItemContent' style={{ height: item.height? (item.height + 'px') : null }}>
-                    <PostList list={posts} /> 
+                    <PostList path={'/a/' + key} activePostId={this.props.model.id} list={posts} /> 
                 </div>
             </li>
         );

@@ -23,6 +23,10 @@ var PostModel = Parse.Object.extend({
 
     reset(...args) {
         args = args || [];
+        this.clear({
+            silent: true
+        });
+        this.id = '';
         args.unshift(this.defaults);
         this.set.apply(this, args);
     },

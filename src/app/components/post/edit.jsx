@@ -1,5 +1,6 @@
 var PostModel = require('components/post/model'),
-		marked = require('marked');
+		marked = require('marked'),
+		slug = require('slug');
 
 require('ace-builds/src-noconflict/ace');
 require('ace-builds/src-noconflict/mode-markdown');
@@ -37,25 +38,41 @@ class PostEdit {
 	getInitialState(){
 		return {
 			post: this.props.model.toJSON(),
-			saving: false
+			postId: this.props.model.id
 		}
 	}
 
 	componentDidMount(){
-		var post = this.state.post,
-				editor = ace.edit(this.refs.postBody.getDOMNode());
+		var model = this.props.model,
+				editor = this._editor = ace.edit(this.refs.postBody.getDOMNode()); 
 
-		this.props.model.on('change', this._modelChanged);
-		editor.setValue(post.body);
+		this.props.model.on('all', this._modelChanged);
 		editor.setFontSize(16);
 		editor.renderer.setShowGutter(false);
 		editor.renderer.setShowPrintMargin(false);
 		editor.getSession().setMode('ace/mode/markdown');
 		
 		editor.getSession().on('change', ()=>{
-			post.body = editor.getValue();
-			this.setState({ post: post });
+			model.set('body', editor.getValue(), {silent: ture});
 		});
+
+		if(model.id){
+			model.fetch();
+		}
+	}
+
+	componentWillReceiveProps(nextProps){
+		var state = this.state;
+
+		if(this.state.postId !== nextProps.model.id){
+			state.postId = nextProps.model.id;
+
+			if(nextProps.model.id){
+				nextProps.model.fetch();
+			}
+
+			this.setState(state);
+		}
 	}
 
 	componentWillUpdate(nextProps, nextState){
@@ -63,15 +80,34 @@ class PostEdit {
 
 	_inputChanged(e){
 		var post = this.state.post,
-				target = e.target;
+				target = e.target,
+				model = this.props.model;
 
 		post[target.name] = target.value;
-		this.props.model.set(post);
+
+		if(target.name === 'title'){
+			post['seoUrl'] = slug(target.value.trim());
+		}
+
+		model.set(post);
+
+		if(this._autoSaveTimeoutId){
+			window.clearTimeout(this._autoSaveTimeoutId);
+		}
+
+		this._autoSaveTimeoutId = window.setTimeout(() => {
+			model.save();
+		}, 2000);
 	}
 
-	_modelChanged(model){
-		this.setState({ post: model.toJSON() });
+	_modelChanged(event, model){
+		if((event === 'sync' || event === 'change') && this.isMounted()){
+			this.setState({ post: model.toJSON() });
+			this._editor.setValue(model.get('body'));
+		}
+
 	}
+
 }
 
 module.exports = React.createClass(PostEdit.prototype);
