@@ -39,7 +39,6 @@ var appRoutes = {
 
             '\/?(\\w*)': (id) => {
 
-                console.log('published', page);
                 require(['admin'], (admin) => {
                     admin('published', {
                         id: id

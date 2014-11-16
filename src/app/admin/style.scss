@@ -130,6 +130,9 @@ $navPrimaryBackColor:#2d323b;
         &.publish .fa {
             @extend .fa-cloud-upload;
         }
+        &.withdraw .fa {
+            @extend .fa-cloud-download;
+        }
         &.preview {
             @include media($large) {
                 display: none;

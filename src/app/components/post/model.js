@@ -9,18 +9,6 @@ var PostModel = Parse.Object.extend({
         files: null
     },
 
-    validate(attrs, options) {
-        var msg = [];
-
-        if (!attrs.title.trim()) {
-            msg.push('title required');
-        }
-
-        if (!attrs.body.trim()) {
-            msg.push('body required');
-        }
-    },
-
     reset(...args) {
         args = args || [];
         this.clear({
@@ -29,11 +17,12 @@ var PostModel = Parse.Object.extend({
         this.id = '';
         args.unshift(this.defaults);
         this.set.apply(this, args);
+        return this;
     },
 
     save(...args) {
         this.trigger('save', this);
-        Parse.Object.prototype.save.apply(this, args);
+        return Parse.Object.prototype.save.apply(this, args);
     }
 
 });

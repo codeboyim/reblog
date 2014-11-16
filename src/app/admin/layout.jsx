@@ -75,15 +75,19 @@ class Layout{
                                 var key = Object.keys(menuItem)[0],
                                     item = menuItem[key],
                                     active = this.state.activeNavDropdownUid === key,
-                                    cxDropdown = cx({'adminHeaderNavDropdown': true, active: active}),
+                                    cxHash = {'adminHeaderNavDropdown': true, active: active},
+                                    cxDropdown = cx(cxHash),
                                     isDraft = this.props.model.get('isDraft');
+
+                                cxHash[key] = true;
+                                cxDropdown = cx(cxHash);
 
                                 if(isDraft && key === 'withdraw' || !isDraft && key === 'publish'){
                                     return null;
                                 }
 
                                 return (
-                                    <li key={key} className={cxDropdown + ' key'}>
+                                    <li key={key} className={cxDropdown}>
                                         <div className={ 'dropdownTitle ' + key } onClick={this._toggleNavDropdown.bind(this, key)}>
                                             <i className="fa"/><span>{item.title}</span>
                                         </div>
@@ -161,10 +165,6 @@ class Layout{
     getInitialState(){
         var data = this.props.model? this.props.model.toJSON() : null;
 
-        if(data){
-            data.id = this.props.model.id;
-        }
-
         return {
             isSidebarVisible: false,
             activeContentHeight: 1,
@@ -194,8 +194,8 @@ class Layout{
     }
 
     componentWillReceiveProps(nextProps){
-        if(nextProps.activeMenuItemUid !== this.props.activeMenuItemUid || nextProps.model.id !== this.state.data.id){
-           this._loadPosts(); 
+        if(nextProps.activeMenuItemUid !== this.props.activeMenuItemUid || nextProps.model.id !== this.state.data.objectId){
+           this._loadPosts(nextProps.activeMenuItemUid); 
            this.setState({activeNavDropdownUid:''});
         }
     }
@@ -251,17 +251,23 @@ class Layout{
             uid = key;
         }
 
+        if(~['publish', 'withdraw'].indexOf(key) && this.props.model.isValid()){
+            this.props.model.save({ 'isDraft': !this.props.model.get('isDraft') }).then((post) => {
+                router.setRoute(path.join('/a', post.get('isDraft')?'drafts':'published', post.id));
+            });
+        }
+
+
         this.setState({ activeNavDropdownUid: uid });
     }
 
-    _dataModelChanged(event, _data){
-        var data = _data.toJSON();
-
-        data.id = _data.id;
+    _dataModelChanged(event, model){
+        var list, 
+            newState = {};
 
         switch(event){
             case 'change':
-                this.setState({ data: data });
+                this.setState({ data: model.toJSON() });
                 break;
 
             case 'save':
@@ -269,20 +275,35 @@ class Layout{
                 break;
 
             case 'sync':
-                this.setState({ notification: null });
+                list = this.state[this.props.activeMenuItemUid];
+                if(Array.isArray(list)){
+
+                    list.every((post) => {
+                       if(post.id === model.id){
+                        post.set('title', model.get('title'));
+                        return false;
+                       } 
+                       return true;
+                    })
+
+                    newState[this.props.activeMenuItemUid] = list;
+                }
+                newState.data =  model.toJSON();
+                newState.notification = null;
+                this.setState(newState);
                 break;
         }
     } 
 
-    _loadPosts(){
+    _loadPosts(menuItemUid){
         var promise,
             newState,
-            menuUid = this.props.activeMenuItemUid;
+            menuItemUid = menuItemUid || this.props.activeMenuItemUid;
 
-        if(typeof this.state[menuUid] === 'undefined'){
+        if(typeof this.state[menuItemUid] === 'undefined'){
             return;
         }
-        switch(menuUid){
+        switch(menuItemUid){
             case 'drafts':
                 promise = PostModel.findDrafts();
                 break;
@@ -295,7 +316,7 @@ class Layout{
             promise.done((posts) => {
                 if(this.isMounted()){
                     newState = {};
-                    newState[menuUid] = posts;
+                    newState[menuItemUid] = posts;
                     this.setState(newState); 
                 }
             })
@@ -313,7 +334,7 @@ class Layout{
             if(Array.isArray(list)){
 
                 list.every((p, i) => {
-console.log(i);
+
                     if(p.id === post.id){
                         idx = i;
                         return false;
@@ -323,7 +344,8 @@ console.log(i);
                 });
 
             }
-            if(idx !== len-1){ //if not delete the last one, show next post
+
+            if(idx !== len - 1){ //if not delete the last one, show next post
                 router.setRoute(path.join('/a', this.props.activeMenuItemUid, '/'+list[idx + 1].id));
             }
             else if(len === 1){ //if delete the only one, go to new

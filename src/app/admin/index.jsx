@@ -15,7 +15,7 @@ function render(path, ...args){
 			post = new PostModel();
 		}
 
-		post.reset({silent:true});
+		post.reset({silent:true}).set({'isDraft':path!=='published'}, {silent:true});
 
 		if(path !== 'new' && Array.isArray(args) && args.length > 0){
 			post.id = args[0].id || '';

@@ -1,6 +1,8 @@
 var PostModel = require('components/post/model'),
 		marked = require('marked'),
-		slug = require('slug');
+		slug = require('slug'),
+		router = require('router'),
+		path = require('path');
 
 require('./style.scss');
 require('ace-builds/src-noconflict/ace');
@@ -54,11 +56,10 @@ class PostEdit {
 		editor.getSession().setMode('ace/mode/markdown');
 		
 		editor.getSession().on('change', ()=>{
-			model.set('body', editor.getValue());
+			model.set('body', editor.getValue(), {silent: !!this._editorAutoSaveDisabled});
 			if(!this._editorAutoSaveDisabled){
 				this._autoSave();
 			}
-			this._editorAutoSaveDisabled = false;
 		});
 
 		if(model.id){
@@ -67,14 +68,16 @@ class PostEdit {
 	}
 
 	componentWillReceiveProps(nextProps){
-		var state = this.state;
+		var state = this.state,
+				attrs;
 
 		if(this.state.post.objectId !== nextProps.model.id){
 			if(nextProps.model.id){
 				nextProps.model.fetch();
 			}
 			else{
-				nextProps.model.reset();
+				// this.setState({post: nextProps.model.toJSON()});
+				this.props.model.set(nextProps.model.toJSON());
 			}
 		}
 
@@ -110,11 +113,12 @@ class PostEdit {
 	_modelChanged(event, model){
 
 		if((event === 'sync' || event === 'change') && this.isMounted()){
-			this.setState({ post: model.toJSON() });
+			this.setState({post: model.toJSON()});
 
-			if(this._editor.getValue() !== model.get('body')){
-					this._editorAutoSaveDisabled = true;
+			if(this._editor.getValue()!==model.get('body')){
+				this._editorAutoSaveDisabled = true;
 				this._editor.setValue(model.get('body'));
+				this._editorAutoSaveDisabled = false;
 			}
 		}
 
