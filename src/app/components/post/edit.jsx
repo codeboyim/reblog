@@ -2,6 +2,7 @@ var PostModel = require('components/post/model'),
 		marked = require('marked'),
 		slug = require('slug');
 
+require('./style.scss');
 require('ace-builds/src-noconflict/ace');
 require('ace-builds/src-noconflict/mode-markdown');
 class PostEdit {
@@ -10,18 +11,18 @@ class PostEdit {
 		var post = this.state.post;
 
 		return (
-			<div className="adminPost">
+			<div className="post edit">
 					<div>
 						<label>Title</label>
-						<input type="text" placeholder="Untitled" className="adminPostTitle" name="title" onChange={this._inputChanged} value={post.title} />
+						<input type="text" placeholder="Untitled" className="postTitle" name="title" onChange={this._inputChanged} value={post.title} />
 					</div>
-					<div className="adminPostEdit">
+					<div className="postEdit">
 							<label>Post Content</label>
-							<div ref="postBody" className="adminPostBody"></div>
+							<div ref="postBody" className="postBody"></div>
 					</div>
-					<div className="adminPostView">
+					<div className="postPreview">
 						<label>Preview</label>
-						<div className="adminPostBody">
+						<div className="postBody">
 							<div dangerouslySetInnerHTML={{__html:marked(post.body)}} />
 						</div>
 					</div>
@@ -36,9 +37,9 @@ class PostEdit {
 	}
 
 	getInitialState(){
+
 		return {
 			post: this.props.model.toJSON(),
-			postId: this.props.model.id
 		}
 	}
 
@@ -53,7 +54,11 @@ class PostEdit {
 		editor.getSession().setMode('ace/mode/markdown');
 		
 		editor.getSession().on('change', ()=>{
-			model.set('body', editor.getValue(), {silent: ture});
+			model.set('body', editor.getValue());
+			if(!this._editorAutoSaveDisabled){
+				this._autoSave();
+			}
+			this._editorAutoSaveDisabled = false;
 		});
 
 		if(model.id){
@@ -64,22 +69,19 @@ class PostEdit {
 	componentWillReceiveProps(nextProps){
 		var state = this.state;
 
-		if(this.state.postId !== nextProps.model.id){
-			state.postId = nextProps.model.id;
-
+		if(this.state.post.objectId !== nextProps.model.id){
 			if(nextProps.model.id){
 				nextProps.model.fetch();
 			}
-
-			this.setState(state);
+			else{
+				nextProps.model.reset();
+			}
 		}
-	}
 
-	componentWillUpdate(nextProps, nextState){
 	}
 
 	_inputChanged(e){
-		var post = this.state.post,
+		var post = {},
 				target = e.target,
 				model = this.props.model;
 
@@ -90,20 +92,30 @@ class PostEdit {
 		}
 
 		model.set(post);
+		this._autoSave();
+	}
 
-		if(this._autoSaveTimeoutId){
-			window.clearTimeout(this._autoSaveTimeoutId);
+	_autoSave(){
+
+		if(this._autoSave.timeoutId){
+			window.clearTimeout(this._autoSave.timeoutId);
 		}
 
-		this._autoSaveTimeoutId = window.setTimeout(() => {
-			model.save();
+		this._autoSave.timeoutId = window.setTimeout(() => {
+			this.props.model.save();
 		}, 2000);
+
 	}
 
 	_modelChanged(event, model){
+
 		if((event === 'sync' || event === 'change') && this.isMounted()){
 			this.setState({ post: model.toJSON() });
-			this._editor.setValue(model.get('body'));
+
+			if(this._editor.getValue() !== model.get('body')){
+					this._editorAutoSaveDisabled = true;
+				this._editor.setValue(model.get('body'));
+			}
 		}
 
 	}

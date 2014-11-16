@@ -66,3 +66,5 @@ document.body.addEventListener('click', function(e) {
         router.setRoute(href);
     }
 })
+
+module.exports = router;

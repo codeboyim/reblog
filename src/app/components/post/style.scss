@@ -1,0 +1,51 @@
+@import"bourbon";
+@import"neat";
+$divider: solid 1px #d9d9d9;
+@import"styles/settings";
+.post {
+    &.edit {
+        &>* {
+            @include padding(1% null 1% null);
+        }
+        &>*:nth-child(1) {
+            border-bottom: $divider;
+        }
+        .postEdit, .postPreview {
+            @include media($large, 24) {
+                @include span-columns(12 of 24);
+            }
+        }
+        .postPreview {
+            border-left: $divider;
+            @include media($medium) {
+                display: none;
+            }
+            @include media($large) {
+                padding-left: flex-gutter(24);
+            }
+        }
+        .postTitle, .postBody {
+            @include fill-parent();
+            @include margin(1% null 1% null);
+            background: transparent;
+            line-height: 1.5em;
+        }
+        .postTitle {
+            border-width: 0;
+            font-size: 2rem;
+        }
+        .postBody {
+            line-height: 1.6em;
+            min-height: 1200px;
+            font-size: 1.6rem;
+            &.ace_editor {
+                line-height: inherit;
+            }
+        }
+    }
+}
+.postlist {
+    >.active {
+    	color: #59a5db;
+    }
+}

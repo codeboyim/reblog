@@ -4,7 +4,6 @@
 $fa-font-path:"../../../node_modules/font-awesome/fonts";
 @import"font-awesome";
 $sidebarWidth:280px;
-$divider: solid 1px #d9d9d9;
 $sidebarTransition:transform 0.2s ease;
 $navSecondaryBackColor:#4d5055;
 $navPrimaryBackColor:#2d323b;
@@ -166,44 +165,4 @@ $navPrimaryBackColor:#2d323b;
 }
 .adminMenuItemContent {
     @include transition(height 0.2s ease);
-}
-// a/new, a/edit/:id
-.adminPost {
-    &>* {
-        @include padding(1% null 1% null);
-    }
-    &>*:nth-child(1) {
-        border-bottom: $divider;
-    }
-}
-.adminPostEdit, .adminPostView {
-    @include media($large, 24) {
-        @include span-columns(12 of 24);
-    }
-}
-.adminPostView {
-    border-left: $divider;
-    @include media($medium) {
-        display: none;
-    }
-    @include media($large) {
-        padding-left: flex-gutter(24);
-    }
-}
-.adminPostTitle, .adminPostBody {
-    @include fill-parent();
-    @include margin(1% null 1% null);
-    background: transparent;
-    line-height: 1.5em;
-}
-.adminPostBody.ace_editor {
-    line-height: 1.5em;
-}
-.adminPostTitle {
-    border-width: 0;
-    font-size: 2rem;
-}
-.adminPostBody {
-    min-height: 1200px;
-    font-size: 1.6rem;
 }

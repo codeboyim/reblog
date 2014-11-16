@@ -1,5 +1,7 @@
 var PostModel = require('components/post/model'),
-    PostList = require('components/post/list');
+    PostList = require('components/post/list'),
+    router = require('router'),
+    path = require('path');
 
 class Layout{
 
@@ -119,7 +121,7 @@ class Layout{
     _renderMenuItem(key){
         var menuItems = {
                 'published': {
-                    'href': '/a/posts',
+                    'href': '/a/published',
                     'text': 'Published'
                 },
                 'drafts': {
@@ -157,11 +159,17 @@ class Layout{
     }
 
     getInitialState(){
+        var data = this.props.model? this.props.model.toJSON() : null;
+
+        if(data){
+            data.id = this.props.model.id;
+        }
+
         return {
             isSidebarVisible: false,
             activeContentHeight: 1,
             activeNavDropdownUid: '',
-            data: this.props.model? this.props.model.toJSON() : null,
+            data: data,
             notification: null, //{ text: '', type: 'info' }
             drafts: [],
             published: []
@@ -183,6 +191,13 @@ class Layout{
     componentWillUnmount(){
         window.removeEventListener('resize', this._resizeActiveMenuContent);
         document.body.removeEventListener('click', this._toggleSidebar)
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.activeMenuItemUid !== this.props.activeMenuItemUid || nextProps.model.id !== this.state.data.id){
+           this._loadPosts(); 
+           this.setState({activeNavDropdownUid:''});
+        }
     }
 
     _resizeActiveMenuContent(){
@@ -239,11 +254,14 @@ class Layout{
         this.setState({ activeNavDropdownUid: uid });
     }
 
-    _dataModelChanged(event, data){
+    _dataModelChanged(event, _data){
+        var data = _data.toJSON();
+
+        data.id = _data.id;
 
         switch(event){
             case 'change':
-                this.setState({ data: data.toJSON() });
+                this.setState({ data: data });
                 break;
 
             case 'save':
@@ -256,9 +274,10 @@ class Layout{
         }
     } 
 
-    _loadPosts(menuUid){
+    _loadPosts(){
         var promise,
-            newState;
+            newState,
+            menuUid = this.props.activeMenuItemUid;
 
         if(typeof this.state[menuUid] === 'undefined'){
             return;
@@ -281,6 +300,39 @@ class Layout{
                 }
             })
         }
+    }
+
+    _deleteClicked(e){
+        var post = this.props.model;
+        e.preventDefault();
+        this.props.model.destroy().done(()=>{
+            var list = this.state[this.props.activeMenuItemUid],
+                len = list.length,
+                idx = -1;
+
+            if(Array.isArray(list)){
+
+                list.every((p, i) => {
+console.log(i);
+                    if(p.id === post.id){
+                        idx = i;
+                        return false;
+                    }
+
+                    return true;
+                });
+
+            }
+            if(idx !== len-1){ //if not delete the last one, show next post
+                router.setRoute(path.join('/a', this.props.activeMenuItemUid, '/'+list[idx + 1].id));
+            }
+            else if(len === 1){ //if delete the only one, go to new
+                router.setRoute('/a/new');
+            }
+            else{ //if delete the last but not the only one, show previous post
+                router.setRoute(path.join('/a', this.props.activeMenuItemUid, '/'+list[idx - 1].id));
+            }
+        }); 
     }
 }
 
