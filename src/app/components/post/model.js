@@ -21,6 +21,9 @@ var PostModel = Parse.Object.extend({
     },
 
     save(...args) {
+        this.unset('insertText', {
+            silent: true
+        });
         this.trigger('save', this);
         return Parse.Object.prototype.save.apply(this, args);
     }

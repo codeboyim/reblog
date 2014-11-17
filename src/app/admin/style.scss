@@ -3,6 +3,7 @@
 @import"styles/settings";
 $fa-font-path:"../../../node_modules/font-awesome/fonts";
 @import"font-awesome";
+@import"../../assets/styles/flaticon/flaticon.css";
 $sidebarWidth:280px;
 $sidebarTransition:transform 0.2s ease;
 $navSecondaryBackColor:#4d5055;
@@ -59,9 +60,18 @@ $navPrimaryBackColor:#2d323b;
     @include fill-parent();
     text-transform: uppercase;
     background-color: $navSecondaryBackColor;
-    border:none;    
-    color:inherit;
-    font-size:inherit;
+    border: none;
+    color: inherit;
+    font-size: inherit;
+    position: relative;
+    li & {
+        text-align: left;
+    }
+    [class^="flaticon-"] {
+        position: absolute;
+        right: 1rem;
+        top: 1.2rem;
+    }
 }
 .adminSidebarButtonCompose {
     @include padding(1.6rem null 1.6rem null);
@@ -165,8 +175,51 @@ $navPrimaryBackColor:#2d323b;
             padding: 2%;
         }
         &.more {
-            width: 60rem;
+            width: 50rem;
         }
+        button {
+            position: relative;
+            padding-left: 4rem;
+            margin: 1rem;
+            [class^="flaticon-"] {
+                position: absolute;
+                left: -0.8rem;
+                top: 0.5rem;
+            }
+        }
+    }
+}
+.adminHeaderAttachments {
+    font-size: 1.4rem;
+    >*{
+        @include row();
+        >*{
+            line-height: 2rem;
+            height:2rem;
+        }
+    }
+    .fileType, .fileDelete, .fileCopy{
+        @extend .fa;
+        cursor: pointer;
+    }
+    .fileType{
+        @include span-columns(1 of 12);
+    }
+    .fileName{
+        @include span-columns(9 of 12);
+        @include ellipsis();
+    }
+    .fileCommands{
+        @include span-columns(2 of 12);
+        text-align: right;
+    }
+    .fileDelete {
+        @extend .fa-trash;
+        margin: auto 0.5rem;
+    }
+    .fileCopy{
+        @extend .fa-clipboard;
+        margin: auto 0.5rem;
     }
 }
 .adminMenuItemContent {

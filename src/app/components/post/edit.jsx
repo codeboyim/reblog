@@ -20,7 +20,7 @@ class PostEdit {
 						<input type="text" placeholder="Untitled" className="postTitle" name="title" onChange={this._inputChanged} value={post.title} />
 					</div>
 					<div className="postEdit">
-							<label>Post Content</label>
+							<label>Content</label>
 							<div ref="postBody" className="postBody"></div>
 					</div>
 					<div className="postPreview">
@@ -55,6 +55,7 @@ class PostEdit {
 		editor.renderer.setShowGutter(false);
 		editor.renderer.setShowPrintMargin(false);
 		editor.getSession().setMode('ace/mode/markdown');
+		editor.getSession().setUseWrapMode(true);
 		
 		editor.getSession().on('change', ()=>{
 			model.set('body', editor.getValue(), {silent: !!this._editorAutoSaveDisabled});
@@ -77,7 +78,6 @@ class PostEdit {
 				nextProps.model.fetch();
 			}
 			else{
-				// this.setState({post: nextProps.model.toJSON()});
 				this.props.model.set(nextProps.model.toJSON());
 			}
 		}
@@ -113,13 +113,19 @@ class PostEdit {
 
 	_modelChanged(event, model){
 
-		if((event === 'sync' || event === 'change') && this.isMounted()){
-			this.setState({post: model.toJSON()});
+		if(this.isMounted()){
 
-			if(this._editor.getValue()!==model.get('body')){
-				this._editorAutoSaveDisabled = true;
-				this._editor.setValue(model.get('body'));
-				this._editorAutoSaveDisabled = false;
+			if((event === 'sync' || event === 'change')){
+				this.setState({post: model.toJSON()});
+
+				if(this._editor.getValue()!==model.get('body')){
+					this._editorAutoSaveDisabled = true;
+					this._editor.setValue(model.get('body'));
+					this._editorAutoSaveDisabled = false;
+				}
+			}
+			else if(event === 'change:insertText'){
+				this._editor.insert(model.get('insertText'));
 			}
 		}
 

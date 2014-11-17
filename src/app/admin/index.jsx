@@ -16,12 +16,14 @@ function render(path, ...args){
 		if(!post){
 			post = new PostModel();
 			post.on('all', postChanged);       
-		} else {
-			post.reset({silent:true});
 		}
 
-		if(Array.isArray(args) && args.length > 0 && args[0].id && args[0].id !== 'new'){
-			post.id = args[0].id;
+		if(Array.isArray(args) && args.length > 0 && args[0].id !== post.id){
+			post.reset({silent:true});
+			
+			if(args[0].id){
+				post.id = args[0].id;
+			}
 		}
 
 		React.render(<Layout model={post}><PostEdit model={post} /></Layout>, docBody);

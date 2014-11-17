@@ -37,7 +37,7 @@ module.exports = {
             loader: "file-loader"
         }, {
             test: /\.scss$/,
-            loader: 'style!css!sass?includePaths[]=' + [neatPath, bourbonPath, faPath, appPath].join('&includePaths[]=')
+            loader: 'style!css!sass?imagePath=/assets/images&includePaths[]=' + [neatPath, bourbonPath, faPath, appPath].join('&includePaths[]=')
         }],
         noParse: []
     },

@@ -18,6 +18,7 @@ class Layout{
                 'shift': this.state.isSidebarVisible,
                 'adminHeader': true
             }),
+            model = this.props.model,
             headerNavMenuItems = [
                 {
                     'publish': {
@@ -44,10 +45,26 @@ class Layout{
                             </div>,
                             <div key="moreAttachments">
                                 <label>Attachments</label>
-                                <ul></ul>
+                                <ul className="adminHeaderAttachments">
+                                {
+                                    Array.isArray(this.state.data.files) ?
+                                    this.state.data.files.map((file) => {
+                                        return <li key={file.url}>
+                                            <i className={'fileType ' + this._getFileType(file.name)}></i>
+                                            <span className="fileName">{file.name}</span>
+                                            <span className="fileCommands">
+                                                <i className="fileDelete" onClick={this._fileCommandClicked.bind(this, file, 'delete')}></i>
+                                                <i className="fileCopy" onClick={this._fileCommandClicked.bind(this, file, 'copy')}></i>
+                                            </span>
+                                        </li>;
+                                    }):null
+                                }
+                                </ul>
+                                <input ref="fileAttach" type="file" style={{display:'none'}} onChange={this._fileChanged} />
                             </div>,
                             <div key="moreButtons" className="text-center">
-                                <button className="button alert" onClick={ this._deleteClicked }>Delete</button>
+                                <button className="button" onClick={this._uploadClicked}><i className="flaticon-upload26"></i>Upload</button>
+                                <button className="button alert" onClick={ this._deleteClicked }><i className="flaticon-test20"></i>Delete</button>
                             </div>
                         ]
                     }
@@ -64,10 +81,6 @@ class Layout{
                             <div className={'adminHeaderNotification ' + this.state.notification.type}>{this.state.notification.text}</div>
                         )
                         : null
-                    }
-                    {
-                        // this.props.dataModel instanceof PostModel 
-
                     }
                     <ul className="adminHeaderNav">
                         {
@@ -125,10 +138,12 @@ class Layout{
     _renderMenuItem(key){
         var menuItems = {
                 'published': {
-                    'text': 'Published'
+                    'text': 'Published',
+                    'iconclass': 'flaticon-write12'
                 },
                 'drafts': {
-                    'text': 'Drafts'
+                    'text': 'Drafts',
+                    'iconclass': 'flaticon-verified9'
                 }
             },
             item = menuItems[key],
@@ -145,7 +160,10 @@ class Layout{
 
         return (
             <li key={key} className={item.cx}>
-                <button ref='menuItemTitle' className="adminSidebarButton" onClick={this._toggleSidebarMenu.bind(this, key)}>{ item.text }</button>
+                <button ref='menuItemTitle' className="adminSidebarButton" onClick={this._toggleSidebarMenu.bind(this, key)}>
+                    { item.text }
+                    <i className={item.iconclass}></i>
+                </button>
                 <div className='adminMenuItemContent' style={{ height: item.height? (item.height + 'px') : null }}>
                     <PostList path={'/a/' + key} activePostId={this.props.model.id} list={posts} /> 
                 </div>
@@ -195,6 +213,10 @@ class Layout{
 
         if(nextProps.model.id !== this.state.data.objectId){
            this.setState({ activeNavDropdownUid: '' });
+
+           if(!nextProps.model.id){
+            this.setState({isSidebarVisible:false});
+           }
         }
     }
 
@@ -239,7 +261,7 @@ class Layout{
             visible = true;
         }
 
-        this.setState({isSidebarVisible:visible});
+        this.setState({isSidebarVisible: visible});
     }
 
     _toggleNavDropdown(key, e){
@@ -274,8 +296,9 @@ class Layout{
                 break;
 
             case 'sync':
-               this._loadPosts(); 
-                this.setState({ notification: null });
+            console.log(model.toJSON());
+                this._loadPosts(); 
+                this.setState({ notification: null, isSidebarVisible: false, data:model.toJSON() });
                 break;
         }
     } 
@@ -312,6 +335,11 @@ class Layout{
         }
     }
 
+    _flash(message){
+        this.setState({notification:message});
+        window.setTimeout(()=>this.setState({notification:null}), 2000);
+    }
+
     _deleteClicked(e){
         var post = this.props.model,
             nextPostId = '',
@@ -346,6 +374,43 @@ class Layout{
         }
 
         this.props.model.destroy({ nextPostId: nextPostId });
+    }
+
+    _uploadClicked(e){
+        e.preventDefault();
+        this.refs.fileAttach.getDOMNode().click();
+    }
+
+    _fileChanged(e){
+        var file;
+        if(e.target.files.length>0){
+            file = e.target.files[0];
+            (new Parse.File(file.name, file)).save().then((parseFile) => {
+                if(!this.props.model.get('files')){
+                    this.props.model.set('files', [], {silent:true});
+                }
+                var files = this.props.model.get('files');
+                files.push({name:file.name, url:parseFile.url()});
+                this.props.model.save();
+            });
+        }       
+    }
+
+    _getFileType(name){
+       return ''; 
+    }
+
+    _fileCommandClicked(file, type){
+        var model = this.props.model,
+            files = model.get('files');
+
+        if(type === 'delete'){
+            files.splice(files.indexOf(file), 1);
+            model.save();
+        } else if(type === 'copy'){
+            model.set('insertText', file.url);
+        }
+
     }
 }
 
