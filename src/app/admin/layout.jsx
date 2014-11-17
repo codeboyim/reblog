@@ -39,14 +39,14 @@ class Layout{
                     'more': {
                         title: 'More',
                         body: [
-                            <div>
+                            <div key="moreUrl">
                                 <label>Friendly URL</label><input type="text" value={this.state.data.seoUrl} readOnly={true}/>
                             </div>,
-                            <div>
+                            <div key="moreAttachments">
                                 <label>Attachments</label>
                                 <ul></ul>
                             </div>,
-                            <div className="text-center">
+                            <div key="moreButtons" className="text-center">
                                 <button className="button alert" onClick={ this._deleteClicked }>Delete</button>
                             </div>
                         ]
@@ -259,6 +259,7 @@ class Layout{
     _toggleSidebarMenu(key, e){
         e.preventDefault();
         this.setState({ activeMenuItemUid: key});
+        this._loadPosts(key);
     }
 
     _dataModelChanged(event, model){
@@ -279,10 +280,10 @@ class Layout{
         }
     } 
 
-    _loadPosts(){
+    _loadPosts(key){
         var promise,
             newState,
-            menuItemUid = this.state.activeMenuItemUid;
+            menuItemUid = key? key: this.state.activeMenuItemUid;
 
         if(typeof this.state[menuItemUid] === 'undefined'){
             return;

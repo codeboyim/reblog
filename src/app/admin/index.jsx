@@ -30,10 +30,17 @@ function render(path, ...args){
 
 function postChanged(event, post, ...args){
 
-	if(event === 'destroy'){
-		if(args[1]){
-			router.setRoute(path.join('/a/p', args[1].nextPostId || 'new'));
-		}
+	switch(event){
+
+		case 'destroy':
+			if(args[1]){
+				router.setRoute(path.join('/a/p', args[1].nextPostId || 'new'));
+			}
+			break;
+
+		case 'sync':
+			router.setRoute(path.join('/a/p', post.id));
+			break;	
 	}
 }
 
