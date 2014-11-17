@@ -6,8 +6,7 @@ class PostList{
 		return {
 			mode:'compact',	
 			activePostId:'',
-			list: [],
-			path: '/a/drafts/'
+			list: []
 		};
 	}
 
@@ -24,7 +23,10 @@ class PostList{
 				<ul className="postlist">
 					{
 						list.map((post) => {
-							return <li key={post.id} className={this.props.activePostId===post.id?'active':''}><a href={path.join(this.props.path, post.id)}>{ post.get('title')?post.get('title'):'Untitled' }</a></li>
+							return (
+								<li key={post.id} className={this.props.activePostId===post.id?'active':''}>
+									<a href={path.join('/a/p', post.id)}>{ post.get('title')?post.get('title'):'Untitled' }</a>
+								</li>);
 						})
 					}
 				</ul>

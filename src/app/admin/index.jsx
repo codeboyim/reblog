@@ -1,7 +1,9 @@
 require('./style.scss');
 
 var PostModel = require('components/post/model'),
-		post;
+		post,
+		path = require('path'),
+		router = require('router');
 
 function render(path, ...args){
 	var PostEdit = require('components/post/edit'),
@@ -9,21 +11,29 @@ function render(path, ...args){
 			docBody = document.body;
 
 
-	if(~['new', 'published', 'drafts'].indexOf(path)){
+	if(path === 'post'){
 
 		if(!post){
 			post = new PostModel();
+			post.on('all', postChanged);       
+		} else {
+			post.reset({silent:true});
 		}
 
-		post.reset({silent:true}).set({'isDraft':path!=='published'}, {silent:true});
-
-		if(path !== 'new' && Array.isArray(args) && args.length > 0){
-			post.id = args[0].id || '';
+		if(Array.isArray(args) && args.length > 0 && args[0].id && args[0].id !== 'new'){
+			post.id = args[0].id;
 		}
 
-		path = path === 'new' ? 'drafts' : path;
+		React.render(<Layout model={post}><PostEdit model={post} /></Layout>, docBody);
+	}
+}
 
-		React.render(<Layout activeMenuItemUid={path} model={post}><PostEdit model={post} /></Layout>, docBody);
+function postChanged(event, post, ...args){
+
+	if(event === 'destroy'){
+		if(args[1]){
+			router.setRoute(path.join('/a/p', args[1].nextPostId || 'new'));
+		}
 	}
 }
 

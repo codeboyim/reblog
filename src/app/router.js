@@ -10,41 +10,19 @@ var appRoutes = {
         });
     },
     '/a': {
-        '/drafts': {
+
+        '/p': {
             '\/?(\\w*)': (id) => {
-                console.log('drafts', id)
+                if (id === 'new') {
+                    id = '';
+                }
+
                 require(['admin'], (admin) => {
-                    admin('drafts', {
+                    admin('post', {
                         id: id
                     });
                 })
             }
-        },
-        '/new': () => {
-            console.log('new');
-            require(['admin'], (admin) => {
-                admin('new');
-            })
-        },
-        '/published': {
-
-            '\/?(\\d*)': (page) => {
-                console.log('published', page);
-                require(['admin'], (admin) => {
-                    admin('published', {
-                        page: page
-                    });
-                })
-            },
-
-            '\/?(\\w*)': (id) => {
-
-                require(['admin'], (admin) => {
-                    admin('published', {
-                        id: id
-                    });
-                })
-            },
         }
     },
     '/signin': () => {}

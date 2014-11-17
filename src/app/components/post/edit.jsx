@@ -7,6 +7,7 @@ var PostModel = require('components/post/model'),
 require('./style.scss');
 require('ace-builds/src-noconflict/ace');
 require('ace-builds/src-noconflict/mode-markdown');
+
 class PostEdit {
 
 	render(){

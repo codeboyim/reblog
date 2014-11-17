@@ -43,7 +43,7 @@ $navPrimaryBackColor:#2d323b;
     }
 }
 .adminSidebarNav {
-    a {
+    a, .adminSidebarButton {
         display: block;
         padding: 1.6rem;
     }
@@ -56,9 +56,12 @@ $navPrimaryBackColor:#2d323b;
     padding: 1.5rem;
 }
 .adminSidebarButton {
+    @include fill-parent();
     text-transform: uppercase;
-    width: 100%;
     background-color: $navSecondaryBackColor;
+    border:none;    
+    color:inherit;
+    font-size:inherit;
 }
 .adminSidebarButtonCompose {
     @include padding(1.6rem null 1.6rem null);

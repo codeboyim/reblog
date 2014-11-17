@@ -14,7 +14,7 @@ var PostModel = Parse.Object.extend({
         this.clear({
             silent: true
         });
-        this.id = '';
+        delete this.id;
         args.unshift(this.defaults);
         this.set.apply(this, args);
         return this;

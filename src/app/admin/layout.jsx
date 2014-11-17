@@ -108,7 +108,7 @@ class Layout{
                         <a href="/">Re/blog</a>
                     </div>
                     <div ref="compose" className="adminSidebarButtonComposeWrap">
-                        <a className="button adminSidebarButton adminSidebarButtonCompose" href="/a/new">Compose</a>
+                        <a className="button adminSidebarButton adminSidebarButtonCompose" href="/a/p/new">Compose</a>
                     </div>
                     <ul ref="nav" className="adminSidebarNav">
                         {this._renderMenuItem('drafts')}
@@ -125,11 +125,9 @@ class Layout{
     _renderMenuItem(key){
         var menuItems = {
                 'published': {
-                    'href': '/a/published',
                     'text': 'Published'
                 },
                 'drafts': {
-                    'href': '/a/drafts',
                     'text': 'Drafts'
                 }
             },
@@ -140,14 +138,14 @@ class Layout{
             return null;
         }
 
-        if(this.props.activeMenuItemUid === key) {
+        if(this.state.activeMenuItemUid === key) {
             item.cx = 'active';
             item.height = this.state.activeContentHeight
         }
 
         return (
             <li key={key} className={item.cx}>
-                <a ref='menuItemTitle' className="adminSidebarButton" href={ item.href }>{ item.text }</a>
+                <button ref='menuItemTitle' className="adminSidebarButton" onClick={this._toggleSidebarMenu.bind(this, key)}>{ item.text }</button>
                 <div className='adminMenuItemContent' style={{ height: item.height? (item.height + 'px') : null }}>
                     <PostList path={'/a/' + key} activePostId={this.props.model.id} list={posts} /> 
                 </div>
@@ -157,19 +155,19 @@ class Layout{
 
     getDefaultProps(){
         return {
-            activeMenuItemUid:'draft',
-            model: null
+            model: null,
+            onEvent: function(){}
         };
     }
 
     getInitialState(){
-        var data = this.props.model? this.props.model.toJSON() : null;
 
         return {
             isSidebarVisible: false,
             activeContentHeight: 1,
             activeNavDropdownUid: '',
-            data: data,
+            activeMenuItemUid: 'drafts',
+            data: this.props.model? this.props.model.toJSON() : null,
             notification: null, //{ text: '', type: 'info' }
             drafts: [],
             published: []
@@ -185,7 +183,7 @@ class Layout{
             this.props.model.on('all', this._dataModelChanged);
         }
 
-        this._loadPosts(this.props.activeMenuItemUid);
+        this._loadPosts();
     }
 
     componentWillUnmount(){
@@ -194,9 +192,9 @@ class Layout{
     }
 
     componentWillReceiveProps(nextProps){
-        if(nextProps.activeMenuItemUid !== this.props.activeMenuItemUid || nextProps.model.id !== this.state.data.objectId){
-           this._loadPosts(nextProps.activeMenuItemUid); 
-           this.setState({activeNavDropdownUid:''});
+
+        if(nextProps.model.id !== this.state.data.objectId){
+           this.setState({ activeNavDropdownUid: '' });
         }
     }
 
@@ -252,18 +250,18 @@ class Layout{
         }
 
         if(~['publish', 'withdraw'].indexOf(key) && this.props.model.isValid()){
-            this.props.model.save({ 'isDraft': !this.props.model.get('isDraft') }).then((post) => {
-                router.setRoute(path.join('/a', post.get('isDraft')?'drafts':'published', post.id));
-            });
+            this.props.model.save({ 'isDraft': !this.props.model.get('isDraft') });
         }
-
 
         this.setState({ activeNavDropdownUid: uid });
     }
 
+    _toggleSidebarMenu(key, e){
+        e.preventDefault();
+        this.setState({ activeMenuItemUid: key});
+    }
+
     _dataModelChanged(event, model){
-        var list, 
-            newState = {};
 
         switch(event){
             case 'change':
@@ -275,41 +273,31 @@ class Layout{
                 break;
 
             case 'sync':
-                list = this.state[this.props.activeMenuItemUid];
-                if(Array.isArray(list)){
-
-                    list.every((post) => {
-                       if(post.id === model.id){
-                        post.set('title', model.get('title'));
-                        return false;
-                       } 
-                       return true;
-                    })
-
-                    newState[this.props.activeMenuItemUid] = list;
-                }
-                newState.data =  model.toJSON();
-                newState.notification = null;
-                this.setState(newState);
+               this._loadPosts(); 
+                this.setState({ notification: null });
                 break;
         }
     } 
 
-    _loadPosts(menuItemUid){
+    _loadPosts(){
         var promise,
             newState,
-            menuItemUid = menuItemUid || this.props.activeMenuItemUid;
+            menuItemUid = this.state.activeMenuItemUid;
 
         if(typeof this.state[menuItemUid] === 'undefined'){
             return;
         }
+
         switch(menuItemUid){
+
             case 'drafts':
                 promise = PostModel.findDrafts();
                 break;
+
             case 'published':
                 promise = PostModel.findPublished();
                 break;
+
         }
 
         if(promise){
@@ -324,37 +312,39 @@ class Layout{
     }
 
     _deleteClicked(e){
-        var post = this.props.model;
+        var post = this.props.model,
+            nextPostId = '',
+            list = this.state[this.state.activeMenuItemUid],
+            len = list.length,
+            idx = -1;
+
         e.preventDefault();
-        this.props.model.destroy().done(()=>{
-            var list = this.state[this.props.activeMenuItemUid],
-                len = list.length,
-                idx = -1;
 
-            if(Array.isArray(list)){
+        if(Array.isArray(list)){
 
-                list.every((p, i) => {
+            list.every((p, i) => {
 
-                    if(p.id === post.id){
-                        idx = i;
-                        return false;
-                    }
+                if(p.id === post.id){
+                    idx = i;
+                    return false;
+                }
 
-                    return true;
-                });
+                return true;
+            });
 
-            }
+        }
 
-            if(idx !== len - 1){ //if not delete the last one, show next post
-                router.setRoute(path.join('/a', this.props.activeMenuItemUid, '/'+list[idx + 1].id));
-            }
-            else if(len === 1){ //if delete the only one, go to new
-                router.setRoute('/a/new');
-            }
-            else{ //if delete the last but not the only one, show previous post
-                router.setRoute(path.join('/a', this.props.activeMenuItemUid, '/'+list[idx - 1].id));
-            }
-        }); 
+        if(idx !== len - 1){ //if not delete the last one, show next post
+            nextPostId = list[idx + 1].id;
+        }
+        else if(len > 1){ //if delete the last but not the only one, show previous post
+            nextPostId = list[idx - 1].id;
+        }
+        else{ //if delete the only one, go to new
+            nextPostId = '';
+        }
+
+        this.props.model.destroy({ nextPostId: nextPostId });
     }
 }
 
