@@ -22,7 +22,7 @@ var appRoutes = {
     '/a': {
 
         '/p': {
-            '\/?(\\w*)': (id) => {
+            '\/?(\\w*)': [requireAuth, (id) => {
                 console.log('p');
                 if (id === 'new') {
                     id = '';
@@ -33,10 +33,8 @@ var appRoutes = {
                         id: id
                     });
                 })
-            }
+            }]
         },
-
-        on: requireAuth
 
     },
     '/login': () => {
@@ -47,9 +45,7 @@ var appRoutes = {
 };
 
 router = require('director').Router(appRoutes).configure({
-    notfound: () => console.log('not found'),
-    recurse: 'forward'
-
+    notfound: () => console.log('not found')
 });
 router.init('/');
 
