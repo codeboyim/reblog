@@ -305,10 +305,16 @@ class Layout{
 
             case 'sync':
                 this._loadPosts(); 
+                
                 model.files().then((files) =>{
-                    this.setState({files: files});
+                    if(this.isMounted()){
+                        this.setState({files: files});
+                    }
                 });
-                this.setState({ notification: null, isSidebarVisible: false, data:model.toJSON() });
+
+                if(this.isMounted()){
+                    this.setState({ notification: null, isSidebarVisible: false, data:model.toJSON() });
+                }
                 break;
         }
     } 
