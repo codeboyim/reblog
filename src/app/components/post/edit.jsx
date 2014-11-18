@@ -43,6 +43,7 @@ class PostEdit {
 
 		return {
 			post: this.props.model.toJSON(),
+			files: []
 		}
 	}
 
@@ -66,7 +67,7 @@ class PostEdit {
 
 		if(model.id){
 			model.fetch();
-		}
+					}
 	}
 
 	componentWillReceiveProps(nextProps){
@@ -116,11 +117,12 @@ class PostEdit {
 		if(this.isMounted()){
 
 			if((event === 'sync' || event === 'change')){
+
 				this.setState({post: model.toJSON()});
 
 				if(this._editor.getValue()!==model.get('body')){
 					this._editorAutoSaveDisabled = true;
-					this._editor.setValue(model.get('body'));
+					this._editor.setValue(model.get('body'), 1);
 					this._editorAutoSaveDisabled = false;
 				}
 			}

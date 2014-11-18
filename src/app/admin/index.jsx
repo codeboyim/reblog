@@ -41,7 +41,7 @@ function postChanged(event, post, ...args){
 			break;
 
 		case 'sync':
-			router.setRoute(path.join('/a/p', post.id));
+			router.setRoute(path.join('/a/p', post.id || 'new'));
 			break;	
 	}
 }
