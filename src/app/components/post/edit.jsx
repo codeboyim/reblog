@@ -67,7 +67,7 @@ class PostEdit {
 
 		if(model.id){
 			model.fetch();
-					}
+		}
 	}
 
 	componentWillReceiveProps(nextProps){

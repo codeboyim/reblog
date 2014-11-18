@@ -1,3 +1,13 @@
+var router,
+    routeBeforeLogin;
+
+function requireAuth() {
+    if (!Parse.User.current()) {
+        routeBeforeLogin = router.getRoute().join('/');
+        router.setRoute('/login');
+        return false;
+    }
+}
 var appRoutes = {
     '/': () => {
         require(['home'], (home) => {
@@ -13,6 +23,7 @@ var appRoutes = {
 
         '/p': {
             '\/?(\\w*)': (id) => {
+                console.log('p');
                 if (id === 'new') {
                     id = '';
                 }
@@ -23,13 +34,22 @@ var appRoutes = {
                     });
                 })
             }
-        }
+        },
+
+        on: requireAuth
+
     },
-    '/signin': () => {}
+    '/login': () => {
+        require(['login'], login => {
+            login(routeBeforeLogin);
+        });
+    }
 };
 
-var router = require('director').Router(appRoutes).configure({
-    notfound: () => console.log('not found')
+router = require('director').Router(appRoutes).configure({
+    notfound: () => console.log('not found'),
+    recurse: 'forward'
+
 });
 router.init('/');
 

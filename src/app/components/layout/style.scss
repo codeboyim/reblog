@@ -1,6 +1,7 @@
 @import"bourbon";
 @import"neat";
-$site-name-size:24px / $em-base * 1em;
+@import"../../../assets/styles/flaticon/flaticon.css";
+$site-name-size: 2.4rem;
 .root {
     min-height: 100%;
     position: relative;
@@ -15,7 +16,15 @@ $site-name-size:24px / $em-base * 1em;
         display: inline-block;
     }
 }
-
+.rootHeaderButton {
+    &::before {
+        font-size: 2.8rem;
+    }
+    &.add {
+        float: right;
+        color:#d9d9d9;
+    }
+}
 .rootMain {
     @include outer-container();
 }
