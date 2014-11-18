@@ -1,7 +1,14 @@
 var PostModel = require('components/post/model'),
     PostList = require('components/post/list'),
+    AttachmentModel = require('components/attachment/model'),
     router = require('router'),
-    path = require('path');
+    path = require('path'),
+    fileTypes = {
+        '^image\\/':'image',
+        'pdf':'pdf',
+        '^text\\/plain': 'text',
+        'msword|officedocument':'word'
+    };
 
 class Layout{
 
@@ -47,11 +54,11 @@ class Layout{
                                 <label>Attachments</label>
                                 <ul className="adminHeaderAttachments">
                                 {
-                                    Array.isArray(this.state.data.files) ?
-                                    this.state.data.files.map((file) => {
-                                        return <li key={file.url}>
-                                            <i className={'fileType ' + this._getFileType(file.name)}></i>
-                                            <span className="fileName">{file.name}</span>
+                                    Array.isArray(this.state.files) ?
+                                    this.state.files.map((file) => {
+                                        return <li key={file.get('file').url()}>
+                                            <i className={'fileType ' + this._getFileType(file.get('type'))}></i>
+                                            <span className="fileName">{file.get('name')}</span>
                                             <span className="fileCommands">
                                                 <i className="fileDelete" onClick={this._fileCommandClicked.bind(this, file, 'delete')}></i>
                                                 <i className="fileCopy" onClick={this._fileCommandClicked.bind(this, file, 'copy')}></i>
@@ -188,7 +195,8 @@ class Layout{
             data: this.props.model? this.props.model.toJSON() : null,
             notification: null, //{ text: '', type: 'info' }
             drafts: [],
-            published: []
+            published: [],
+            files:[]
         };
     }
 
@@ -296,8 +304,10 @@ class Layout{
                 break;
 
             case 'sync':
-            console.log(model.toJSON());
                 this._loadPosts(); 
+                model.files().then((files) =>{
+                    this.setState({files: files});
+                });
                 this.setState({ notification: null, isSidebarVisible: false, data:model.toJSON() });
                 break;
         }
@@ -382,33 +392,61 @@ class Layout{
     }
 
     _fileChanged(e){
-        var file;
+        var file,
+            post = this.props.model;
+
         if(e.target.files.length>0){
             file = e.target.files[0];
-            (new Parse.File(file.name, file)).save().then((parseFile) => {
-                if(!this.props.model.get('files')){
-                    this.props.model.set('files', [], {silent:true});
-                }
-                var files = this.props.model.get('files');
-                files.push({name:file.name, url:parseFile.url()});
-                this.props.model.save();
-            });
+            (new Parse.File(file.name, file))
+                .save()
+                .then((parseFile) => {
+                    return (new AttachmentModel({name: file.name, type: file.type, file: parseFile })).save();
+                })
+                .then((attachment) => {
+                    post.addFile(attachment).save();
+                });
         }       
     }
 
-    _getFileType(name){
-       return ''; 
+    _getFileType(type){
+        var typeIcon = '';
+        type = type || '';
+
+        Object.keys(fileTypes).every((key) => {
+            var regExp = new RegExp(key);
+
+            if(regExp.test(type)){
+                typeIcon = fileTypes[key];
+                return false;
+            }
+
+            return true;
+        })
+
+       return typeIcon; 
     }
 
     _fileCommandClicked(file, type){
-        var model = this.props.model,
-            files = model.get('files');
+        var post = this.props.model,
+            fileType,
+            fileName,
+            fileUrl,
+            insertText = '';
 
         if(type === 'delete'){
-            files.splice(files.indexOf(file), 1);
-            model.save();
+            post.removeFile(file).save();
         } else if(type === 'copy'){
-            model.set('insertText', file.url);
+            fileType = this._getFileType(file.get('type'));
+            fileName = file.get('name');
+            fileUrl = file.get('file').url();
+
+            if(fileType === 'image'){
+               insertText =  `![${fileName}](${fileUrl} "${fileName}")`;
+            } else {
+               insertText =  `[${fileName}](${fileUrl} "${fileName}")`;
+            }
+            post.set('insertText', insertText);
+
         }
 
     }

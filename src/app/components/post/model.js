@@ -5,8 +5,7 @@ var PostModel = Parse.Object.extend({
         title: '',
         body: '',
         seoUrl: '',
-        isDraft: true,
-        files: null
+        isDraft: true
     },
 
     reset(...args) {
@@ -26,7 +25,23 @@ var PostModel = Parse.Object.extend({
         });
         this.trigger('save', this);
         return Parse.Object.prototype.save.apply(this, args);
+    },
+
+    files(){
+        return this.relation('files').query().find();
+    },
+
+    addFile(file){
+        this.relation('files').add(file);
+        return this;
+    },
+
+    removeFile(file){
+        this.relation('files').remove(file);
+        file.destroy();
+        return this;
     }
+
 
 });
 

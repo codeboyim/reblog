@@ -191,25 +191,40 @@ $navPrimaryBackColor:#2d323b;
 }
 .adminHeaderAttachments {
     font-size: 1.4rem;
-    >*{
+    >* {
         @include row();
-        >*{
+        >* {
             line-height: 2rem;
-            height:2rem;
+            height: 2rem;
         }
     }
-    .fileType, .fileDelete, .fileCopy{
+    .fileType, .fileDelete, .fileCopy {
         @extend .fa;
         cursor: pointer;
+        line-height: 2rem;
     }
-    .fileType{
+    .fileType {
         @include span-columns(1 of 12);
+        @extend .fa-file-o;
+        cursor: default;
+        &.image {
+            @extend .fa-file-image-o;
+        }
+        &.word {
+            @extend .fa-file-word-o;
+        }
+        &.pdf {
+            @extend .fa-file-pdf-o;
+        }
+        &.text {
+            @extend .fa-file-text-o;
+        }
     }
-    .fileName{
+    .fileName {
         @include span-columns(9 of 12);
         @include ellipsis();
     }
-    .fileCommands{
+    .fileCommands {
         @include span-columns(2 of 12);
         text-align: right;
     }
@@ -217,7 +232,7 @@ $navPrimaryBackColor:#2d323b;
         @extend .fa-trash;
         margin: auto 0.5rem;
     }
-    .fileCopy{
+    .fileCopy {
         @extend .fa-clipboard;
         margin: auto 0.5rem;
     }
