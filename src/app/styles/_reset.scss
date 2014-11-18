@@ -29,10 +29,14 @@ img {
     height: auto;
     border: 0;
 }
-fieldset{
-    padding:0;
-    border:none;
+fieldset {
+    padding: 0;
+    border: none;
 }
-[type="text"], [type="password"], textarea{
-    font-size:1.6rem;
+[type="text"], [type="password"], textarea {
+    font-size: 1.6rem;
+}
+
+:focus {
+    outline:none;
 }
