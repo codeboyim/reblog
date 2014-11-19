@@ -4,7 +4,7 @@ class PostList{
 
 	getDefaultProps(){
 		return {
-			mode:'compact',	
+			mode:'compact',	//'compact', 'simple'
 			activePostId:'',
 			list: []
 		};
@@ -24,13 +24,26 @@ class PostList{
 					{
 						list.map((post) => {
 							return (
-								<li key={post.id} className={this.props.activePostId===post.id?'active':''}>
+								<li key={post.id.substr(0, 5)} className={this.props.activePostId===post.id?'active':''}>
 									<a href={path.join('/a/p', post.id)}>{ post.get('title')?post.get('title'):'Untitled' }</a>
 								</li>);
 						})
 					}
 				</ul>
 			)
+		} else {
+			return (
+				<ul className="postList">
+					{
+						list.map((post) => {
+							return (
+								<li key={post.id.substr(0, 5)}>
+									<a href={path.join('/p', post.get('seoUrl'))}>{ post.get('title')?post.get('title'):'Untitled' }</a>
+								</li>);
+						})
+					}
+				</ul>
+			);
 		}
 
 		return null;

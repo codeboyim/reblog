@@ -1,10 +1,20 @@
-var Layout = require('components/layout');
+var Layout = require('components/layout'),
+		PostCollection = require('components/post/collection'),
+		PostList = require('components/post/list');
+		posts = new PostCollection;
 
-module.exports = title => {
+posts.on('all', postsChanged);
 
-	if(!title){
-		React.render(<Layout><h1>Home</h1></Layout>, document.body);
-	}else{
-		console.log(title);
-	}
+function render(){
+		React.render(<Layout><PostList mode="simple" list={posts}/></Layout>, document.body);
+}
+
+function postsChanged(event, ...args){
+	console.log(args[0]);
+	render();
+}
+
+module.exports = () => {
+	render();
+	posts.fetchHomeList();
 };
