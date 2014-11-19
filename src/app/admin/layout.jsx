@@ -271,7 +271,9 @@ class Layout{
             visible = true;
         }
 
-        this.setState({isSidebarVisible: visible});
+        if(visible !== this.state.isSidebarVisible){
+            this.setState({isSidebarVisible: visible});
+        }
     }
 
     _toggleNavDropdown(key, e){
@@ -353,8 +355,8 @@ class Layout{
         }
     }
 
-    _flash(message){
-        this.setState({notification:message});
+    _flash(message, type){
+        this.setState({notification:{text:message, type: type||'info'}});
         window.setTimeout(()=>this.setState({notification:null}), 2000);
     }
 
@@ -391,7 +393,14 @@ class Layout{
             nextPostId = '';
         }
 
-        this.props.model.destroy({ nextPostId: nextPostId });
+        this.props.model.destroy().then((model) => {
+            if(Array.isArray(model.get('files'))){
+                model.get('files').forEach((file) => {
+                    file.destroy();
+                })
+            }
+            router.setRoute(path.join('/a/p', nextPostId || 'new'));
+        });
     }
 
     _uploadClicked(e){
@@ -405,10 +414,22 @@ class Layout{
 
         if(e.target.files.length>0){
             file = e.target.files[0];
+
+            if(!/^\w+(?:\.\w+)$/.test(file.name)){
+               this._flash('invalid file name, characters and numbers only', 'error');
+               return;
+            }
+            this.setState({notification: {text: 'uploading', type: 'info' }});
             (new Parse.File(file.name, file))
                 .save()
+                .always((parseFile) => {
+                    this.setState({notification:null});
+                    return parseFile;
+                })
                 .then((parseFile) => {
-                    post.addFile(new AttachmentModel({name: file.name, type: file.type, file: parseFile }));
+                    if(parseFile){
+                        post.addFile(new AttachmentModel({name: file.name, type: file.type, file: parseFile }));
+                    }
                 });
         }       
     }

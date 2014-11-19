@@ -119,7 +119,7 @@ class PostEdit {
 
 				this.setState({post: model.toJSON()});
 
-				if(this._editor.getValue()!==model.get('body')){
+				if(this._editor.getValue() !== model.get('body')){
 					this._editorAutoSaveDisabled = true;
 					this._editor.setValue(model.get('body'), 1);
 					this._editorAutoSaveDisabled = false;

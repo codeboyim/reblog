@@ -27,8 +27,7 @@ $navPrimaryBackColor:#2d323b;
             text-align: center;
         }
     }
-
-    [class*="Button"]{
+    [class*="Button"] {
         font-weight: normal;
     }
 }
@@ -122,15 +121,20 @@ $navPrimaryBackColor:#2d323b;
 .adminHeaderNotification {
     display: inline-block;
     min-width: 10rem;
-    position: absolute;
-    left: 50%;
-    margin-left: -5rem;
     font-size: 1.4rem;
+    padding: 0 0.4rem;
     height: 2.8rem;
     line-height: 2.8rem;
+    position:relative;
+    top:-0.5rem;
+    left:6%;
     @include border-bottom-radius(0.5rem);
     &.info {
         background-color: #b39c00;
+    }
+    &.error {
+        background-color: #fbaca8;
+        color: #5a0303;
     }
 }
 .adminHeaderNav {
