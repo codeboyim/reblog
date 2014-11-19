@@ -42,8 +42,7 @@ class PostEdit {
 	getInitialState(){
 
 		return {
-			post: this.props.model.toJSON(),
-			files: []
+			post: this.props.model.toJSON()
 		}
 	}
 

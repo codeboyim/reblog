@@ -1,3 +1,5 @@
+var AttachmentModel = require('components/attachment/model');
+
 var PostModel = Parse.Object.extend({
     className: 'Post',
 
@@ -5,7 +7,8 @@ var PostModel = Parse.Object.extend({
         title: '',
         body: '',
         seoUrl: '',
-        isDraft: true
+        isDraft: true,
+        files:[]
     },
 
     reset(...args) {
@@ -19,6 +22,15 @@ var PostModel = Parse.Object.extend({
         return this;
     },
 
+    fetch(...args){
+        var query = new Parse.Query(PostModel);
+        query.include('files').get(this.id).then(post=>{
+            this.set(post.toJSON(), {silent:true});
+            this.set({files:post.get('files')}, {silent:true});
+            this.trigger('sync', this);
+        });
+    },
+
     save(...args) {
         this.unset('insertText', {
             silent: true
@@ -27,19 +39,25 @@ var PostModel = Parse.Object.extend({
         return Parse.Object.prototype.save.apply(this, args);
     },
 
-    files(){
-        return this.relation('files').query().find();
-    },
 
     addFile(file){
-        this.relation('files').add(file);
+        this.get('files').push(file);
+        this.save();
         return this;
     },
 
     removeFile(file){
-        this.relation('files').remove(file);
-        file.destroy();
-        return this;
+        var files = this.get('files'),
+            idx = files.indexOf(file);
+
+        file.destroy().then(() => {
+            if(~idx){
+                files.splice(idx, 1);    
+                this.save();
+            }
+        });
+
+        return this
     }
 
 

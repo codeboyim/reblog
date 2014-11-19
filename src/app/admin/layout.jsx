@@ -26,6 +26,7 @@ class Layout{
                 'adminHeader': true
             }),
             model = this.props.model,
+            files = model.get('files'),
             headerNavMenuItems = [
                 {
                     'publish': {
@@ -50,8 +51,8 @@ class Layout{
                                 <label>Attachments</label>
                                 <ul className="adminHeaderAttachments">
                                 {
-                                    Array.isArray(this.state.files) ?
-                                    this.state.files.map((file) => {
+                                    Array.isArray(files) ?
+                                    files.map((file) => {
                                         return <li key={file.get('file').url()}>
                                             <i className={'fileType ' + this._getFileType(file.get('type'))}></i>
                                             <span className="fileName">{file.get('name')}</span>
@@ -308,15 +309,10 @@ class Layout{
             case 'sync':
                 this._loadPosts(); 
 
-                model.files().then((files) =>{
-                    if(this.isMounted()){
-                        this.setState({files: files});
-                    }
-                });
-
                 if(this.isMounted()){
                     newState = { notification: null, isSidebarVisible: false, data:model.toJSON() };
                 }
+
                 break;
         }
 
@@ -412,10 +408,7 @@ class Layout{
             (new Parse.File(file.name, file))
                 .save()
                 .then((parseFile) => {
-                    return (new AttachmentModel({name: file.name, type: file.type, file: parseFile })).save();
-                })
-                .then((attachment) => {
-                    post.addFile(attachment).save();
+                    post.addFile(new AttachmentModel({name: file.name, type: file.type, file: parseFile }));
                 });
         }       
     }
@@ -446,7 +439,7 @@ class Layout{
             insertText = '';
 
         if(type === 'delete'){
-            post.removeFile(file).save();
+            post.removeFile(file);
         } else if(type === 'copy'){
             fileType = this._getFileType(file.get('type'));
             fileName = file.get('name');
