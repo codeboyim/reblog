@@ -40,10 +40,6 @@ class Layout{
                         title: 'Preview'
                     }
                 }, {
-                    'share': {
-                        title: 'Share'
-                    }
-                }, {
                     'more': {
                         title: 'More',
                         body: [
@@ -70,8 +66,8 @@ class Layout{
                                 <input ref="fileAttach" type="file" style={{display:'none'}} onChange={this._fileChanged} />
                             </div>,
                             <div key="moreButtons" className="text-center">
-                                <button className="button" onClick={this._uploadClicked}><i className="flaticon-upload26"></i>Upload</button>
-                                <button className="button alert" onClick={ this._deleteClicked }><i className="flaticon-test20"></i>Delete</button>
+                                <button className="adminUploadButton" onClick={this._uploadClicked}><i className="flaticon-upload26"></i>Upload</button>
+                                <button className="adminDeleteButton" onClick={ this._deleteClicked }><i className="flaticon-test20"></i>Delete</button>
                             </div>
                         ]
                     }
@@ -128,12 +124,16 @@ class Layout{
                         <a href="/">Re/blog</a>
                     </div>
                     <div ref="compose" className="adminSidebarButtonComposeWrap">
-                        <a className="button adminSidebarButton adminSidebarButtonCompose" href="/a/p/new">Compose</a>
+                        <a className="adminComposeButton" href="/a/p/new">Compose</a>
                     </div>
                     <ul ref="nav" className="adminSidebarNav">
                         {this._renderMenuItem('drafts')}
                         {this._renderMenuItem('published')}
                     </ul>
+                    <div ref="footer" className="adminSidebarFooter">
+                        <hr/>
+                        <button onClick={this._logoutClicked} className="adminLogoutButton">Log out</button>
+                    </div>
                 </aside>
                 <div className={cxMain}>
             		{this.props.children}
@@ -238,7 +238,8 @@ class Layout{
                 menuItemsCount * this.refs.menuItemTitle.getDOMNode().offsetHeight +
                 (menuItemsCount - 1) * collapsedContentHeight +
                 this.refs.compose.getDOMNode().offsetHeight +
-                this.refs.logo.getDOMNode().offsetHeight
+                this.refs.logo.getDOMNode().offsetHeight +
+                this.refs.footer.getDOMNode().offsetHeight
             );
 
         window.requestAnimationFrame(function(){
@@ -293,19 +294,20 @@ class Layout{
     }
 
     _dataModelChanged(event, model){
+        var newState;
 
         switch(event){
             case 'change':
-                this.setState({ data: model.toJSON() });
+                newState = { data: model.toJSON() };
                 break;
 
             case 'save':
-                this.setState({ notification: { text: 'saving', type: 'info' } });
+                newState = { notification: { text: 'saving', type: 'info' } };
                 break;
 
             case 'sync':
                 this._loadPosts(); 
-                
+
                 model.files().then((files) =>{
                     if(this.isMounted()){
                         this.setState({files: files});
@@ -313,9 +315,13 @@ class Layout{
                 });
 
                 if(this.isMounted()){
-                    this.setState({ notification: null, isSidebarVisible: false, data:model.toJSON() });
+                    newState = { notification: null, isSidebarVisible: false, data:model.toJSON() };
                 }
                 break;
+        }
+
+        if(newState && this.isMounted()){
+            this.setState(newState);
         }
     } 
 
@@ -455,6 +461,12 @@ class Layout{
 
         }
 
+    }
+
+    _logoutClicked(e){
+        e.preventDefault();
+        Parse.User.logOut();
+        router.setRoute('/');
     }
 }
 

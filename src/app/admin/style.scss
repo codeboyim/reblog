@@ -27,6 +27,10 @@ $navPrimaryBackColor:#2d323b;
             text-align: center;
         }
     }
+
+    [class*="Button"]{
+        font-weight: normal;
+    }
 }
 .adminLogo {
     padding: 3rem 0 2rem 0;
@@ -73,8 +77,24 @@ $navPrimaryBackColor:#2d323b;
         top: 1.2rem;
     }
 }
-.adminSidebarButtonCompose {
+.adminComposeButton {
+    @include button();
     @include padding(1.6rem null 1.6rem null);
+    @include fill-parent();
+    text-align: center;
+    text-transform: uppercase;
+}
+.adminUploadButton {
+    @include button();
+}
+.adminDeleteButton {
+    @include button(#bb2323);
+}
+.adminLogoutButton {
+    @include button(#5f7f96);
+    width: 50%;
+    margin: 2rem auto;
+    display: block;
 }
 .adminSidebarToggler {
     @extend .fa;
@@ -84,6 +104,9 @@ $navPrimaryBackColor:#2d323b;
     float: left;
     line-height: 3.8rem;
     height: 3.8rem
+}
+.adminSidebarFooter {
+    @include padding(1rem null 1rem null);
 }
 .adminHeader {
     position: fixed;
