@@ -110,7 +110,7 @@ class Layout{
                                         </div>
                                         {
                                             active && item.body? (
-                                            <div className={'dropdownBody ' + key}>{item.body}</div>
+                                            <div className={'dropdownBody ' + key} onClick={this._toggleNavDropdown.bind(this, '')}>{item.body}</div>
                                             ):
                                             null
                                         }
@@ -120,7 +120,7 @@ class Layout{
                         }
                     </ul>
                 </header>
-                <aside className={cxSidebar} ref="sidebar">
+                <aside className={cxSidebar} ref="sidebar" onClick={this._sidebarClicked}>
                     <div ref="logo" className="adminLogo">
                         <a href="/">Re/blog</a>
                     </div>
@@ -181,8 +181,7 @@ class Layout{
 
     getDefaultProps(){
         return {
-            model: null,
-            onEvent: function(){}
+            model: null
         };
     }
 
@@ -204,7 +203,8 @@ class Layout{
     componentDidMount(){
         this._resizeActiveMenuContent();
         window.addEventListener('resize', this._resizeActiveMenuContent);
-        document.body.addEventListener('click', this._toggleSidebar);
+        window.addEventListener('click', this._windowClicked);
+        window.addEventListener('keydown', this._windowKeydown);
 
         if(this.props.model){
             this.props.model.on('all', this._dataModelChanged);
@@ -215,7 +215,8 @@ class Layout{
 
     componentWillUnmount(){
         window.removeEventListener('resize', this._resizeActiveMenuContent);
-        document.body.removeEventListener('click', this._toggleSidebar)
+        window.removeEventListener('click', this._windowClicked);
+        window.removeEventListener('keydown', this._windowKeydown);
     }
 
     componentWillReceiveProps(nextProps){
@@ -253,23 +254,15 @@ class Layout{
      * @param {(boolean|object)} args - to be passed true/false to show/hide the toolbar, or bound to an event and then to toggle between show & hide
      */
     _toggleSidebar(arg){
-        var visible = false,
-            sidebarDom = this.refs.sidebar.getDOMNode();
+        var visible = false;
 
         if(typeof arg === 'boolean'){
             visible = arg;
         }    
-        else if(arg.target === this.refs.toggle.getDOMNode()){
-            visible = !this.state.isSidebarVisible;
-            arg.stopPropagation();
-        }
-        else if(sidebarDom !== arg.target 
-            && !~[].slice.apply(sidebarDom.getElementsByTagName(arg.target.tagName)).indexOf(arg.target)){
-            visible = false;
-        }
         else{
-            visible = true;
-        }
+            arg.stopPropagation();
+            visible = !this.state.isSidebarVisible; 
+        }  
 
         if(visible !== this.state.isSidebarVisible){
             this.setState({isSidebarVisible: visible});
@@ -278,6 +271,20 @@ class Layout{
 
     _toggleNavDropdown(key, e){
         var uid = '';
+
+        if(typeof key === 'object'){
+            e = key;
+            key = '';
+        }
+
+        if(e){
+            e.stopPropagation();
+        }
+
+        if(!key && e){
+            return;
+        }
+
 
         if(this.state.activeNavDropdownUid !== key && ~['more', 'share'].indexOf(key)){
             uid = key;
@@ -481,6 +488,22 @@ class Layout{
         e.preventDefault();
         Parse.User.logOut();
         router.setRoute('/');
+    }
+
+    _sidebarClicked(e){
+        e.stopPropagation();
+    }
+
+    _windowClicked(e){
+        this._toggleSidebar(false);
+        this._toggleNavDropdown('');
+    } 
+
+    _windowKeydown(e){
+       if((e.which || e.keyCode) === 27){
+        this._toggleSidebar(false);
+        this._toggleNavDropdown('');
+       } 
     }
 }
 
