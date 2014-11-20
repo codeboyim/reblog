@@ -6,6 +6,7 @@ var PostModel = Parse.Object.extend({
     defaults: {
         title: '',
         body: '',
+        subtitle: '',
         seoUrl: '',
         isDraft: true,
         files:[]
@@ -39,6 +40,17 @@ var PostModel = Parse.Object.extend({
         return Parse.Object.prototype.save.apply(this, args);
     },
 
+    delaySave(delay) {
+        delay = delay || 2000;
+        
+        if(this.delaySave.timeoutId){
+            window.clearTimeout(this.delaySave.timeoutId);
+        }
+
+        this.delaySave.timeoutId = window.setTimeout(() => {
+            this.save();
+        }, delay);
+    },
 
     addFile(file){
         this.get('files').push(file);

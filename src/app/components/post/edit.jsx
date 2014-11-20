@@ -60,7 +60,7 @@ class PostEdit {
 		editor.getSession().on('change', ()=>{
 			model.set('body', editor.getValue(), {silent: !!this._editorAutoSaveDisabled});
 			if(!this._editorAutoSaveDisabled){
-				this._autoSave();
+				model.delaySave();
 			}
 		});
 
@@ -95,20 +95,7 @@ class PostEdit {
 			post['seoUrl'] = slug(target.value.trim());
 		}
 
-		model.set(post);
-		this._autoSave();
-	}
-
-	_autoSave(){
-
-		if(this._autoSave.timeoutId){
-			window.clearTimeout(this._autoSave.timeoutId);
-		}
-
-		this._autoSave.timeoutId = window.setTimeout(() => {
-			this.props.model.save();
-		}, 2000);
-
+		model.set(post).delaySave();
 	}
 
 	_modelChanged(event, model){

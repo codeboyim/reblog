@@ -1,4 +1,7 @@
-var path = require('path');
+var path = require('path'),
+		moment = require('moment');
+
+require('./style.scss');
 
 class PostList{
 
@@ -20,7 +23,7 @@ class PostList{
 
 		if(this.props.mode === 'compact'){
 			return (
-				<ul className="postlist">
+				<ul className="postList compact">
 					{
 						list.map((post) => {
 							return (
@@ -33,12 +36,26 @@ class PostList{
 			)
 		} else {
 			return (
-				<ul className="postList">
+				<ul className="postList simple">
 					{
 						list.map((post) => {
+							var featureImage = this._findFeatureImage(post);
 							return (
-								<li key={post.id.substr(0, 5)}>
-									<a href={path.join('/p', post.get('seoUrl'))}>{ post.get('title')?post.get('title'):'Untitled' }</a>
+								<li key={post.id.substr(0, 5)} className={'postListItem' + ( featureImage?' featured':'' )}>
+									<i>{moment(post.createdAt).format('LL')}</i>
+									<div>
+									{
+										featureImage ?
+											<div className="postListItemFeature" style={{backgroundImage: 'url("'+featureImage.get('file').url()+'")'}}></div>
+											:null
+									}
+										<div className="postListItemTitle">
+											<a href={path.join('/p', post.get('seoUrl'))}>
+												<h2>{ post.get('title') }</h2>
+												<p>{post.get('subtitle')}</p>
+											</a>
+										</div>
+									</div>
 								</li>);
 						})
 					}
@@ -48,6 +65,38 @@ class PostList{
 
 		return null;
 	}
+
+	_findFeatureImage(post){
+		var files = post.get('files'),
+				images,
+				regExImage = /^image/i,
+				regExFeatureImage = /^feature(?:\.\w+)/i,
+				featureImage;
+
+		if(files && Array.isArray(files)){
+			images = files.map( file => {
+				if(regExImage.test(file.get('type'))){
+					return file;
+				}
+			})
+			if(images && images.length){
+				images.every( img => {
+					if(regExFeatureImage.test(img.get('name'))){
+						featureImage = img;
+						return false;
+					}
+					return true;
+				});
+
+				if(!featureImage){
+					featureImage = images[0];
+				}
+			}
+		}
+
+		return featureImage;
+	}
+
 }
 
 

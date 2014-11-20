@@ -35,8 +35,8 @@ fieldset {
 }
 [type="text"], [type="password"], textarea {
     font-size: 1.6rem;
+    font-family: inherit;
 }
-
 :focus {
-    outline:none;
+    outline: none;
 }

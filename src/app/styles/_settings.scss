@@ -1,4 +1,8 @@
 // $visual-grid: true !global;
 // $visual-grid-color: #ccc !global;
+@import"bourbon";
+@import"neat";
 $large: new-breakpoint(min-width 1025px);
 $medium: new-breakpoint(max-width 1024px);
+$gw-column: $column; // Column Width
+$gw-gutter: $gutter; // Gutter Width

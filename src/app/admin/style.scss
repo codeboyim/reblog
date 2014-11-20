@@ -125,9 +125,9 @@ $navPrimaryBackColor:#2d323b;
     padding: 0 0.4rem;
     height: 2.8rem;
     line-height: 2.8rem;
-    position:relative;
-    top:-0.5rem;
-    left:6%;
+    position: relative;
+    top: -0.5rem;
+    left: 6%;
     @include border-bottom-radius(0.5rem);
     &.info {
         background-color: #b39c00;
@@ -146,11 +146,16 @@ $navPrimaryBackColor:#2d323b;
     min-width: 6rem;
     text-align: center;
     position: relative;
-    input[type=text] {
+    input[type=text], textarea {
         @include fill-parent();
     }
     &.active, &:hover .dropdownTitle {
         background-color: $navPrimaryBackColor;
+    }
+    &.preview {
+        @include media($large) {
+            display: none;
+        }
     }
     .dropdownTitle {
         cursor: pointer;
@@ -173,13 +178,8 @@ $navPrimaryBackColor:#2d323b;
         &.withdraw .fa {
             @extend .fa-cloud-download;
         }
-        &.preview {
-            @include media($large) {
-                display: none;
-            }
-            .fa {
-                @extend .fa-eye;
-            }
+        &.preview .fa {
+            @extend .fa-eye;
         }
         @include media($medium) {
             padding: 0;

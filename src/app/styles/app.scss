@@ -2,23 +2,32 @@
 @import"settings";
 @import"bourbon";
 @import"neat";
+@import url(http://fonts.googleapis.com/css?family=Noto+Serif:400,700,400italic,700italic|Merriweather:400,300italic,300,400italic);
 html, body {
     height: 100%;
-    font-family:$helvetica;
+    font-family: Merriweather  $lucida-grande;
     font-size: 62.5%;
+    color: rgba(0, 0, 0, 0.8);
 }
 body {
-	background-color:#fbfbfb;
-    font-size:1.6rem;
+    background-color: #fbfbfb;
+    font-size: 1.6rem;
+    line-height: golden-ratio(1.6rem, 1);
 }
 label {
-    font: bold 1.1rem $georgia;
+    font: bold 1.1rem "Noto Serif" $georgia;
     color: #b6b6b6;
     text-transform: uppercase;
 }
-.logo{
-	font-size:2.4rem;
+h2 {
+    font-size: 2.2rem;
+    line-height: golden-ratio(2.2rem, 1);
+    font-weight: 400;
+    @include margin(2% null 2% null);
 }
-.text-center{
+.logo {
+    font-size: 2.4rem;
+}
+.text-center {
     text-align: center;
 }

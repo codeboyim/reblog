@@ -47,6 +47,10 @@ class Layout{
                             <div key="moreUrl">
                                 <label>Friendly URL</label><input type="text" value={this.state.data.seoUrl} readOnly={true}/>
                             </div>,
+                            <div key="moreShortDesc">
+                                <label>Short Description</label>
+                                <textarea name="subtitle" value={this.state.data.subtitle} rows="5" onChange={this._inputChange}></textarea>
+                            </div>,
                             <div key="moreAttachments">
                                 <label>Attachments</label>
                                 <ul className="adminHeaderAttachments">
@@ -264,13 +268,14 @@ class Layout{
             visible = !this.state.isSidebarVisible; 
         }  
 
-        if(visible !== this.state.isSidebarVisible){
+        if(visible !== this.state.isSidebarVisible && this.isMounted()){
             this.setState({isSidebarVisible: visible});
         }
     }
 
     _toggleNavDropdown(key, e){
-        var uid = '';
+        var model = this.props.model,
+            uid = '';
 
         if(typeof key === 'object'){
             e = key;
@@ -290,8 +295,8 @@ class Layout{
             uid = key;
         }
 
-        if(~['publish', 'withdraw'].indexOf(key) && this.props.model.isValid()){
-            this.props.model.save({ 'isDraft': !this.props.model.get('isDraft') });
+        if(~['publish', 'withdraw'].indexOf(key) && model.get('title').trim() && model.get('body').trim()){
+            model.save({ 'isDraft': !model.get('isDraft') });
         }
 
         this.setState({ activeNavDropdownUid: uid });
@@ -303,10 +308,11 @@ class Layout{
         this._loadPosts(key);
     }
 
-    _dataModelChanged(event, model){
+    _dataModelChanged(event, model, ...args){
         var newState;
 
         switch(event){
+
             case 'change':
                 newState = { data: model.toJSON() };
                 break;
@@ -484,6 +490,13 @@ class Layout{
 
     }
 
+    _inputChange(e){
+        var newState = {};
+
+        newState[e.target.name] = e.target.value;
+        this.props.model.set(newState).delaySave();
+    }
+
     _logoutClicked(e){
         e.preventDefault();
         Parse.User.logOut();
@@ -495,15 +508,25 @@ class Layout{
     }
 
     _windowClicked(e){
-        this._toggleSidebar(false);
-        this._toggleNavDropdown('');
+        this._resetDrawnMenus();
     } 
 
     _windowKeydown(e){
        if((e.which || e.keyCode) === 27){
-        this._toggleSidebar(false);
-        this._toggleNavDropdown('');
+        this._resetDrawnMenus();
        } 
+    }
+
+    _resetDrawnMenus(){
+
+        if(!this.state.isSidebarVisible){
+            this._toggleSidebar(false);
+        }
+
+        if(this.state.activeNavDropdownUid !=='' ){
+            this._toggleNavDropdown('');
+        }
+
     }
 }
 

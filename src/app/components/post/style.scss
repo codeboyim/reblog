@@ -44,8 +44,36 @@ $divider: solid 1px #d9d9d9;
         }
     }
 }
-.postlist {
-    >.active {
-    	color: #59a5db;
+.postList {
+    &.compact {
+        >.active {
+            color: #59a5db;
+        }
+    }
+    &.simple {}
+}
+.postListItem {
+    @include margin(2% null 2% null);
+    &.featured .postListItemTitle {
+        @include span-columns(9);
+    }
+}
+.postListItemCreatedAt {
+    font-size: 1.2rem;
+}
+.postListItemFeature {
+    @include span-columns(3);
+    // height: 10rem;
+    height: golden-ratio(grid-width(3), -1);
+    margin-top: 1%;
+    background-repeat: no-repeat;
+    background-size:cover;
+}
+.postListItemTitle {
+    h2 {
+        margin-top: 1%;
+    }
+    p {
+        font-weight: 200;
     }
 }
