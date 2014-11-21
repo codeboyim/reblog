@@ -14,9 +14,9 @@ var appRoutes = {
             home();
         });
     },
-    '/p/:title': (title) => {
-        require(['home'], (home) => {
-            home(title);
+    '/p/:seoUrl': (seoUrl) => {
+        require(['home/post'], (post) => {
+            post(seoUrl);
         });
     },
     '/a': {
@@ -52,9 +52,14 @@ router.init('/');
 document.body.addEventListener('click', function(e) {
     var url = document.location.origin + document.location.pathname,
         hash = '',
-        href = e.target.getAttribute('href');
+        anchor = e.target,
+        href;
 
-    if (e.target.tagName === 'A' && /^\/.*/.test(href)) {
+    while(anchor !== document.body && anchor.tagName !== 'A'){
+        anchor = anchor.parentNode;
+    }
+
+    if (anchor.tagName === 'A' && /^\/.*/.test(href = anchor.getAttribute('href'))) {
         e.preventDefault();
         router.setRoute(href);
     }

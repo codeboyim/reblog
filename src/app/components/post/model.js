@@ -32,6 +32,16 @@ var PostModel = Parse.Object.extend({
         });
     },
 
+    fetchBySeoUrl(){
+        var query = new Parse.Query(PostModel);
+
+        query.include('files').first().then( post => {
+            this.set(post.toJSON(), {silent:true});
+            this.set({files:post.get('files')}, {silent:true});
+            this.trigger('sync', this);
+        });
+    },
+
     save(...args) {
         this.unset('insertText', {
             silent: true

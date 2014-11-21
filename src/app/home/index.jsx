@@ -10,11 +10,9 @@ function render(){
 }
 
 function postsChanged(event, ...args){
-	console.log(args[0]);
 	render();
 }
 
 module.exports = () => {
-	render();
 	posts.fetchHomeList();
 };
