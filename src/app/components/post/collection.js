@@ -8,7 +8,7 @@ var PostCollection = Parse.Collection.extend({
         numToSkip = numToSkip ? numToSkip : 0;
         query.descending('createdAt').equalTo('isDraft', false).limit(10).skip(numToSkip).include('files');
         return query.find().done((posts)=>{
-        	this.add(posts);
+        	this.reset(posts);
         });
     }
 

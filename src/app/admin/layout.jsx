@@ -519,7 +519,7 @@ class Layout{
 
     _resetDrawnMenus(){
 
-        if(!this.state.isSidebarVisible){
+        if(this.state.isSidebarVisible){
             this._toggleSidebar(false);
         }
 
