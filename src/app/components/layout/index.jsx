@@ -13,7 +13,7 @@ var Layout = React.createClass({
         return (
         	<div className="root">
         		<header className="rootHeader">
-        			<h1>Re/blog</h1>
+        			<a href="/"><h1>Re/blog</h1></a>
                     <a href="/a/p/new" title="write a new post" className="rootHeaderButton add flaticon-plus72"></a>
         		</header>
         		<div className="rootMain">
