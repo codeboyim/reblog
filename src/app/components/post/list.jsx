@@ -42,20 +42,18 @@ class PostList{
 							var featureImage = this._findFeatureImage(post);
 							return (
 								<li key={post.id.substr(0, 5)} className={'postListItem' + ( featureImage?' featured':'' )}>
-									<i>{moment(post.createdAt).format('LL')}</i>
-									<div>
-									{
-										featureImage ?
-											<div className="postListItemFeature" style={{backgroundImage: 'url("'+featureImage.get('file').url()+'")'}}></div>
-											:null
-									}
+									<a href={path.join('/p', post.get('seoUrl'))}>
+										<i>{moment(post.createdAt).format('LL')}</i>
+										<h2>{ post.get('title') }</h2>
+										{
+											featureImage ?
+												<div className="postListItemFeature" style={{backgroundImage: 'url("'+featureImage.get('file').url()+'")'}}></div>
+												:null
+										}
 										<div className="postListItemTitle">
-											<a href={path.join('/p', post.get('seoUrl'))}>
-												<h2>{ post.get('title') }</h2>
 												<p>{post.get('subtitle')}</p>
-											</a>
 										</div>
-									</div>
+									</a>
 								</li>);
 						})
 					}

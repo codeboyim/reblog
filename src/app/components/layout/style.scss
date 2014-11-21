@@ -1,13 +1,14 @@
 @import"bourbon";
 @import"neat";
 @import"../../../assets/styles/flaticon/flaticon.css";
+@import"styles/settings";
 $site-name-size: 2.4rem;
 .root {
     min-height: 100%;
     position: relative;
 }
 .rootHeader {
-    @include pad(0.5em);
+    @include pad();
     background-color: #fff;
     h1 {
         margin: 0;
@@ -27,6 +28,9 @@ $site-name-size: 2.4rem;
 }
 .rootMain {
     @include outer-container();
+    @include media($medium){
+        margin: flex-gutter();
+    }
 }
 .rootFooter {
     @include pad(1em);
