@@ -32,6 +32,13 @@ $site-name-size: 2.4rem;
 }
 .rootHeaderDropdown{
     display:inline-block;
+    float: right;
+    position: relative;
+    .dropdown{
+        position:absolute;
+        right: 0;
+        top: 10rem;
+    }
 }
 .rootHeaderButton {
     &::before {
