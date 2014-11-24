@@ -43,15 +43,15 @@ class PostList{
 							return (
 								<li key={post.id.substr(0, 5)} className={'postListItem' + ( featureImage?' featured':'' )}>
 									<a href={path.join('/p', post.get('seoUrl'))}>
-										<i>{moment(post.createdAt).format('LL')}</i>
-										<h2>{ post.get('title') }</h2>
+										<i className="postCreatedAt">{moment(post.createdAt).format('LL')}</i>
 										{
 											featureImage ?
 												<div className="postListItemFeature" style={{backgroundImage: 'url("'+featureImage.get('file').url()+'")'}}></div>
 												:null
 										}
 										<div className="postListItemTitle">
-												<p>{post.get('subtitle')}</p>
+											<h2>{ post.get('title') }</h2>
+											<p>{ post.get('subtitle') }</p>
 										</div>
 									</a>
 								</li>);

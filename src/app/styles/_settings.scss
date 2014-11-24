@@ -1,5 +1,5 @@
-$visual-grid: true !global;
-$visual-grid-color: #ccc !global;
+// $visual-grid: true !global;
+// $visual-grid-color: #ccc !global;
 @import"bourbon";
 @import"neat";
 $large: new-breakpoint(min-width 1089px);

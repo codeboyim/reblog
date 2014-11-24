@@ -6,7 +6,7 @@ $divider: solid 1px #d9d9d9;
     @include pad(default 0 default 0);
     &.edit {
         &>* {
-            @include padding(1% null 1% null);
+            @include padding(1% null);
         }
         &>*:nth-child(1) {
             border-bottom: $divider;
@@ -29,20 +29,30 @@ $divider: solid 1px #d9d9d9;
             @include fill-parent();
             @include margin(1% null 1% null);
             background: transparent;
-            line-height: 1.5em;
         }
         .postTitle {
             border-width: 0;
-            font-size: 2rem;
+            font-size: 2.6rem;
+            font-family: Lora $georgia;
         }
         .postBody {
-            line-height: 1.6em;
             min-height: 1200px;
-            font-size: 1.6rem;
             &.ace_editor {
                 line-height: inherit;
             }
         }
+    }
+    &.view {
+        .postTitle, .postBody {
+            @include margin(flex-gutter() null);
+            @include clearfix;
+        }
+    }
+}
+.postCreatedAt {
+    font-size: 1.4rem;
+    .postList & {
+        display: block;
     }
 }
 .postList {
@@ -58,23 +68,14 @@ $divider: solid 1px #d9d9d9;
     &.featured .postListItemTitle {
         @include span-columns(9);
     }
-}
-.postListItemCreatedAt {
-    font-size: 1.2rem;
+    h2 {
+        @include margin(1% null 1% null);
+    }
 }
 .postListItemFeature {
     @include span-columns(3);
-    height: golden-ratio(grid-width(3), -1);
     margin-top: 1%;
+    height: golden-ratio(grid-width(3), -1);
     background-repeat: no-repeat;
     background-size: cover;
-}
-.postListItemTitle {
-    margin-top: 1%;
-    a {
-        display: block;
-    }
-    h2 {} p {
-        font-weight: 200;
-    }
 }

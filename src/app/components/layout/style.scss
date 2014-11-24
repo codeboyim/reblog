@@ -8,7 +8,7 @@ $site-name-size: 2.4rem;
     position: relative;
 }
 .rootHeader {
-    @include pad();
+    @include pad(1% default);
     background-color: #fff;
     h1 {
         margin: 0;
@@ -33,7 +33,7 @@ $site-name-size: 2.4rem;
     }
 }
 .rootFooter {
-    @include pad(1em);
+    @include pad(1% default);
     @include fill-parent();
     position: absolute;
     bottom: 0;

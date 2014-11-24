@@ -20,7 +20,7 @@ var Layout = React.createClass({
         		{this.props.children}
         		</div>
         		<footer className="rootFooter">
-	        		<p>Developed by codeboy</p>
+	        		<span>Developed by codeboy</span>
         		</footer>
           </div>
         );
