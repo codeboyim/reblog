@@ -126,7 +126,7 @@ class Layout{
                 </header>
                 <aside className={cxSidebar} ref="sidebar" onClick={this._sidebarClicked}>
                     <div ref="logo" className="adminLogo">
-                        <a href="/">Re/blog</a>
+                        <a href="/"><h1>Re/blog</h1></a>
                     </div>
                     <div ref="compose" className="adminSidebarButtonComposeWrap">
                         <a className="adminComposeButton" href="/a/p/new">Compose</a>

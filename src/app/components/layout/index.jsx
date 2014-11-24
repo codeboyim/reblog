@@ -1,3 +1,4 @@
+var Dropdown = require('components/dropdown');
 require('./style.scss');
 
 class HomeLayout {
@@ -17,7 +18,17 @@ class HomeLayout {
                 <div className={cxHeader}>
                     <header>
                         <a href="/"><h1>Re/blog</h1></a>
-                        <a href="/a/p/new" title="write a new post" className="rootHeaderButton add flaticon-plus72"></a>
+                        <span className="rootHeaderDropdown">
+                            <a className="rootHeaderButton add flaticon-plus72"></a>
+                            <Dropdown>
+                                <div>
+                                    <a href="/a/p/new" title="write a new post">Write a new post</a>
+                                </div>
+                                <div>
+                                    <span>Log out</span>
+                                </div>
+                            </Dropdown>
+                        </span>
                     </header>
                 </div>
                 <div className="rootMain">

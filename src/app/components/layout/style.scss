@@ -30,6 +30,9 @@ $site-name-size: 2.4rem;
         @include outer-container();
     }
 }
+.rootHeaderDropdown{
+    display:inline-block;
+}
 .rootHeaderButton {
     &::before {
         font-size: 2.8rem;
