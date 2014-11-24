@@ -3,7 +3,7 @@
 $divider: solid 1px #d9d9d9;
 @import"styles/settings";
 .post {
-    @include pad(default 0 default 0);
+    @include row();
     &.edit {
         &>* {
             @include padding(1% null);

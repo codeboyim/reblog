@@ -5,7 +5,7 @@
 @import url(http://fonts.googleapis.com/css?family=Lora|Open+Sans|Noto+Serif:400,700,400italic,700italic|Merriweather:400,300italic,300,400italic);
 html, body {
     height: 100%;
-    font-family: "Open Sans"  $lucida-grande;
+    font-family: "Open Sans" $lucida-grande;
     font-size: 62.5%;
     color: rgba(0, 0, 0, 0.8);
 }
@@ -19,18 +19,22 @@ label {
     color: #b6b6b6;
     text-transform: uppercase;
 }
-h2 {
-    font-size: 2.6rem;
-    line-height: golden-ratio(2.2rem, 1);
+h1, h2 {
     font-weight: 400;
     font-family: Lora $georgia;
     @include margin(2% null 2% null);
 }
-p{
-   @include margin(1.6rem null);
+h1{
+    font-size: 3.6rem
+}
+h2 {
+    font-size: 2.4rem;
+    line-height: golden-ratio(2.2rem, 1);
+}
+p {
+    @include margin(1.6rem null);
 }
 .logo {
-    font-size: 2.4rem;
 }
 .text-center {
     text-align: center;

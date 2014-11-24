@@ -10,7 +10,7 @@ $site-name-size: 2.4rem;
     @include calc(padding-top, '2% + 3rem');
 }
 .rootHeader {
-    @include pad(1% default);
+    @include padding(1% null);
     @include fill-parent();
     @include transition(transform 0.3s ease-out);
     background-color: #fff;
@@ -20,12 +20,14 @@ $site-name-size: 2.4rem;
     box-shadow: 0 0 8px rgba(100, 100, 100, 0.8);
     h1 {
         margin: 0;
-        font-size: $site-name-size;
-        font-weight: normal;
         display: inline-block;
     }
     &.hide{
         @include transform(translateY(-8rem));
+    }
+
+    header{
+        @include outer-container();
     }
 }
 .rootHeaderButton {
