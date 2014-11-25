@@ -23,7 +23,7 @@ var appRoutes = {
 
         '/p': {
             '\/?(\\w*)': [requireAuth, (id) => {
-                console.log('p');
+
                 if (id === 'new') {
                     id = '';
                 }
@@ -36,6 +36,9 @@ var appRoutes = {
             }]
         },
 
+        on: () => {
+            router.setRoute('/a/p/new');
+        }
     },
     '/login': () => {
         require(['login'], login => {
@@ -55,7 +58,7 @@ document.body.addEventListener('click', function(e) {
         anchor = e.target,
         href;
 
-    while(anchor !== document.body && anchor.tagName !== 'A'){
+    while (anchor !== document.body && anchor.tagName !== 'A') {
         anchor = anchor.parentNode;
     }
 

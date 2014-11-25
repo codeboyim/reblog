@@ -2,6 +2,9 @@
 @import"neat";
 @import"../../../assets/styles/flaticon/flaticon.css";
 @import"styles/settings";
+@import"styles/components/dropdown";
+$fa-font-path:"../../../../node_modules/font-awesome/fonts";
+@import"font-awesome";
 $site-name-size: 2.4rem;
 .root {
     overflow: auto;
@@ -21,32 +24,44 @@ $site-name-size: 2.4rem;
     h1 {
         margin: 0;
         display: inline-block;
+        line-height: 3.6rem;
     }
-    &.hide{
+    &.hide {
         @include transform(translateY(-8rem));
     }
-
-    header{
+    header {
         @include outer-container();
     }
 }
-.rootHeaderDropdown{
-    display:inline-block;
+.rootHeaderLogo {
+    display: inline-block;
+    float: left;
+}
+.rootHeaderDropdown {
+    display: inline-block;
     float: right;
     position: relative;
-    .dropdown{
-        position:absolute;
-        right: 0;
-        top: 10rem;
+    .dropdownButton {
+        @extend .fa;
+        @extend .fa-cog;
+        opacity: 0.5;
+        font-size: 2.4rem;
+        line-height: 3.5rem;
+        width: 8rem;
+        height: 4rem;
+        text-align: right;
     }
-}
-.rootHeaderButton {
-    &::before {
-        font-size: 2.8rem;
+    .dropdownMenu {
+        right: -2.8rem;
+        top: 4rem;
+        font-size: 1.4rem;
+        transition: opacity .3s ease-in;
     }
-    &.add {
-        float: right;
-        color: #d9d9d9;
+    .dropdownMenu-enter, .dropdownMenu-leave.dropdownMenu-leave-active {
+        opacity: 0.01;
+    }
+    .dropdownMenu-enter-active, .dropdownMenu-leave {
+        opacity: 1;
     }
 }
 .rootMain {

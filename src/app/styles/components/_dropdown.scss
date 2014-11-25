@@ -1,10 +1,16 @@
 @import "bourbon";
 .dropdown {
+    position: relative;
+}
+.dropdownButton{
+	cursor: pointer;
+}
+.dropdownMenu {
     min-width: 20rem;
     border-radius: 0.5rem;
     box-shadow: 0 2px 10px 2px #aaa;
     overflow: visible;
-    opacity: 0.9;
+    position: absolute;
     &::before {
         display: inline;
         content: '\25B2';

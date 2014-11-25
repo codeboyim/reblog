@@ -6,7 +6,7 @@ var Layout = require('components/layout'),
 post.on('all', modelChanged);
 
 function render(){
-		React.render(<Layout><Post post={post} /></Layout>, document.body);
+		React.render(<Layout postId={post.id}><Post post={post} /></Layout>, document.body);
 }
 
 function modelChanged(event, model){
