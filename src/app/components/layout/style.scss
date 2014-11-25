@@ -10,7 +10,7 @@ $site-name-size: 2.4rem;
     overflow: auto;
     height: 100%;
     position: relative;
-    @include calc(padding-top, '2% + 3rem');
+    @include calc(padding-top, '2% + 4rem');
 }
 .rootHeader {
     @include padding(1% null);
@@ -66,7 +66,7 @@ $site-name-size: 2.4rem;
 }
 .rootMain {
     @include outer-container();
-    @include calc(padding-bottom, '2% + 2.5rem');
+    @include calc(padding-bottom, '2% + 4rem');
     min-height: 100%;
 }
 .rootFooter {
@@ -75,5 +75,5 @@ $site-name-size: 2.4rem;
     text-align: center;
     color: #aaa;
     font-size: 1.2rem;
-    @include calc(margin-top, '-2% - 2.5rem');
+    @include calc(margin-top, '-2% - 4rem + 1.4rem');
 }
