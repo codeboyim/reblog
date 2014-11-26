@@ -18,8 +18,12 @@ $fa-font-path:"../../../../node_modules/font-awesome/fonts";
                 @include span-columns(12 of 24);
             }
         }
+        .postEdit {
+            @include media($large) {
+                border-right: $divider;
+            }
+        }
         .postPreview {
-            border-left: $divider;
             @include media($medium) {
                 display: none;
             }
@@ -58,12 +62,11 @@ $fa-font-path:"../../../../node_modules/font-awesome/fonts";
             margin-left: 2rem;
             li {
                 display: list-item;
-                margin:1.4rem;
+                margin: 1.4rem;
             }
         }
-
-        a{
-            color:#1D59A3;
+        a {
+            color: #1D59A3;
         }
     }
 }
@@ -101,14 +104,14 @@ $fa-font-path:"../../../../node_modules/font-awesome/fonts";
     background-repeat: no-repeat;
     background-size: cover;
 }
-.postListLoadMore{
+.postListLoadMore {
     @extend .fa;
     @include margin(null auto);
     display: block;
     width: 1.4rem;
-    height:1.4rem;
-    &.loading{
+    height: 1.4rem;
+    &.loading {
         @extend .fa-refresh;
         @extend .fa-spin;
-    }    
+    }
 }

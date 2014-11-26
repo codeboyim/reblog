@@ -7,5 +7,6 @@ $medium: new-breakpoint(max-width 1088px);
 $gw-column: $column; // Column Width
 $gw-gutter: $gutter; // Gutter Width
 $z-layers:(
-	'rootHeader': 9, 
+	'rootHeader': 9,
+	'adminHeader': 9
 );
