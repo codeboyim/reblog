@@ -2,6 +2,8 @@
 @import"neat";
 $divider: solid 1px #d9d9d9;
 @import"styles/settings";
+$fa-font-path:"../../../../node_modules/font-awesome/fonts";
+@import"font-awesome";
 .post {
     @include row();
     &.edit {
@@ -98,4 +100,15 @@ $divider: solid 1px #d9d9d9;
     height: golden-ratio(grid-width(3), -1);
     background-repeat: no-repeat;
     background-size: cover;
+}
+.postListLoadMore{
+    @extend .fa;
+    @include margin(null auto);
+    display: block;
+    width: 1.4rem;
+    height:1.4rem;
+    &.loading{
+        @extend .fa-refresh;
+        @extend .fa-spin;
+    }    
 }

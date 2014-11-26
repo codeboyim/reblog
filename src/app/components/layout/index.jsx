@@ -66,7 +66,7 @@ class HomeLayout {
     }
 
     componentDidMount(){
-        this.refs.root.getDOMNode().addEventListener('scroll', this._rootScroll);
+        window.addEventListener('scroll', this._onWindowScroll);
     }
 
     componentWillReceiveProps(nextProps){
@@ -74,29 +74,32 @@ class HomeLayout {
     }
 
     componentWillUnmount(){
-        this.refs.root.getDOMNode().removeEventListener('scroll', this._rootScroll);
+        window.removeEventListener('scroll', this._onWindowScroll);
     }
 
-    _rootScroll(e){
-        var busy = this._rootScroll.busy || false,
-            lastScrollTop = this._rootScroll.lastScrollTop || 0,
+    _onWindowScroll(e){
+        var callee = this._onWindowScroll,
+            didScroll = callee.didScroll || false,
+            lastScrollTop = callee.lastScrollTop || 0,
             up = false,
-            target = e.target,
-            scrollTop = target.scrollTop;
+            scrollTop = document.body.scrollTop;
 
-        if(!busy){
+        if(!didScroll){
             up = scrollTop - lastScrollTop > 0;
-            this._rootScroll.lastScrollTop = scrollTop;
-            this._rootScroll.busy = true;
+            callee.lastScrollTop = scrollTop;
+            callee.didScroll = true;
 
             if(this.state.hideHeader && !up || !this.state.hideHeader && up){
                 window.setTimeout(() => {
-                    this._rootScroll.busy = false;
-                    this.setState({'hideHeader':up});
+                    callee.didScroll = false;
+
+                    if(this.isMounted()){
+                        this.setState({'hideHeader':up});
+                    }
                 }, 60);
             }
             else{
-                this._rootScroll.busy = false;
+                callee.didScroll = false;
             }
         }
 
