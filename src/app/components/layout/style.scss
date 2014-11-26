@@ -8,8 +8,7 @@ $fa-font-path:"../../../../node_modules/font-awesome/fonts";
 @import"styles/functions";
 $site-name-size: 2.4rem;
 .root {
-    overflow: auto;
-    height: 100%;
+    min-height: 100%;
     position: relative;
     @include calc(padding-top, '2% + 4rem');
 }
@@ -77,5 +76,7 @@ $site-name-size: 2.4rem;
     text-align: center;
     color: #aaa;
     font-size: 1.2rem;
-    @include calc(margin-top, '-2% - 4rem + 1.4rem');
+    position:absolute;
+    bottom:0;
+
 }
