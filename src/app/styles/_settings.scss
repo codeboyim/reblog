@@ -6,3 +6,6 @@ $large: new-breakpoint(min-width 1089px);
 $medium: new-breakpoint(max-width 1088px);
 $gw-column: $column; // Column Width
 $gw-gutter: $gutter; // Gutter Width
+$z-layers:(
+	'rootHeader': 9, 
+);

@@ -1,0 +1,4 @@
+@import"./settings";
+@function z($layer){
+	@return map-get($z-layers, $layer);
+}
