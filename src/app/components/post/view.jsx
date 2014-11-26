@@ -16,7 +16,7 @@ class PostView{
 		return(
 			<article className="post view">
 				<header className="postTitle">
-					<i className="postCreatedAt">{moment(post.get('createdAt')).format('LL')}</i>
+					<i className="postCreatedAt">{moment(post.createdAt).format('LL')}</i>
 					<h2>{post.get('title')}</h2>
 				</header>
 				<main className="postBody">
