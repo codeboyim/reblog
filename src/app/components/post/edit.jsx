@@ -10,6 +10,19 @@ require('ace-builds/src-noconflict/mode-markdown');
 
 class PostEdit {
 
+	getDefaultProps(){
+		return {
+			model: new PostModel
+		};
+	}
+
+	getInitialState(){
+
+		return {
+			post: this.props.model.toJSON()
+		}
+	}
+
 	render(){
 		var post = this.state.post;
 
@@ -33,25 +46,13 @@ class PostEdit {
 		);
 	}
 
-	getDefaultProps(){
-		return {
-			model: new PostModel
-		};
-	}
-
-	getInitialState(){
-
-		return {
-			post: this.props.model.toJSON()
-		}
-	}
-
 	componentDidMount(){
 		var model = this.props.model,
 				editor = this._editor = ace.edit(this.refs.postBody.getDOMNode()); 
 
 		this.props.model.on('all', this._modelChanged);
 		editor.setFontSize(16);
+		editor.setOptions({maxLines: Infinity});
 		editor.renderer.setShowGutter(false);
 		editor.renderer.setShowPrintMargin(false);
 		editor.getSession().setMode('ace/mode/markdown');

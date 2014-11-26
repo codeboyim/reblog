@@ -151,11 +151,11 @@ class Layout{
         var menuItems = {
                 'published': {
                     'text': 'Published',
-                    'iconclass': 'flaticon-write12'
+                    'iconclass': 'flaticon-verified9'
                 },
                 'drafts': {
                     'text': 'Drafts',
-                    'iconclass': 'flaticon-verified9'
+                    'iconclass': 'flaticon-write12'
                 }
             },
             item = menuItems[key],

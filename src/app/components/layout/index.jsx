@@ -66,32 +66,40 @@ class HomeLayout {
     }
 
     componentDidMount(){
-        this.refs.root.getDOMNode().addEventListener('scroll', this._rootScroll());
+        this.refs.root.getDOMNode().addEventListener('scroll', this._rootScroll);
     }
 
     componentWillReceiveProps(nextProps){
         this.setState({ authenticated: !!Parse.User.current(), hideHeaderDropdownMenu: true });
     }
 
-    _rootScroll(){
-        var busy = false,
-            lastScrollTop = 0,
-            up = false;
+    componentWillUnmount(){
+        this.refs.root.getDOMNode().removeEventListener('scroll', this._rootScroll);
+    }
 
-        return (e) =>{
-            var target = e.target,
-                scrollTop = target.scrollTop;
-            if(!busy){
-                up = scrollTop - lastScrollTop > 0;
-                lastScrollTop = scrollTop;
-                busy = true;
+    _rootScroll(e){
+        var busy = this._rootScroll.busy || false,
+            lastScrollTop = this._rootScroll.lastScrollTop || 0,
+            up = false,
+            target = e.target,
+            scrollTop = target.scrollTop;
+
+        if(!busy){
+            up = scrollTop - lastScrollTop > 0;
+            this._rootScroll.lastScrollTop = scrollTop;
+            this._rootScroll.busy = true;
+
+            if(this.state.hideHeader && !up || !this.state.hideHeader && up){
                 window.setTimeout(() => {
-                    busy = false;
+                    this._rootScroll.busy = false;
                     this.setState({'hideHeader':up});
                 }, 60);
             }
+            else{
+                this._rootScroll.busy = false;
+            }
+        }
 
-        };
     }
 
     _toggleRootHeaderDropdown(...args){

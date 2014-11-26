@@ -48,6 +48,22 @@ $divider: solid 1px #d9d9d9;
             @include clearfix;
         }
     }
+    &.edit, &.view {
+        h1, h2, h3 {
+            font-family: inherit;
+        }
+        ul, ol {
+            margin-left: 2rem;
+            li {
+                display: list-item;
+                margin:1.4rem;
+            }
+        }
+
+        a{
+            color:#1D59A3;
+        }
+    }
 }
 .postCreatedAt {
     font-size: 1.4rem;
@@ -65,7 +81,7 @@ $divider: solid 1px #d9d9d9;
 }
 .postListItem {
     @include pad(default 0 default 0);
-    a{
+    a {
         @include row();
         opacity: 0.95;
     }
