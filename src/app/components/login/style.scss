@@ -1,11 +1,19 @@
 @import"bourbon";
 @import"neat";
-.login{
+.login {
     margin: 15rem auto auto;
-    width:30%;
+    width: 30%;
+    .error {
+        color: #c6311c;
+        display:block;
+        margin-top:1rem;
+        text-align: right;
+        text-align: end;
+        font-size: 1.4rem;
+    }
 }
-.loginBox {
-    @include prefixer(box-shadow, 0 0 36px 0px rgba(0, 0, 0, 0.75), webkit moz spec);
+.loginForm {
+    @include prefixer(box-shadow, 0 0 10px rgba(0, 0, 0, 0.5), webkit moz spec);
     border-radius: 1rem;
     >* {
         padding: 1rem;
@@ -17,18 +25,17 @@
     [type="text"], [type="password"] {
         @include fill-parent();
     }
-    button {
+    button, [type="submit"] {
         font-size: 1.2rem;
         font-weight: normal;
-        margin:0 2%;
-        min-width:8rem;
+        margin: 0 2%;
+        min-width: 8rem;
+        color: #ececec;
     }
 }
 .loginButtonLogin {
     @include button(#5f7f96);
-    color: #ececec;
 }
-.loginButtonCancel{
+.loginButtonCancel {
     @include button(#8e9091);
-    color: #ececec;
 }
