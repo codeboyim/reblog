@@ -2,8 +2,7 @@
 @import"neat";
 $divider: solid 1px #d9d9d9;
 @import"styles/settings";
-$fa-font-path:"../../../../node_modules/font-awesome/fonts";
-@import"font-awesome";
+@import"styles/components/loaders";
 .post {
     @include row();
     &.edit {
@@ -105,13 +104,10 @@ $fa-font-path:"../../../../node_modules/font-awesome/fonts";
     background-size: cover;
 }
 .postListLoadMore {
-    @extend .fa;
-    @include margin(null auto);
-    display: block;
-    width: 1.4rem;
-    height: 1.4rem;
-    &.loading {
-        @extend .fa-refresh;
-        @extend .fa-spin;
+    @include spinner(double);
+    opacity: 0.5;
+    visibility: hidden;
+    &.loading{
+        visibility: visible;
     }
 }

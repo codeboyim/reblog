@@ -7,7 +7,6 @@ require('./style.scss');
 class PostList{
 
 	getDefaultProps(){
-		console.log('default props');
 		return {
 			mode: 'compact',	//'compact', 'simple'
 			activePostId: '',
@@ -66,7 +65,7 @@ class PostList{
 								</li>);
 						})
 					}
-					<li><i ref="loadMore" className={cxLoadMore}></i></li>
+					<li><div ref="loadMore" className={cxLoadMore}><span></span><span></span><span></span></div></li>
 				</ul>
 			);
 		}
@@ -78,6 +77,7 @@ class PostList{
 		if(this.props.mode === 'simple'){
 			window.addEventListener('scroll', this._onWindowScroll);
 			this.props.list.on('all', this._onListChange);
+			this._loadMore();
 		}
 	}
 
@@ -96,33 +96,38 @@ class PostList{
 			callee.didScroll = true;
 
 			window.setTimeout(()=>{
-				var loadMore;
-
 				callee.didScroll = false;
-
-				if(this.isMounted()){
-					loadMore = document.body.clientHeight > this.refs.loadMore.getDOMNode().getBoundingClientRect().bottom;
-
-					if(loadMore){
-						this.setState({ loading: true });
-
-						this.props.list.fetchHomeList().then(()=>{
-
-							if(this.isMounted()){
-								this.setState({ loading: false });
-							}
-
-						});
-					}
-				}
+				this._loadMore();
 			}, 500);
 		}
+
+	}
+
+	_loadMore(){
+		var loadMore;
+
+		if(this.isMounted()){
+			loadMore = document.body.clientHeight > this.refs.loadMore.getDOMNode().getBoundingClientRect().bottom;
+
+			if(loadMore){
+				this.setState({ loading: true });
+
+				this.props.list.fetchHomeList().then(()=>{
+
+					if(this.isMounted()){
+						this.setState({ loading: false });
+					}
+
+				});
+			}
+		}	
 
 	}
 
 	_onListChange(model, collection, options){
 		if(this.isMounted()){
 			this.forceUpdate();
+			this._loadMore();
 		}
 	}
 
