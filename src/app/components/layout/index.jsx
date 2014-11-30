@@ -81,26 +81,25 @@ class HomeLayout {
         var callee = this._onWindowScroll,
             didScroll = callee.didScroll || false,
             lastScrollTop = callee.lastScrollTop || 0,
-            up = false,
-            scrollTop = document.body.scrollTop;
+            hide = false,
+            show = false,
+            scrollDist = 0,
+            scrollTop;
 
         if(!didScroll){
-            up = scrollTop - lastScrollTop > 0;
-            callee.lastScrollTop = scrollTop;
             callee.didScroll = true;
 
-            if(this.state.hideHeader && !up || !this.state.hideHeader && up){
-                window.setTimeout(() => {
-                    callee.didScroll = false;
-
-                    if(this.isMounted()){
-                        this.setState({'hideHeader':up});
-                    }
-                }, 60);
-            }
-            else{
+            window.setTimeout(() => {
+                scrollTop = document.body.scrollTop;
+                scrollDist = scrollTop - lastScrollTop;
+                hide = scrollDist > 0;
+                show = scrollDist < -50 || scrollTop === 0;
+                callee.lastScrollTop = scrollTop;
                 callee.didScroll = false;
-            }
+                if(this.isMounted() && (show || hide) && (this.state.hideHeader && show || !this.state.hideHeader && hide)){
+                    this.setState({'hideHeader':!show || hide});
+                }
+            }, 60);
         }
 
     }
