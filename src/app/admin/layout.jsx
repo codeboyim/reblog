@@ -370,7 +370,12 @@ class Layout{
 
     _flash(message, type){
         this.setState({notification:{text:message, type: type||'info'}});
-        window.setTimeout(()=>this.setState({notification:null}), 2000);
+        window.setTimeout(()=> {
+            if(this.isMounted()){
+                this.setState({notification:null});
+            }
+        }, 2000);
+        
     }
 
     _deleteClicked(e){
@@ -427,17 +432,23 @@ class Layout{
 
         if(e.target.files.length>0){
             file = e.target.files[0];
+            e.target.value = '';
 
-            if(!/^\w+(?:\.\w+)$/.test(file.name)){
-               this._flash('invalid file name, characters and numbers only', 'error');
-               return;
+            if(!/^[\w\-\.\s]+(?:\.\w+)$/g.test(file.name)){
+                this._flash('invalid file name, characters and numbers only', 'error');
+                return;
             }
+
             this.setState({notification: {text: 'uploading', type: 'info' }});
+
             (new Parse.File(file.name, file))
                 .save()
-                .always((parseFile) => {
+                .always(parseFile => {
                     this.setState({notification:null});
                     return parseFile;
+                })
+                .fail(error => {
+                    this._flash(error);
                 })
                 .then((parseFile) => {
                     if(parseFile){
