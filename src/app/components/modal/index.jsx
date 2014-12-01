@@ -13,7 +13,7 @@ class Modal{
 		return (
 			<div className="modal">
 				<div className="modalOverlay"></div>
-				<div className="modalContent">
+				<div className="modalContent" onClick={this._onModalContentClick}>
 					{this.props.children}
 				</div>
 			</div>
@@ -24,10 +24,19 @@ class Modal{
     window.addEventListener('keydown', this._onWindowKeydown);
 	}
 
-	_onWindowKeydown(e){
-
+	componentWillUnmount(){
+    window.removeEventListener('keydown', this._onWindowKeydown);
 	}
 
+	_onWindowKeydown(e){
+		if((e.which || e.keyCode) === 27){
+			ModalComponent.close(this);
+		} 
+	}
+
+	_onModalContentClick(e){
+		ModalComponent.close(this)
+	}
 }
  
 Modal.prototype.statics = {
@@ -37,13 +46,13 @@ Modal.prototype.statics = {
 
 		container.setAttribute('class', 'modalContainer');
 		document.body.appendChild(container);
-		React.render(<ModalComponent onClose={onClose||null} container={container}>{content}</ModalComponent>, container);
+		return React.render(<ModalComponent onClose={onClose||null} container={container}>{content}</ModalComponent>, container);
 	},
 
 	close(modal){
 		var container = modal.props.container;
 
-		if(typeof modal.props.onClose === 'function' && !model.props.onClose()){
+		if(typeof modal.props.onClose === 'function' && modal.props.onClose(modal) === false){
 			return;
 		}
 

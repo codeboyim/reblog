@@ -1,5 +1,6 @@
 var PostModel = require('components/post/model'),
     PostList = require('components/post/list'),
+    Post = require('components/post/view'),
     AttachmentModel = require('components/attachment/model'),
     router = require('router'),
     path = require('path'),
@@ -15,6 +16,7 @@ class Layout{
 
     render() {
         var cx = React.addons.classSet,
+            cxAdmin = cx({'admin': true, 'blur': this.state.blur}),
             cxSidebar = cx({
                'hide': !this.state.isSidebarVisible 
             }),
@@ -81,7 +83,7 @@ class Layout{
             ];
 
         return (
-        	<div className="admin" onClick={this._documentBodyClicked}>
+        	<div className={cxAdmin} onClick={this._documentBodyClicked}>
                 <header className={cxHeader}>
                     <i ref="toggle" className="adminSidebarToggler" onClick={this._toggleSidebar}></i>
                     {
@@ -109,13 +111,13 @@ class Layout{
                                 }
 
                                 return (
-                                    <li key={key} className={cxDropdown}>
-                                        <div className={ 'dropdownTitle ' + key } onClick={this._toggleNavDropdown.bind(this, key)}>
+                                    <li key={key} className={cxDropdown} onClick={this._toggleNavDropdown.bind(this, key)}>
+                                        <div className={ 'dropdownTitle ' + key }>
                                             <i className="fa"/><span>{item.title}</span>
                                         </div>
                                         {
                                             active && item.body? (
-                                            <div className={'dropdownBody ' + key} onClick={this._toggleNavDropdown.bind(this, '')}>{item.body}</div>
+                                            <div className={'dropdownBody ' + key}>{item.body}</div>
                                             ):
                                             null
                                         }
@@ -198,6 +200,7 @@ class Layout{
             activeNavDropdownUid: '',
             activeMenuItemUid: 'drafts',
             data: this.props.model? this.props.model.toJSON() : null,
+            blur: false,
             notification: null, //{ text: '', type: 'info' }
             drafts: [],
             published: [],
@@ -259,6 +262,23 @@ class Layout{
         }
     }
 
+    _renderPreviewModal(){
+        var modal = Modal.open(
+            <div className="adminPostModal" onClick={this._onAdminPostModelClick}>
+                <i title="close" className="adminPostModalClose" onClick={e=>{e.stopPropagation();Modal.close(modal);}}></i>
+                <Post post={this.props.model} />
+            </div>, this._onPreviewModalClose);
+        this.setState({blur: true});
+    }
+
+    _onAdminPostModelClick(e){
+        e.stopPropagation();
+    }
+
+    _onPreviewModalClose(){
+        this.setState({blur: false});
+    }
+
     _toggleNavDropdown(key, e){
         var model = this.props.model,
             uid = '';
@@ -272,13 +292,11 @@ class Layout{
             e.stopPropagation();
         }
 
-        if(!key && e){
-            return;
-        }
 
-
-        if(this.state.activeNavDropdownUid !== key && ~['more'].indexOf(key)){
+        if(~['more'].indexOf(key)){
             uid = key;
+        } else if (key === 'preview'){
+            this._renderPreviewModal();
         }
 
         if(~['publish', 'withdraw'].indexOf(key) && model.get('title').trim() && model.get('body').trim()){

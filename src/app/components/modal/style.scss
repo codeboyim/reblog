@@ -12,6 +12,9 @@
 .modalOverlay, .modalContent {
     position: absolute;
 }
+.modalContent {
+    overflow: auto;
+}
 .modalOverlay {
     background-color: rgba(255, 255, 255, 0.6);
 }

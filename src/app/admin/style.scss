@@ -32,6 +32,9 @@ $navPrimaryBackColor:#2d323b;
     [class*="Button"] {
         font-weight: normal;
     }
+    &.blur {
+        @include prefixer( filter, blur(3px), webkit moz spec ms o);
+    }
 }
 .adminLogo {
     padding: 3rem 0 2rem 0;
@@ -263,4 +266,18 @@ $navPrimaryBackColor:#2d323b;
 }
 .adminMenuItemContent {
     @include transition(height 0.2s ease);
+}
+.adminPostModal {
+    @include outer-container();
+    @include pad();
+    margin: flex-gutter() auto;
+    border-radius: 1rem;
+    box-shadow: 0 0 1.5rem 0 rgba(0, 0, 0, 0.6);
+    background-color: #fff;
+}
+.adminPostModalClose {
+    @extend .fa;
+    @extend .fa-close;
+    cursor: pointer;
+    float: right;
 }

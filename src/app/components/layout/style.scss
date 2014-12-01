@@ -10,10 +10,9 @@ $site-name-size: 2.4rem;
 .root {
     min-height: 100%;
     position: relative;
-    @include calc(padding-top, '2% + 4rem');
+    @include calc(padding-top, '2% + 3rem');
 }
 .rootHeader {
-    @include padding(1% null);
     @include fill-parent();
     @include transition(transform 0.3s ease-out);
     background-color: #fff;
@@ -32,6 +31,7 @@ $site-name-size: 2.4rem;
     }
     header {
         @include outer-container();
+        @include pad(1% default);
     }
 }
 .rootHeaderLogo {
@@ -67,7 +67,8 @@ $site-name-size: 2.4rem;
 }
 .rootMain {
     @include outer-container();
-    @include calc(padding-bottom, '2% + 4rem');
+    @include pad();
+    @include calc(padding-bottom, '2% + 3rem');
     min-height: 100%;
 }
 .rootFooter {
@@ -76,7 +77,6 @@ $site-name-size: 2.4rem;
     text-align: center;
     color: #aaa;
     font-size: 1.2rem;
-    position:absolute;
-    bottom:0;
-
+    position: absolute;
+    bottom: 0;
 }

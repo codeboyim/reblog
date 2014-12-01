@@ -1,15 +1,13 @@
 require('./style.scss');
 
 var PostModel = require('components/post/model'),
+		PostEdit = require('components/post/edit'),
+		Layout = require('./layout'),
 		post,
 		path = require('path'),
 		router = require('router');
 
 function render(path, ...args){
-	var PostEdit = require('components/post/edit'),
-			Layout = require('./layout'),
-			docBody = document.body;
-
 
 	if(path === 'post'){
 
@@ -26,7 +24,7 @@ function render(path, ...args){
 			}
 		}
 
-		React.render(<Layout model={post}><PostEdit model={post} /></Layout>, docBody);
+		React.render(<Layout model={post}><PostEdit model={post} /></Layout>, document.body);
 	}
 }
 

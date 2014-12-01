@@ -3,6 +3,7 @@
 $divider: solid 1px #d9d9d9;
 @import"styles/settings";
 @import"styles/components/loaders";
+@import"../../../assets/fonts/flaticon/flaticon.css";
 .post {
     @include row();
     &.edit {
@@ -20,6 +21,10 @@ $divider: solid 1px #d9d9d9;
         .postEdit {
             @include media($large) {
                 border-right: $divider;
+                padding-right: flex-gutter(24);
+                &.hide {
+                    display: none;
+                }
             }
         }
         .postPreview {
@@ -28,6 +33,11 @@ $divider: solid 1px #d9d9d9;
             }
             @include media($large) {
                 padding-left: flex-gutter(24);
+                &.expanded {
+                    @include outer-container;
+                    float: none;
+                    width: 100%;
+                }
             }
         }
         .postTitle, .postBody {
@@ -37,13 +47,21 @@ $divider: solid 1px #d9d9d9;
         }
         .postTitle {
             border-width: 0;
-            font-size: 2.6rem;
-            font-family: Lora $georgia;
+            font: {
+                size: 2.6rem;
+                family: Lora $georgia
+            }
         }
         .postBody {
             min-height: 1200px;
             &.ace_editor {
                 line-height: inherit;
+            }
+        }
+        .postPreviewToggle {
+            cursor: pointer;
+            &:before {
+                font-size: 1.6rem;
             }
         }
     }
@@ -107,7 +125,7 @@ $divider: solid 1px #d9d9d9;
     @include spinner(double);
     opacity: 0.5;
     visibility: hidden;
-    &.loading{
+    &.loading {
         visibility: visible;
     }
 }
