@@ -14,6 +14,7 @@ $navPrimaryBackColor:#2d323b;
     height: 100%;
     overflow: auto;
     padding-top: 3.8rem;
+    transition: all .2s ease;
     &>aside {
         width: $sidebarWidth;
         position: fixed;
