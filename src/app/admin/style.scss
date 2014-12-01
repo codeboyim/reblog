@@ -11,7 +11,8 @@ $navSecondaryBackColor:#4d5055;
 $navPrimaryBackColor:#2d323b;
 .admin {
     width: 100%;
-    overflow: hidden;
+    height: 100%;
+    overflow: auto;
     padding-top: 3.8rem;
     &>aside {
         width: $sidebarWidth;
@@ -151,11 +152,6 @@ $navPrimaryBackColor:#2d323b;
     }
     &.active, &:hover .dropdownTitle {
         background-color: $navPrimaryBackColor;
-    }
-    &.preview {
-        @include media($large) {
-            display: none;
-        }
     }
     .dropdownTitle {
         cursor: pointer;

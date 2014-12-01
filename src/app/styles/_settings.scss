@@ -8,5 +8,6 @@ $gw-column: $column; // Column Width
 $gw-gutter: $gutter; // Gutter Width
 $z-layers:(
 	'rootHeader': 9,
-	'adminHeader': 9
+	'adminHeader': 9,
+	'modal': 10
 );

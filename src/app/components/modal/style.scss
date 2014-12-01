@@ -1,0 +1,17 @@
+@import"styles/functions";
+.modalContainer, .modalOverlay, .modalContent {
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+.modalContainer {
+    position: fixed;
+    z-index: z(modal);
+}
+.modalOverlay, .modalContent {
+    position: absolute;
+}
+.modalOverlay {
+    background-color: rgba(255, 255, 255, 0.6);
+}

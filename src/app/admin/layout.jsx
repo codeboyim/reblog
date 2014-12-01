@@ -8,7 +8,8 @@ var PostModel = require('components/post/model'),
         'pdf':'pdf',
         '^text\\/plain': 'text',
         'msword|officedocument':'word'
-    };
+    },
+    Modal = require('components/modal');
 
 class Layout{
 
@@ -49,7 +50,7 @@ class Layout{
                             </div>,
                             <div key="moreShortDesc">
                                 <label>Short Description</label>
-                                <textarea name="subtitle" value={this.state.data.subtitle} rows="5" onChange={this._inputChange}></textarea>
+                                <textarea name="subtitle" value={this.state.data.subtitle} rows="5" onChange={this._onInputChange}></textarea>
                             </div>,
                             <div key="moreAttachments">
                                 <label>Attachments</label>
@@ -206,9 +207,9 @@ class Layout{
 
     componentDidMount(){
         this._resizeActiveMenuContent();
-        window.addEventListener('resize', this._resizeActiveMenuContent);
-        window.addEventListener('click', this._windowClicked);
-        window.addEventListener('keydown', this._windowKeydown);
+        window.addEventListener('resize', this._onWindowResize);
+        window.addEventListener('click', this._onWindowClicked);
+        window.addEventListener('keydown', this._onWindowKeydown);
 
         if(this.props.model){
             this.props.model.on('all', this._dataModelChanged);
@@ -218,9 +219,13 @@ class Layout{
     }
 
     componentWillUnmount(){
-        window.removeEventListener('resize', this._resizeActiveMenuContent);
-        window.removeEventListener('click', this._windowClicked);
-        window.removeEventListener('keydown', this._windowKeydown);
+        window.removeEventListener('resize', this._onWindowResize);
+        window.removeEventListener('click', this._onWindowClicked);
+        window.removeEventListener('keydown', this._onWindowKeydown);
+
+        if(this._flashTimeoutId){
+            window.clearTimeout(this._flashTimeoutId);
+        }       
     }
 
     componentWillReceiveProps(nextProps){
@@ -232,25 +237,6 @@ class Layout{
             this.setState({isSidebarVisible:false});
            }
         }
-    }
-
-    _resizeActiveMenuContent(){
-        var menuItemsCount = 2,
-            collapsedContentHeight = 1,
-            sidebarHeight = this.refs.sidebar.getDOMNode().offsetHeight;
-
-        this._fixedHeight = this._fixedHeight || 
-            ( 
-                menuItemsCount * this.refs.menuItemTitle.getDOMNode().offsetHeight +
-                (menuItemsCount - 1) * collapsedContentHeight +
-                this.refs.compose.getDOMNode().offsetHeight +
-                this.refs.logo.getDOMNode().offsetHeight +
-                this.refs.footer.getDOMNode().offsetHeight
-            );
-
-        window.requestAnimationFrame(function(){
-            this.setState({ activeContentHeight: sidebarHeight - this._fixedHeight });
-        }.bind(this));
     }
 
     /**
@@ -291,7 +277,7 @@ class Layout{
         }
 
 
-        if(this.state.activeNavDropdownUid !== key && ~['more', 'share'].indexOf(key)){
+        if(this.state.activeNavDropdownUid !== key && ~['more'].indexOf(key)){
             uid = key;
         }
 
@@ -370,7 +356,7 @@ class Layout{
 
     _flash(message, type){
         this.setState({notification:{text:message, type: type||'info'}});
-        window.setTimeout(()=> {
+        this._flashTimeoutId = window.setTimeout(()=> {
             if(this.isMounted()){
                 this.setState({notification:null});
             }
@@ -501,7 +487,7 @@ class Layout{
 
     }
 
-    _inputChange(e){
+    _onInputChange(e){
         var newState = {};
 
         newState[e.target.name] = e.target.value;
@@ -518,15 +504,39 @@ class Layout{
         e.stopPropagation();
     }
 
-    _windowClicked(e){
+    _onWindowClicked(e){
         this._resetDrawnMenus();
     } 
 
-    _windowKeydown(e){
+    _onWindowKeydown(e){
        if((e.which || e.keyCode) === 27){
         this._resetDrawnMenus();
        } 
     }
+
+    _onWindowResize(){
+       this._resizeActiveMenuContent(); 
+    }
+
+    _resizeActiveMenuContent(){
+        var menuItemsCount = 2,
+            collapsedContentHeight = 1,
+            sidebarHeight = this.refs.sidebar.getDOMNode().offsetHeight;
+
+        this._fixedHeight = this._fixedHeight || 
+            ( 
+                menuItemsCount * this.refs.menuItemTitle.getDOMNode().offsetHeight +
+                (menuItemsCount - 1) * collapsedContentHeight +
+                this.refs.compose.getDOMNode().offsetHeight +
+                this.refs.logo.getDOMNode().offsetHeight +
+                this.refs.footer.getDOMNode().offsetHeight
+            );
+
+        window.requestAnimationFrame(function(){
+            this.setState({ activeContentHeight: sidebarHeight - this._fixedHeight });
+        }.bind(this));
+    }
+
 
     _resetDrawnMenus(){
 
