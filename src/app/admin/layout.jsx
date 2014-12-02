@@ -65,8 +65,8 @@ class Layout{
                                             <i className={'fileType ' + this._getFileType(file.get('type'))}></i>
                                             <span className="fileName">{file.get('name')}</span>
                                             <span className="fileCommands">
-                                                <i className="fileDelete" onClick={this._fileCommandClicked.bind(this, file, 'delete')}></i>
-                                                <i className="fileCopy" onClick={this._fileCommandClicked.bind(this, file, 'copy')}></i>
+                                                <i className="fileDelete" onClick={this._onFileCommandClick.bind(this, file, 'delete')}></i>
+                                                <i className="fileCopy" onClick={this._onFileCommandClick.bind(this, file, 'copy')}></i>
                                             </span>
                                         </li>;
                                     }):null
@@ -75,8 +75,8 @@ class Layout{
                                 <input ref="fileAttach" type="file" style={{display:'none'}} onChange={this._fileChanged} />
                             </div>,
                             <div key="moreButtons" className="text-center">
-                                <button className="adminUploadButton" onClick={this._uploadClicked}><i className="flaticon-upload26"></i>Upload</button>
-                                <button className="adminDeleteButton" onClick={ this._deleteClicked }><i className="flaticon-test20"></i>Delete</button>
+                                <button className="adminUploadButton" onClick={this._onUploadClicked}><i className="flaticon-upload26"></i>Upload</button>
+                                <button className="adminDeleteButton" onClick={ this._onDeleteClicked }><i className="flaticon-test20"></i>Delete</button>
                             </div>
                         ]
                     }
@@ -383,7 +383,7 @@ class Layout{
         
     }
 
-    _deleteClicked(e){
+    _onDeleteClicked(e){
         var post = this.props.model,
             nextPostId = '',
             list = this.state[this.state.activeMenuItemUid],
@@ -426,7 +426,7 @@ class Layout{
         });
     }
 
-    _uploadClicked(e){
+    _onUploadClicked(e){
         e.preventDefault();
         this.refs.fileAttach.getDOMNode().click();
     }
@@ -481,7 +481,7 @@ class Layout{
        return typeIcon; 
     }
 
-    _fileCommandClicked(file, type){
+    _onFileCommandClick(file, type){
         var post = this.props.model,
             fileType,
             fileName,
