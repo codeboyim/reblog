@@ -10,7 +10,8 @@ var PostModel = require('components/post/model'),
         '^text\\/plain': 'text',
         'msword|officedocument':'word'
     },
-    Modal = require('components/modal');
+    Modal = require('components/modal'),
+    ConfirmBox = require('components/confirmBox');
 
 class Layout{
 
@@ -384,46 +385,67 @@ class Layout{
     }
 
     _onDeleteClicked(e){
-        var post = this.props.model,
-            nextPostId = '',
-            list = this.state[this.state.activeMenuItemUid],
-            len = list.length,
-            idx = -1;
+        var modal;
+
 
         e.preventDefault();
+        e.stopPropagation();
+        modal = Modal.open(
+            <ConfirmBox title="Delete Post?" 
+                message="The post will be removed if you click &quot;Delete&quot;. Caution, there is no undo for this action."
+                confirmButtonText="Delete"
+                onCancel={onCancel}
+                onConfirm={onConfirm.bind(this)}/>);
 
-        if(Array.isArray(list)){
+        function onCancel() {
+            Modal.close(modal);
+        };
 
-            list.every((p, i) => {
+        function onConfirm() {
+            var post = this.props.model,
+                nextPostId = '',
+                list = this.state[this.state.activeMenuItemUid],
+                len = list.length,
+                idx = -1;
 
-                if(p.id === post.id){
-                    idx = i;
-                    return false;
+            e.preventDefault();
+
+            if(Array.isArray(list)){
+
+                list.every((p, i) => {
+
+                    if(p.id === post.id){
+                        idx = i;
+                        return false;
+                    }
+
+                    return true;
+                });
+
+            }
+
+            if(idx !== len - 1){ //if not delete the last one, show next post
+                nextPostId = list[idx + 1].id;
+            }
+            else if(len > 1){ //if delete the last but not the only one, show previous post
+                nextPostId = list[idx - 1].id;
+            }
+            else{ //if delete the only one, go to new
+                nextPostId = '';
+            }
+
+            this.props.model.destroy().then((model) => {
+                if(Array.isArray(model.get('files'))){
+                    model.get('files').forEach((file) => {
+                        file.destroy();
+                    })
                 }
-
-                return true;
+                Modal.close(modal);
+                router.setRoute(path.join('/a/p', nextPostId || 'new'));
             });
 
-        }
+        };
 
-        if(idx !== len - 1){ //if not delete the last one, show next post
-            nextPostId = list[idx + 1].id;
-        }
-        else if(len > 1){ //if delete the last but not the only one, show previous post
-            nextPostId = list[idx - 1].id;
-        }
-        else{ //if delete the only one, go to new
-            nextPostId = '';
-        }
-
-        this.props.model.destroy().then((model) => {
-            if(Array.isArray(model.get('files'))){
-                model.get('files').forEach((file) => {
-                    file.destroy();
-                })
-            }
-            router.setRoute(path.join('/a/p', nextPostId || 'new'));
-        });
     }
 
     _onUploadClicked(e){

@@ -10,11 +10,9 @@ $sidebarTransition:transform 0.2s ease;
 $navSecondaryBackColor:#4d5055;
 $navPrimaryBackColor:#2d323b;
 @mixin filter-transition {
-    transition: {
-        property: filter;
-        property: -webkit-filter;
-        duration: .5s;
-    }
+    @include transition-property(filter);
+    @include transition-property(-webkit-filter);
+    @include transition-duration(0.2s);
 }
 .admin {
     width: 100%;
