@@ -9,12 +9,19 @@ $sidebarWidth:280px;
 $sidebarTransition:transform 0.2s ease;
 $navSecondaryBackColor:#4d5055;
 $navPrimaryBackColor:#2d323b;
+@mixin filter-transition {
+    transition: {
+        property: filter;
+        property: -webkit-filter;
+        duration: .5s;
+    }
+}
 .admin {
     width: 100%;
     height: 100%;
     overflow: auto;
     padding-top: 3.8rem;
-    transition: all .2s ease;
+    @include filter-transition;
     &>aside {
         width: $sidebarWidth;
         position: fixed;
@@ -33,9 +40,6 @@ $navPrimaryBackColor:#2d323b;
     [class*="Button"] {
         font-weight: normal;
     }
-    &.blur {
-        @include prefixer( filter, blur(3px), webkit moz spec ms o);
-    }
 }
 .adminLogo {
     padding: 3rem 0 2rem 0;
@@ -50,6 +54,9 @@ $navPrimaryBackColor:#2d323b;
     &.shift {
         @include transform(translateX($sidebarWidth));
     }
+}
+.adminMain {
+    @include filter-transition;
 }
 .adminSidebarNav {
     a, .adminSidebarButton {

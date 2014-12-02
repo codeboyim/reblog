@@ -22,7 +22,8 @@ class Layout{
             }),
             cxMain = cx({
                 'shift': this.state.isSidebarVisible,
-                'adminMain': true
+                'adminMain': true,
+                'blur': this.state.activeNavDropdownUid === 'more'
             }),
             cxHeader = cx({
                 'shift': this.state.isSidebarVisible,
