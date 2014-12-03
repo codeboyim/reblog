@@ -119,7 +119,7 @@ class Layout{
                                         </div>
                                         {
                                             active && item.body? (
-                                            <div className={'dropdownBody ' + key}>{item.body}</div>
+                                            <div ref={'dropdownBody'+key} className={'dropdownBody ' + key}>{item.body}</div>
                                             ):
                                             null
                                         }
@@ -385,23 +385,67 @@ class Layout{
     }
 
     _onDeleteClicked(e){
-        var modal;
-
+        var modal,
+            dropdownBodyMoreBottom = this.refs['dropdownBodymore'].getDOMNode().getBoundingClientRect().bottom + 5,
+            confirmBoxHeight,
+            confirmBox,
+            layoutComp = this,
+            closingModal = false,
+            closingDelete = false;
 
         e.preventDefault();
         e.stopPropagation();
-        modal = Modal.open(
-            <ConfirmBox title="Delete Post?" 
-                message="The post will be removed if you click &quot;Delete&quot;. Caution, there is no undo for this action."
-                confirmButtonText="Delete"
-                onCancel={onCancel}
-                onConfirm={onConfirm.bind(this)}/>);
 
-        function onCancel() {
-            Modal.close(modal);
-        };
+        //a more programmatic way to manipulate DOM
+        Modal.open(null, 'adminDeleteConfirmModal', onModalClose, function() {
+            modal = this;
+            layoutComp.setState({blur:true});
+            React.render(<ConfirmBox title="Delete Post?" 
+                    message="The post will be removed if you click &quot;Delete&quot;. Caution, there is no undo for this action."
+                    confirmButtonText="Delete"
+                    customClass="adminDeleteConfirm"
+                    position='absolute'
+                    right='2%'
+                    onClose={onDeleteClose.bind(layoutComp)}
+                    onConfirm={onDeleteConfirm.bind(layoutComp)}/>, modal.refs['contentContainer'].getDOMNode(), function(){
+                        confirmBox = this;
+                        confirmBoxHeight = confirmBox.getDOMNode().offsetHeight; 
+                        position();
+                        window.addEventListener('resize', onWindowResize);
+                    });
+        });
 
-        function onConfirm() {
+        function position(){
+            var bodyHeight = document.body.offsetHeight;
+
+            if(dropdownBodyMoreBottom + confirmBoxHeight < bodyHeight){
+                confirmBox.setProps({top: dropdownBodyMoreBottom, bottom: null});
+            } 
+            else{
+                confirmBox.setProps({top: null, bottom: 5});
+            }
+
+        }
+
+        function onModalClose() {
+            layoutComp.setState({blur:false});
+            closingModal = true;
+
+            if(!closingDelete){
+                React.unmountComponentAtNode(confirmBox.getDOMNode().parentNode);
+            }
+        }
+
+        function onDeleteClose() {
+            window.removeEventListener('resize', onWindowResize);
+            closingDelete = true;
+
+            if(!closingModal){
+                Modal.close(modal); 
+            }
+        }
+
+        function onDeleteConfirm() {
             var post = this.props.model,
                 nextPostId = '',
                 list = this.state[this.state.activeMenuItemUid],
@@ -440,11 +484,17 @@ class Layout{
                         file.destroy();
                     })
                 }
-                Modal.close(modal);
                 router.setRoute(path.join('/a/p', nextPostId || 'new'));
             });
 
         };
+
+        function onWindowResize(){
+            if(onWindowResize.timeoutId){
+                window.clearTimeout(onWindowResize.timeoutId);
+            }
+            onWindowResize.timeoutId = window.setTimeout(position, 500);
+        }
 
     }
 

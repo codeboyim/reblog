@@ -5,15 +5,16 @@ class Modal{
 	getDefaultProps(){
 		return {
 			onClose: null,
-			container: null
+			container: null,
+			customClass: null 
 		}
 	}
 
 	render(){
 		return (
-			<div className="modal">
+			<div className={'modal ' + (this.props.customClass||'')}>
 				<div className="modalOverlay"></div>
-				<div className="modalContent" onClick={this._onModalContentClick}>
+				<div ref="contentContainer" className="modalContent" onClick={this._onModalContentClick}>
 					{this.props.children}
 				</div>
 			</div>
@@ -35,18 +36,26 @@ class Modal{
 	}
 
 	_onModalContentClick(e){
-		ModalComponent.close(this)
+		e.stopPropagation();
+
+		if(e.currentTarget === e.target){
+			ModalComponent.close(this)
+		}
 	}
 }
  
 Modal.prototype.statics = {
 
-	open(content, onClose){
+	open(content, customClass, onClose, onRendered){
 		var container = document.createElement('div');
 
+		if(typeof customClass === 'function'){
+			onRendered = onClose;
+			onClose = customClass;
+		}
 		container.setAttribute('class', 'modalContainer');
 		document.body.appendChild(container);
-		return React.render(<ModalComponent onClose={onClose||null} container={container}>{content}</ModalComponent>, container);
+		return React.render(<ModalComponent onClose={onClose||null} customClass={customClass} container={container}>{content}</ModalComponent>, container, onRendered);
 	},
 
 	close(modal){
