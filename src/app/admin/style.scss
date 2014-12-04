@@ -287,11 +287,6 @@ $navPrimaryBackColor:#2d323b;
     cursor: pointer;
     float: right;
 }
-.adminDeleteConfirmModal .modalOverlay {
-    @include media($large) {
-        background-color: rgba(0, 0, 0, 0);
-    }
-}
 .adminDeleteConfirm {
     @include media($medium) {
         position: relative !important;

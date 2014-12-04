@@ -302,10 +302,15 @@ class Layout{
         }
 
         if(~['publish', 'withdraw'].indexOf(key) && model.get('title').trim() && model.get('body').trim()){
-            model.save({ 'isDraft': !model.get('isDraft') });
+            this._togglePublishStatus(!model.get('isDraft'))
         }
 
         this.setState({ activeNavDropdownUid: uid });
+    }
+
+    _togglePublishStatus(newStatus){
+
+
     }
 
     _toggleSidebarMenu(key, e){
@@ -385,35 +390,25 @@ class Layout{
     }
 
     _onDeleteClicked(e){
-        var modal,
-            dropdownBodyMoreBottom = this.refs['dropdownBodymore'].getDOMNode().getBoundingClientRect().bottom + 5,
+        var dropdownBodyMoreBottom = this.refs['dropdownBodymore'].getDOMNode().getBoundingClientRect().bottom + 5,
             confirmBoxHeight,
             confirmBox,
-            layoutComp = this,
-            closingModal = false,
-            closingDelete = false;
+            layoutComp = this;
 
         e.preventDefault();
         e.stopPropagation();
 
-        //a more programmatic way to manipulate DOM
-        Modal.open(null, 'adminDeleteConfirmModal', onModalClose, function() {
-            modal = this;
-            layoutComp.setState({blur:true});
-            React.render(<ConfirmBox title="Delete Post?" 
-                    message="The post will be removed if you click &quot;Delete&quot;. Caution, there is no undo for this action."
-                    confirmButtonText="Delete"
-                    customClass="adminDeleteConfirm"
-                    position='absolute'
-                    right='2%'
-                    onClose={onDeleteClose.bind(layoutComp)}
-                    onConfirm={onDeleteConfirm.bind(layoutComp)}/>, modal.refs['contentContainer'].getDOMNode(), function(){
-                        confirmBox = this;
-                        confirmBoxHeight = confirmBox.getDOMNode().offsetHeight; 
-                        position();
-                        window.addEventListener('resize', onWindowResize);
-                    });
-        });
+        ConfirmBox.open('adminDeleteConfirm', {
+            title:"Delete Post?", 
+            message:"The post will be removed if you click \"Delete\". Caution, there is no undo for this action.",
+            confirmButtonText:"Delete",
+            customClass:"adminDeleteConfirm",
+            position:'absolute',
+            right:'2%',
+            onClose:onDeleteClose.bind(this),
+            onConfirm:onDeleteConfirm.bind(this),
+            onRender:onDeleteRender.bind(this)
+        } )
 
         function position(){
             var bodyHeight = document.body.offsetHeight;
@@ -427,22 +422,17 @@ class Layout{
 
         }
 
-        function onModalClose() {
-            layoutComp.setState({blur:false});
-            closingModal = true;
-
-            if(!closingDelete){
-                React.unmountComponentAtNode(confirmBox.getDOMNode().parentNode);
-            }
+        function onDeleteRender(_confirmBox){
+            confirmBox = _confirmBox;
+            confirmBoxHeight = confirmBox.getDOMNode().offsetHeight; 
+            position();
+            window.addEventListener('resize', onWindowResize);
         }
+
 
         function onDeleteClose() {
             window.removeEventListener('resize', onWindowResize);
-            closingDelete = true;
-
-            if(!closingModal){
-                Modal.close(modal); 
-            }
+            this.setState({blur:false});
         }
 
         function onDeleteConfirm() {
