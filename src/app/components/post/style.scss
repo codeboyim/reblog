@@ -85,6 +85,18 @@ $divider: solid 1px #d9d9d9;
         a {
             color: #1D59A3;
         }
+        p, figure {
+            @include margin(1.6rem null);
+        }
+        figure {
+            text-align: center;
+        }
+        figcaption {
+            font-size: 1.4rem;
+            font-style: italic;
+            color: rgba(0, 0, 0, 0.7);
+            text-align: center;
+        }
     }
 }
 .postCreatedAt {
