@@ -53,7 +53,7 @@ class Layout{
                                 <label>Friendly URL</label><input type="text" value={this.state.data.seoUrl} readOnly={true}/>
                             </div>,
                             <div key="moreShortDesc">
-                                <label>Short Description</label>
+                                <label>Synopsis</label>
                                 <textarea name="subtitle" value={this.state.data.subtitle} rows="5" onChange={this._onInputChange}></textarea>
                             </div>,
                             <div key="moreAttachments">
@@ -322,7 +322,7 @@ class Layout{
             	this.setState({blur: false});
             },
             onConfirm:()=>{
-				this.props.model.save({ 'isDraft': isDraft});
+                this.props.model[isDraft?'withdraw':'publish']();
             },
             onRender: _confirmBox => {
             	this.setState({blur: true});
