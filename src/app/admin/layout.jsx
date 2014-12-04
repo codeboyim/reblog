@@ -308,8 +308,26 @@ class Layout{
         this.setState({ activeNavDropdownUid: uid });
     }
 
-    _togglePublishStatus(newStatus){
+    _togglePublishStatus(isDraft){
 
+    	ConfirmBox.open({
+    		title: isDraft? 'Withdraw?':'Publish?',
+    		message: isDraft? 'This post will be moved to \"Drafts\". It will not be accessible publicly.': 'This post will be moved to \"Published\" and become publicly accessible',
+    		confirmButtonText: isDraft? 'Withdraw': 'Publish',
+            customClass:"adminConfirm",
+            position:'absolute',
+            top: 40,
+            right:100,
+            onClose:()=>{
+            	this.setState({blur: false});
+            },
+            onConfirm:()=>{
+				this.props.model.save({ 'isDraft': isDraft});
+            },
+            onRender: _confirmBox => {
+            	this.setState({blur: true});
+            }
+    	});
 
     }
 
@@ -398,17 +416,17 @@ class Layout{
         e.preventDefault();
         e.stopPropagation();
 
-        ConfirmBox.open('adminDeleteConfirm', {
+        ConfirmBox.open({
             title:"Delete Post?", 
             message:"The post will be removed if you click \"Delete\". Caution, there is no undo for this action.",
             confirmButtonText:"Delete",
-            customClass:"adminDeleteConfirm",
+            customClass:"adminConfirm",
             position:'absolute',
             right:'2%',
             onClose:onDeleteClose.bind(this),
             onConfirm:onDeleteConfirm.bind(this),
             onRender:onDeleteRender.bind(this)
-        } )
+        });
 
         function position(){
             var bodyHeight = document.body.offsetHeight;
@@ -427,6 +445,7 @@ class Layout{
             confirmBoxHeight = confirmBox.getDOMNode().offsetHeight; 
             position();
             window.addEventListener('resize', onWindowResize);
+            this.setState({blur:true});
         }
 
 

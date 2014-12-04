@@ -83,45 +83,39 @@ class ConfirmBox{
 
 
 ConfirmBox.prototype.statics = {
-	open(customClass, props){
+	open(props){
+		var modal = Modal.open(null, onModalClose),
+			confirmBox,
+			closingModal = false,
+			closingConfirm = false,
+			{onRender, onClose, ...props} = props;
 
-       var modal = Modal.open(null, customClass, onModalClose),
-       		 confirmBox,
-       		 closingModal = false,
-       		 closingConfirm = false;
+		confirmBox = React.render(<ConfirmBoxComponent {...props} onClose={onConfirmClose} />, modal.refs['contentContainer'].getDOMNode());
 
-       if(typeof customClass === 'object'){
-       	props = customClass;
-       }
+		if(typeof onRender === 'function'){
+			onRender.apply(confirmBox, [confirmBox]);
+		}
 
-       var {onRender, onClose, ...props} = props;
+		function onModalClose(){
+			closingModal = true;
 
-       confirmBox = React.render(<ConfirmBoxComponent {...props} onClose={onConfirmClose} />, modal.refs['contentContainer'].getDOMNode());
+			if(!closingConfirm){
+				React.unmountComponentAtNode(confirmBox.getDOMNode().parentNode);
+			}
 
-       if(typeof onRender === 'function'){
-       	onRender.apply(confirmBox, [confirmBox]);
-       }
+		}
 
-       function onModalClose(){
-       	closingModal = true;
+		function onConfirmClose(){
+			closingConfirm = true;
 
-        if(!closingConfirm){
-            React.unmountComponentAtNode(confirmBox.getDOMNode().parentNode);
-        }
+			if(!closingModal){
+				Modal.close(modal); 
+			}
 
-       }
-
-       function onConfirmClose(){
-            closingConfirm = true;
-
-            if(!closingModal){
-                Modal.close(modal); 
-            }
-
-            if(typeof onClose === 'function'){
-            	onClose.apply(confirmBox, [confirmBox]);
-            }
-       }
+			if(typeof onClose === 'function'){
+				onClose.apply(confirmBox, [confirmBox]);
+			}
+		}
 	}
 
 }
