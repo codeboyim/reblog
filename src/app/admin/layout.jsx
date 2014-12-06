@@ -15,6 +15,28 @@ var PostModel = require('components/post/model'),
 
 class Layout{
 
+    getDefaultProps(){
+        return {
+            model: null
+        };
+    }
+
+    getInitialState(){
+
+        return {
+            isSidebarVisible: false,
+            activeContentHeight: 1,
+            activeNavDropdownUid: '',
+            activeMenuItemUid: 'drafts',
+            data: this.props.model? this.props.model.toJSON() : null,
+            blur: false,
+            notification: null, //{ text: '', type: 'info' }
+            drafts: [],
+            published: [],
+            files:[]
+        };
+    }
+
     render() {
         var cx = React.addons.classSet,
             cxAdmin = cx({'admin': true, 'blur': this.state.blur}),
@@ -188,28 +210,6 @@ class Layout{
         );
     }
 
-    getDefaultProps(){
-        return {
-            model: null
-        };
-    }
-
-    getInitialState(){
-
-        return {
-            isSidebarVisible: false,
-            activeContentHeight: 1,
-            activeNavDropdownUid: '',
-            activeMenuItemUid: 'drafts',
-            data: this.props.model? this.props.model.toJSON() : null,
-            blur: false,
-            notification: null, //{ text: '', type: 'info' }
-            drafts: [],
-            published: [],
-            files:[]
-        };
-    }
-
     componentDidMount(){
         this._resizeActiveMenuContent();
         window.addEventListener('resize', this._onWindowResize);
@@ -358,6 +358,15 @@ class Layout{
                 }
 
                 break;
+
+            case 'error':
+                if(args[0] instanceof Parse.Error){
+                    this._flash(args[0].code === 101? 'post not exist, or user has no privilege to edit': args[0].message, 'error');
+                }
+                else{
+                    this._flash('an error occurs', 'error');
+                }
+                break;
         }
 
         if(newState && this.isMounted()){
@@ -398,7 +407,10 @@ class Layout{
     }
 
     _flash(message, type){
-        this.setState({notification:{text:message, type: type||'info'}});
+        if(this.isMounted()){
+            this.setState({notification:{text:message, type: type||'info'}});
+        }
+
         this._flashTimeoutId = window.setTimeout(()=> {
             if(this.isMounted()){
                 this.setState({notification:null});

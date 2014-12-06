@@ -44,11 +44,16 @@ var appRoutes = {
         require(['login'], login => {
             login(routeBeforeLogin);
         });
+    },
+    '/404': () => {
+        require(['404'], notFound => {
+            notFound();
+        });
     }
 };
 
 router = require('director').Router(appRoutes).configure({
-    notfound: () => console.log('not found')
+    notfound: () => router.setRoute('/404')
 });
 router.init('/');
 

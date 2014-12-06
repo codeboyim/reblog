@@ -25,7 +25,9 @@ var PostModel = Parse.Object.extend({
 
     fetch(...args) {
         var query = new Parse.Query(PostModel);
-        query.include('files').get(this.id).then(post => {
+        query.include('files').get(this.id).fail(error => {
+            this.trigger('error', this, error);
+        }).then(post => {
             this.set(post.toJSON(), {
                 silent: true
             });
@@ -41,20 +43,32 @@ var PostModel = Parse.Object.extend({
     fetchBySeoUrl() {
         var query = new Parse.Query(PostModel);
 
-        query.include('files').equalTo('seoUrl', this.get('seoUrl')).first().then(post => {
-            this.set(post.toJSON(), {
-                silent: true
+        query.include('files')
+            .equalTo('seoUrl', this.get('seoUrl'))
+            .equalTo('isDraft', false)
+            .first()
+            .done(post => {
+
+                if(!post){
+                    this.trigger('notFound');
+                    return;
+                }
+
+                this.set(post.toJSON(), {
+                    silent: true
+                });
+                this.set({
+                    files: post.get('files')
+                }, {
+                    silent: true
+                });
+                this.trigger('sync', this);
             });
-            this.set({
-                files: post.get('files')
-            }, {
-                silent: true
-            });
-            this.trigger('sync', this);
-        });
     },
 
     save(...args) {
+        var acl;
+
         this.unset('insertText', {
             silent: true
         });
@@ -66,6 +80,16 @@ var PostModel = Parse.Object.extend({
             silent: true
         });
         this.trigger('save', this);
+
+        if (this.isNew()) {
+            acl = new Parse.ACL(Parse.User.current());
+            acl.setPublicReadAccess(true);
+
+            if (Parse.User.current().id !== 'zFJkzlQsiO') {
+                acl.setWriteAccess('zFJkzlQsiO', true);
+            }
+            this.setACL(acl);
+        }
         return Parse.Object.prototype.save.apply(this, args);
     },
 
@@ -77,7 +101,7 @@ var PostModel = Parse.Object.extend({
         this.changePublishStatus(true);
     },
 
-    changePublishStatus(isDraft, ...args){
+    changePublishStatus(isDraft, ...args) {
         this.set({
             isDraft: isDraft
         }, {
