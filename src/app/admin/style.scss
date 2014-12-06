@@ -17,7 +17,10 @@ $navPrimaryBackColor:#2d323b;
 .admin {
     width: 100%;
     height: 100%;
-    overflow: auto;
+    overflow: {
+        x: hidden;
+        y: auto;
+    }
     padding-top: 3.8rem;
     @include filter-transition;
     &>aside {

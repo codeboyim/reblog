@@ -74,8 +74,9 @@ class PostEdit {
 		var state = this.state,
 				attrs;
 
-		if(this.state.post.objectId !== nextProps.model.id){
+		if(state.post.objectId !== nextProps.model.id){
 			if(nextProps.model.id){
+				state.post.objectId = nextProps.model.id;
 				nextProps.model.fetch();
 			}
 			else{

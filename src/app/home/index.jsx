@@ -13,11 +13,4 @@ function postsChanged(event, ...args){
 	render();
 }
 
-module.exports = () => {
-	if(posts.length === 0){
-		posts.fetchHomeList();
-	}
-	else{
-		render();
-	}
-};
+module.exports = render;
