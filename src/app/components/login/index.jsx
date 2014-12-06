@@ -24,7 +24,7 @@ class Login{
 				<form className="loginForm" onSubmit={this._onFormSubmit}>
 					<div>
 						<label>Login Name</label>
-						<input type="text" required onChange={this._onInputChange.bind(this, 'name')} value={this.state.name}/>
+						<input type="text" ref="name" required onChange={this._onInputChange.bind(this, 'name')} value={this.state.name}/>
 					</div>	
 					<div>
 						<label>Password</label>
@@ -38,6 +38,10 @@ class Login{
 				{this.state.flashError?<span className="error">{this.state.flashError}</span>:null}
 			</div>
 		);	
+	}
+
+	componentDidMount(){
+		this.refs.name.getDOMNode().focus();
 	}
 
 	_onFormSubmit(e){
