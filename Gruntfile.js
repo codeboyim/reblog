@@ -6,6 +6,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-build-control');
 
     grunt.initConfig({
         webpack: {
@@ -18,7 +19,9 @@ module.exports = function(grunt) {
                         }
                     }),
                     new webpack.optimize.DedupePlugin(),
-                    new webpack.optimize.UglifyJsPlugin({compress:false})
+                    new webpack.optimize.UglifyJsPlugin({
+                        compress: false
+                    })
                 )
             },
             'build-dev': {
@@ -30,7 +33,7 @@ module.exports = function(grunt) {
         'webpack-dev-server': {
             options: {
                 webpack: webpackConfig,
-                publicPath: webpackConfig.output.publicPath
+                publicPath: '/' + webpackConfig.output.publicPath
             },
             start: {
                 keepAlive: true,
@@ -53,6 +56,20 @@ module.exports = function(grunt) {
                     'release/index.html': ['src/index.html']
                 }
             }
+        },
+        buildcontrol: {
+            options: {
+                dir: 'release',
+                commit: true,
+                push: true,
+                message: 'Built %sourceName% from commit %sourceCommit% on branch %sourceBranch%'
+            },
+            github: {
+                options: {
+                    remote: 'git@github.com:codeboyim/reblog.git',
+                    branch: 'gh-pages'
+                }
+            }
         }
 
 
@@ -60,4 +77,5 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', ['webpack-dev-server:start']);
     grunt.registerTask('build', ['clean:build', 'webpack:build', 'copy:build']);
+    grunt.registerTask('deploy', ['buildcontrol']);
 };
