@@ -17,10 +17,7 @@ $navPrimaryBackColor:#2d323b;
 .admin {
     width: 100%;
     height: 100%;
-    overflow: {
-        x: hidden;
-        y: auto;
-    }
+    overflow: hidden;
     padding-top: 3.8rem;
     @include filter-transition;
     &>aside {
@@ -58,6 +55,8 @@ $navPrimaryBackColor:#2d323b;
 }
 .adminMain {
     @include filter-transition;
+    height:100%;
+    overflow: auto;
 }
 .adminSidebarNav {
     a, .adminSidebarButton {

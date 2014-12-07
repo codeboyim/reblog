@@ -4,19 +4,29 @@ $divider: solid 1px #d9d9d9;
 @import"styles/settings";
 @import"styles/components/loaders";
 @import"../../../assets/fonts/flaticon/flaticon.css";
+@import"../../../../node_modules/highlight.js/styles/default.css";
+@import"../../../../node_modules/highlight.js/styles/solarized_light.css";
 .post {
     @include row();
     &.edit {
+        height: 100%;
+        overflow: hidden;
+        @include calc(padding-top, '2% + 79px');
         &>* {
             @include padding(1% null);
         }
         &>*:nth-child(1) {
             border-bottom: $divider;
         }
+        .postEditTitle {
+            @include calc(margin-top, '-2% - 79px');
+        }
         .postEdit, .postPreview {
             @include media($large, 24) {
                 @include span-columns(12 of 24);
             }
+            height: 100%;
+            overflow: auto;
         }
         .postEdit {
             @include media($large) {
@@ -53,7 +63,6 @@ $divider: solid 1px #d9d9d9;
             }
         }
         .postBody {
-            min-height: 1200px;
             &.ace_editor {
                 line-height: inherit;
             }
@@ -75,7 +84,7 @@ $divider: solid 1px #d9d9d9;
         h1, h2, h3 {
             font-family: inherit;
         }
-        h1{
+        h1 {
             font-size: 4.8rem;
             line-height: 120%;
         }
@@ -100,6 +109,13 @@ $divider: solid 1px #d9d9d9;
             font-style: italic;
             color: rgba(0, 0, 0, 0.7);
             text-align: center;
+        }
+        code{
+            font-size: 1.8rem;
+        }
+        pre code{
+            @extend .hljs;
+            font-size: 1.6rem;
         }
     }
 }

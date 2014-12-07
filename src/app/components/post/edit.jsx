@@ -2,7 +2,16 @@ var PostModel = require('components/post/model'),
 		marked = require('marked'),
 		slug = require('slug'),
 		router = require('router'),
-		path = require('path');
+		path = require('path'),
+		hljs = require('highlight.js');
+
+marked.setOptions({
+	langPrefix:'hljs ',
+	silent: true,
+	highlight: code =>{
+		return hljs.highlightAuto(code).value;
+	}
+})
 
 require('./style.scss');
 require('ace-builds/src-noconflict/ace');
@@ -28,13 +37,13 @@ class PostEdit {
 
 		return (
 			<div className="post edit">
-					<div>
+					<div className="postEditTitle">
 						<label>Title</label>
 						<input type="text" placeholder="Untitled" className="postTitle" name="title" onChange={this._inputChanged} value={post.title} />
 					</div>
 					<div className="postEdit">
 							<label>Content</label>
-							<div ref="postBody" className="postBody"></div>
+							<div ref="postEditBody" className="postBody"></div>
 					</div>
 					<div className="postPreview">
 						<label>Preview</label>
@@ -48,7 +57,7 @@ class PostEdit {
 
 	componentDidMount(){
 		var model = this.props.model,
-				editor = this._editor = ace.edit(this.refs.postBody.getDOMNode()); 
+				editor = this._editor = ace.edit(this.refs.postEditBody.getDOMNode()); 
 
 		this.props.model.on('all', this._modelChanged);
 		editor.setFontSize(16);
@@ -118,7 +127,6 @@ class PostEdit {
 				this._editor.insert(model.get('insertText'));
 			}
 		}
-
 	}
 
 }
