@@ -93,11 +93,11 @@ class HomeLayout {
                 scrollTop = document.body.scrollTop;
                 scrollDist = scrollTop - lastScrollTop;
                 hide = scrollDist > 0;
-                show = scrollDist < -50 || scrollTop === 0;
+                show = scrollDist < -50 || scrollTop <= 0;
                 callee.lastScrollTop = scrollTop;
                 callee.didScroll = false;
                 if(this.isMounted() && (show || hide) && (this.state.hideHeader && show || !this.state.hideHeader && hide)){
-                    this.setState({'hideHeader':!show || hide});
+                    this.setState({'hideHeader':!show && hide});
                 }
             }, 60);
         }
