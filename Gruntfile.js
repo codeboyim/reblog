@@ -47,7 +47,7 @@ module.exports = function(grunt) {
         },
         clean: {
             build: {
-                src: ['release/']
+                src: ['release/*', '!release/.git/**']
             }
         },
         copy: {
