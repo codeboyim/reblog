@@ -17,7 +17,7 @@ class PostView{
 			<article className="post view">
 				<header className="postTitle">
 					<i className="postCreatedAt">{moment(post.createdAt).format('LL')}</i>
-					<h2>{post.get('title')}</h2>
+					<h1>{post.get('title')}</h1>
 				</header>
 				<main className="postBody">
 					<div dangerouslySetInnerHTML={{__html: marked(post.get('body')) }}></div>

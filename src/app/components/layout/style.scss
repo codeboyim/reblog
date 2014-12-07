@@ -68,7 +68,7 @@ $site-name-size: 2.4rem;
 .rootMain {
     @include outer-container();
     @include pad();
-    @include calc(padding-bottom, '2% + 3rem');
+    @include calc(padding-bottom, '2% + 5rem');
     min-height: 100%;
 }
 .rootFooter {

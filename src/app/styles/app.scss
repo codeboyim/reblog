@@ -12,7 +12,7 @@ body {
     color: rgba(0, 0, 0, 0.9);
     background-color: #fbfbfb;
     font-size: 1.6rem;
-    line-height: golden-ratio(1.6rem, 1);
+    line-height: 145%; 
     height: 100%;
 }
 label {
@@ -21,19 +21,20 @@ label {
     text-transform: uppercase;
 }
 h1, h2 {
+    @include margin(2% null 2% null);
     font-weight: 400;
     font-family: Lora $georgia;
-    @include margin(2% null 2% null);
+    line-height: 120%;
 }
 h1 {
     font-size: 3.6rem;
 }
 h2 {
     font-size: 2.4rem;
-    line-height: golden-ratio(2.2rem, 1);
 }
 p {
     @include margin(1.6rem null);
+    line-height: 145%;
 }
 .text-center {
     text-align: center;
