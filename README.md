@@ -1,4 +1,4 @@
-[Reblog](https://github.com/codeboyim/reblog)
+[Re/blog](https://github.com/codeboyim/reblog)
 ======
 
 Reblog is a simple web application for blogging or news publishing, built on [React][react] and other awesome tools and frameworks.
@@ -8,7 +8,7 @@ Demo
 ---
 Visit http://codeboyim.github.io/reblog/ for a live demo with guest user account ```guest``` and password ```guest123```. 
 
-As some experimental features are used, a **later version** of your favourite browser is required. Pitfalls will be considered in future development.
+As some experimental features are used, a **recent version** of your favourite browser is required. Pitfalls will be considered in future development.
 
 A quick guide is also available at http://codeboyim.github.io/reblog/#/p/Reblog-101
 
