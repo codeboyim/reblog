@@ -1,7 +1,15 @@
 var moment = require('moment'),
-		marked = require('marked');
+		marked = require('marked'),
+		hljs = require('highlight.js');
 
 require('./style.scss');
+marked.setOptions({
+	langPrefix:'hljs ',
+	silent: true,
+	highlight: code =>{
+		return hljs.highlightAuto(code).value;
+	}
+})
 
 class PostView{
 	getDefaultProps(){
