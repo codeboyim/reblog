@@ -111,6 +111,11 @@ class Layout{
                 <header className={cxHeader}>
                     <i ref="toggle" className="adminSidebarToggler" onClick={this._toggleSidebar}></i>
                     {
+                        this.props.model.get('isDraft') ?
+                        <label className="adminHeaderLabel draft">Draft</label>
+                        :null
+                    }
+                    {
                         this.state.notification ?
                         (
                             <div className={'adminHeaderNotification ' + this.state.notification.type}>{this.state.notification.text}</div>
@@ -339,7 +344,7 @@ class Layout{
 
     _dataModelChanged(event, model, ...args){
         var newState;
-
+console.log(args)
         switch(event){
 
             case 'change':
@@ -350,12 +355,21 @@ class Layout{
                 newState = { notification: { text: 'saving', type: 'info' } };
                 break;
 
+            case 'destroy':
+                model.set({'isDraft': null}, {silent:true});
+                break;
+
             case 'sync':
                 this._loadPosts(); 
 
                 if(this.isMounted()){
-                    newState = { notification: null, isSidebarVisible: false, data:model.toJSON() };
-                }
+                    newState = { isSidebarVisible: false, data:model.toJSON() };
+                    if(args.length>0 && model.previous('isDraft') !== model.get('isDraft') && model.get('isDraft')){
+                        this._flash('saved as draft');
+                    } else{
+                        newState.notification = null;
+                    }
+            }
 
                 break;
 
