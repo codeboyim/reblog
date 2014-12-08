@@ -74,7 +74,7 @@ The repo has a Grunt deployment task which uses [grunt-build-control](https://gi
 
 If this is your preferrable way to deply, remember to change following settings in the ```Gruntfile.js``` file for your own situation.
 
-```json
+```javascript
 buildcontrol: {
     options: {
         dir: 'release',
