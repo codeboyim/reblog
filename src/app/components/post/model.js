@@ -1,4 +1,5 @@
-var AttachmentModel = require('components/attachment/model');
+var AttachmentModel = require('components/attachment/model'),
+    packageInfo = require('../../../../package.json');
 
 var PostModel = Parse.Object.extend({
     className: 'Post',
@@ -85,8 +86,8 @@ var PostModel = Parse.Object.extend({
             acl = new Parse.ACL(Parse.User.current());
             acl.setPublicReadAccess(true);
 
-            if (Parse.User.current().id !== 'zFJkzlQsiO') {
-                acl.setWriteAccess('zFJkzlQsiO', true);
+            if (Parse.User.current().id !== packageInfo.parse.adminId) {
+                acl.setWriteAccess(packageInfo.parse.adminId, true);
             }
             this.setACL(acl);
         }

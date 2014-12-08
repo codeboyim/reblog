@@ -32,5 +32,10 @@
     "style-loader": "*",
     "underscore": "^1.7.0",
     "url-loader": "*"
+  },
+  "parse":{
+    "applicationId":"your-parse-app-id",
+    "javascriptKey":"your-parse-app-js-key",
+    "adminId":"your-admin-user-objectId"
   }
 }
