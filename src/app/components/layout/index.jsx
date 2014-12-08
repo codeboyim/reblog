@@ -1,4 +1,5 @@
 require('./style.scss');
+var packageInfo = require('../../../../package.json');
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 class HomeLayout {
 
@@ -59,7 +60,7 @@ class HomeLayout {
                     {this.props.children}
                 </div>
                 <footer className="rootFooter">
-                    <span>Developed by codeboy</span>
+                    <span><a href="https://github.com/codeboyim/reblog">re/blog v{packageInfo.version}</a>, developed by <a href="https://github.com/codeboyim">codeboy</a></span>
                 </footer>
           </div>
         );

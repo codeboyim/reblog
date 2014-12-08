@@ -18,11 +18,11 @@ module.exports = {
     },
     module: {
         loaders: [{
-            //     test: /showdown\.js$/,
-            //     loader: 'imports?exports=>undefined'
-            // }, {
             test: /\.js$|\.jsx$/,
             loaders: ['react-hot', 'jsx?harmony']
+        }, {
+            test: /\.json$/,
+            loader: 'json'
         }, {
             test: /parse-latest.js$/,
             loader: 'exports?exports.Parse'
