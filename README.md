@@ -1,12 +1,12 @@
 [Re/blog](https://github.com/codeboyim/reblog)
 ======
 
-Reblog is a simple web application for blogging or news publishing, built on [React][react] and other awesome tools and frameworks.
+Re/blog is a simple but complete single page application for blogging or publishing news, built on [React][react] and other awesome tools and frameworks. It is written in JavaScript Harmony (ES6) with features supported and transformed by JSXTransformer.
 
 
 Demo
 ---
-Visit http://codeboyim.github.io/reblog/ for a live demo with guest user account ```guest``` and password ```guest123```. 
+Visit http://codeboyim.github.io/reblog/ for a live demo with guest user account ```guest``` and password ```guest123``` when required. 
 
 As some experimental features are used, a **recent version** of your favourite browser is required. Polyfills will be considered in future development.
 
