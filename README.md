@@ -6,19 +6,25 @@ Re/blog is a simple but complete single page application for blogging or publish
 
 Demo
 ---
-Visit http://codeboyim.github.io/reblog/ for a live demo with guest user account ```guest``` and password ```guest123``` when required. 
+Demo homepage: http://codeboyim.github.io/reblog/ 
 
-As some experimental features are used, a **recent version** of your favourite browser is required. Polyfills will be considered in future development.
+Start/edit an article: http://codeboyim.github.io/reblog/#/a/p/new (account ```guest```, password ```guest123```).
 
 A quick guide is also available at http://codeboyim.github.io/reblog/#/p/Reblog-101
 
-Tech
+Notice, because some experimental JavaScript and CSS3 features are used, a **recent version** of your favourite browser is required. Polyfills will be considered in future development.
+
+
+
+Tech highlights
 ---
 - [React][react] - UI components
 - [Parse][parse] - Cloud backend solution and authentication support
 - [director](https://github.com/flatiron/director) - Client URL router
 - [Webpack](http://webpack.github.io/) - Module bundler, hot update development environment via Webpack-dev-server
 - [Bourbon](http://bourbon.io/), [Neat](http://neat.bourbon.io/) - SASS mixins and a lightweight grid framework for a responsive UI
+- [Ace](http://ace.c9.io/) - Embeded article editor
+- [highlight.js](https://highlightjs.org/) - Syntax highlighting the code in articles
 - [Font Awesome](http://fortawesome.github.io/Font-Awesome/), [flaticon](http://www.flaticon.com/) - Icon fonts
 - [Grunt](http://gruntjs.com/) - Task automation
 - [npm](https://www.npmjs.org/), [bower](http://bower.io/) - Package managers
