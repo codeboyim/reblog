@@ -1,7 +1,7 @@
 [Re/blog](https://github.com/codeboyim/reblog)
 ======
 
-Re/blog is a simple but complete single page application for blogging or publishing news, built on [React][react] and other awesome tools and frameworks. It is written in JavaScript Harmony (ES6) with features supported and transformed by JSXTransformer.
+Re/blog is a simple but complete single page application for blogging or publishing news with responsive design, built on [React][react] and other awesome tools and frameworks. It is written in JavaScript Harmony (ES6) with features supported and transformed by JSXTransformer.
 
 
 Demo
