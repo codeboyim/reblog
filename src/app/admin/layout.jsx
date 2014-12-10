@@ -31,8 +31,6 @@ class Layout{
             data: this.props.model? this.props.model.toJSON() : null,
             blur: false,
             notification: null, //{ text: '', type: 'info' }
-            drafts: [],
-            published: [],
             files:[]
         };
     }
@@ -190,10 +188,9 @@ class Layout{
                     'iconclass': 'flaticon-write12'
                 }
             },
-            item = menuItems[key],
-            posts = this.state[key];
+            item = menuItems[key];
 
-        if(!item || !posts){
+        if(!item){
             return null;
         }
 
@@ -209,7 +206,7 @@ class Layout{
                     <i className={item.iconclass}></i>
                 </button>
                 <div className='adminMenuItemContent' style={{ height: item.height? (item.height + 'px') : null }}>
-                    <PostList path={'/a/' + key} activePostId={this.props.model.id} list={posts} /> 
+                    <PostList path={'/a/' + key} activePostId={this.props.model.id} type={key} /> 
                 </div>
             </li>
         );
@@ -225,7 +222,6 @@ class Layout{
             this.props.model.on('all', this._dataModelChanged);
         }
 
-        this._loadPosts();
     }
 
     componentWillUnmount(){
@@ -339,7 +335,6 @@ class Layout{
     _toggleSidebarMenu(key, e){
         e.preventDefault();
         this.setState({ activeMenuItemUid: key});
-        this._loadPosts(key);
     }
 
     _dataModelChanged(event, model, ...args){
@@ -360,7 +355,6 @@ console.log(args)
                 break;
 
             case 'sync':
-                this._loadPosts(); 
 
                 if(this.isMounted()){
                     newState = { isSidebarVisible: false, data:model.toJSON() };
@@ -387,38 +381,6 @@ console.log(args)
             this.setState(newState);
         }
     } 
-
-    _loadPosts(key){
-        var promise,
-            newState,
-            menuItemUid = key? key: this.state.activeMenuItemUid;
-
-        if(typeof this.state[menuItemUid] === 'undefined'){
-            return;
-        }
-
-        switch(menuItemUid){
-
-            case 'drafts':
-                promise = PostModel.findDrafts();
-                break;
-
-            case 'published':
-                promise = PostModel.findPublished();
-                break;
-
-        }
-
-        if(promise){
-            promise.done((posts) => {
-                if(this.isMounted()){
-                    newState = {};
-                    newState[menuItemUid] = posts;
-                    this.setState(newState); 
-                }
-            })
-        }
-    }
 
     _flash(message, type){
         if(this.isMounted()){
@@ -483,35 +445,9 @@ console.log(args)
         function onDeleteConfirm() {
             var post = this.props.model,
                 nextPostId = '',
-                list = this.state[this.state.activeMenuItemUid],
-                len = list.length,
                 idx = -1;
 
             e.preventDefault();
-
-            if(Array.isArray(list)){
-
-                list.every((p, i) => {
-
-                    if(p.id === post.id){
-                        idx = i;
-                        return false;
-                    }
-
-                    return true;
-                });
-
-            }
-
-            if(idx !== len - 1){ //if not delete the last one, show next post
-                nextPostId = list[idx + 1].id;
-            }
-            else if(len > 1){ //if delete the last but not the only one, show previous post
-                nextPostId = list[idx - 1].id;
-            }
-            else{ //if delete the only one, go to new
-                nextPostId = '';
-            }
 
             this.props.model.destroy().then((model) => {
                 if(Array.isArray(model.get('files'))){
@@ -519,7 +455,7 @@ console.log(args)
                         file.destroy();
                     })
                 }
-                router.setRoute(path.join('/a/p', nextPostId || 'new'));
+                router.setRoute('/a/p/new');
             });
 
         };

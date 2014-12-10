@@ -144,26 +144,6 @@ var PostModel = Parse.Object.extend({
         return this
     }
 
-
 });
 
-PostModel.findDrafts = function() {
-    var query = new Parse.Query(PostModel);
-
-    query.select('title')
-        .equalTo('isDraft', true)
-        .descending('createdAt');
-
-    return query.find();
-}
-
-PostModel.findPublished = function() {
-    var query = new Parse.Query(PostModel);
-
-    query.select('title')
-        .equalTo('isDraft', false)
-        .descending('createdAt');
-
-    return query.find();
-}
 module.exports = PostModel;

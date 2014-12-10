@@ -1,6 +1,7 @@
 var path = require('path'),
-		moment = require('moment'),
-		cx = React.addons.classSet;
+	moment = require('moment'),
+	PostCollection = require('./collection'),
+	cx = React.addons.classSet;
 
 require('./style.scss');
 
@@ -8,27 +9,28 @@ class PostList{
 
 	getDefaultProps(){
 		return {
-			mode: 'compact',	//'compact', 'simple'
-			activePostId: '',
-			list: [] 
+			type: '',	//'drafts', 'published', 'home'
+			activePostId: ''
 		};
 	}
 
 	getInitialState(){
 		return{
-			loading: false
+			loading: false,
+			posts: new PostCollection
 		};
 	}
 
 	render(){
-		var list = this.props.list,
+		var posts = this.state.posts,
+				type = this.props.type,
 				cxLoadMore;
 
-		if(this.props.mode === 'compact'){
+		if(type === 'drafts' || type === 'published'){
 			return (
 				<ul className="postList compact">
 					{
-						list.map((post) => {
+						posts.map((post) => {
 							return (
 								<li key={post.id.substr(0, 5)} className={this.props.activePostId===post.id?'active':''}>
 									<a href={path.join('/a/p', post.id)}>{ post.get('title')?post.get('title'):'Untitled' }</a>
@@ -46,7 +48,7 @@ class PostList{
 			return (
 				<ul ref="postList" className="postList simple">
 					{
-						list.map((post) => {
+						posts.map((post) => {
 							var featureImage = this._findFeatureImage(post);
 							return (
 								<li key={post.id.substr(0, 5)} className={'postListItem' + ( featureImage?' featured':'' )}>
@@ -65,7 +67,11 @@ class PostList{
 								</li>);
 						})
 					}
-					<li><div ref="loadMore" className={cxLoadMore}><span></span><span></span><span></span></div></li>
+					<li>
+						<div ref="loadMore" className={cxLoadMore}>
+							<span></span><span></span><span></span>
+						</div>
+					</li>
 				</ul>
 			);
 		}
@@ -74,15 +80,21 @@ class PostList{
 	}
 
 	componentDidMount(){
-		if(this.props.mode === 'simple'){
+
+		if(this.props.type === 'home'){
 			window.addEventListener('scroll', this._onWindowScroll);
-			this.props.list.on('all', this._onListChange);
-			this._loadMore();
 		}
+
+		this._loadPosts();
+	}
+
+	componentWillReceiveProps(nextProps){
+		this._loadPosts();
 	}
 
 	componentWillUnmount(){
-		if(this.props.mode === 'simple'){
+
+		if(this.props.type === 'home'){
 			window.removeEventListener('scroll', this._windowOnScroll);
 		}
 	}
@@ -97,14 +109,32 @@ class PostList{
 
 			window.setTimeout(()=>{
 				callee.didScroll = false;
-				this._loadMore();
+				this._loadHomeList();
 			}, 500);
 		}
 
 	}
 
-	_loadMore(){
-		var loadMore;
+	_loadPosts(){
+		var posts = this.state.posts;
+
+		switch(this.props.type){
+			case 'home':
+				this._loadHomeList();
+				break;
+			case 'drafts':
+				posts.fetchDrafts();
+				break;
+			case 'published':
+				posts.fetchPublished();
+				break;
+			default: break;
+		}	
+	}
+
+	_loadHomeList(){
+		var loadMore,
+			posts = this.state.posts;
 
 		if(this.isMounted()){
 			loadMore = document.body.clientHeight > this.refs.loadMore.getDOMNode().getBoundingClientRect().bottom;
@@ -112,7 +142,7 @@ class PostList{
 			if(loadMore){
 				this.setState({ loading: true });
 
-				this.props.list.fetchHomeList().then(()=>{
+				posts.fetchHomeList().then(()=>{
 
 					if(this.isMounted()){
 						this.setState({ loading: false });
@@ -127,7 +157,10 @@ class PostList{
 	_onListChange(model, collection, options){
 		if(this.isMounted()){
 			this.forceUpdate();
-			this._loadMore();
+
+			if(this.props.type === 'home'){
+				this._loadHomeList();
+			}
 		}
 	}
 
