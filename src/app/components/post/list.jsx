@@ -89,7 +89,9 @@ class PostList{
 	}
 
 	componentWillReceiveProps(nextProps){
-		this._loadPosts();
+		if(this.props.type !== 'home'){
+			this._loadPosts();
+		}
 	}
 
 	componentWillUnmount(){
@@ -102,9 +104,9 @@ class PostList{
 	_onWindowScroll(e){
 		var callee = this._onWindowScroll,
 				didScroll = callee.didScroll || false,
-				list = this.props.list;
+				posts = this.state.posts;
 
-		if(!didScroll && !this.state.loading && !list.getAllLoaded()){
+		if(!didScroll && !this.state.loading && !posts.getAllLoaded()){
 			callee.didScroll = true;
 
 			window.setTimeout(()=>{

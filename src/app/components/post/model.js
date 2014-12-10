@@ -74,12 +74,6 @@ var PostModel = Parse.Object.extend({
             silent: true
         });
 
-        //reset isDraft to true when save. publish status needs to change specificaly by calling pubish() or withdraw()
-        this.set({
-            isDraft: true
-        }, {
-            silent: true
-        });
         this.trigger('save', this);
 
         if (this.isNew()) {

@@ -23,7 +23,7 @@ Tech highlights
 - [director](https://github.com/flatiron/director) - Client URL router
 - [Webpack](http://webpack.github.io/) - Module bundler, hot update development environment via Webpack-dev-server
 - [Bourbon](http://bourbon.io/), [Neat](http://neat.bourbon.io/) - SASS mixins and a lightweight grid framework for a responsive UI
-- [Ace](http://ace.c9.io/) - Embeded article editor
+- [Ace](http://ace.c9.io/) - Embedded article editor
 - [highlight.js](https://highlightjs.org/) - Syntax highlighting the code in articles
 - [Font Awesome](http://fortawesome.github.io/Font-Awesome/), [flaticon](http://www.flaticon.com/) - Icon fonts
 - [Grunt](http://gruntjs.com/) - Task automation
@@ -51,7 +51,7 @@ Replace following settings in ```Package.json``` with the information you get ab
 
 Get started
 ---
-Prerequest: Git, Node, npm, Grunt cli, Bower
+Prerequisite: Git, Node, npm, Grunt cli, Bower
 
 - download [latest release](https://github.com/codeboyim/reblog/archive/0.1.0-rc.zip "0.1.0-rc"), or clone the repo ```git clone https://github.com/codeboyim/reblog.git```
 - install bower packages ```bower install```
@@ -78,7 +78,7 @@ Reblog is a pure JavaScript application, it only requires a static Web server. S
 
 The repo has a Grunt deployment task which uses [grunt-build-control](https://github.com/robwierzbowski/grunt-build-control) to push the released content to a Web server or publish environment, e.g. gh-pages branch on Github.
 
-If this is your preferrable way to deply, remember to change following settings in the ```Gruntfile.js``` file for your own situation.
+If this is your preferable way to deploy, remember to change following settings in the ```Gruntfile.js``` file for your own situation.
 
 ```javascript
 buildcontrol: {
