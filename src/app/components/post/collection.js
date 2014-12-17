@@ -26,7 +26,7 @@ var PostCollection = Parse.Collection.extend({
 
         query.select('title')
             .equalTo('isDraft', true)
-            .descending('updatedAt');
+            .descending('updatedAt').limit(10);
 
         return query.find().done(posts => {
             this.reset(posts);
@@ -38,7 +38,7 @@ var PostCollection = Parse.Collection.extend({
 
         query.select('title')
             .equalTo('isDraft', false)
-            .descending('updatedAt');
+            .descending('updatedAt').limit(10);
 
         return query.find().done(posts => {
             this.reset(posts);
