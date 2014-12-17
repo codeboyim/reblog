@@ -339,7 +339,7 @@ class Layout{
 
     _dataModelChanged(event, model, ...args){
         var newState;
-console.log(args)
+        
         switch(event){
 
             case 'change':

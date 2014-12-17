@@ -23,8 +23,8 @@ class PostList{
 
 	render(){
 		var posts = this.state.posts,
-				type = this.props.type,
-				cxLoadMore;
+			type = this.props.type,
+			cxLoadMore;
 
 		if(type === 'drafts' || type === 'published'){
 			return (
