@@ -1,6 +1,6 @@
 {
   "name": "reblog",
-  "version": "0.1.0-rc",
+  "version": "0.1.0",
   "description": "a simple blogging system",
   "devDependencies": {
     "ace-builds": "git://github.com/ajaxorg/ace-builds.git",

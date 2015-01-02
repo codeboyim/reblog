@@ -53,7 +53,7 @@ Get started
 ---
 Prerequisite: Git, Node, npm, Grunt cli, Bower
 
-- download [latest release](https://github.com/codeboyim/reblog/archive/0.1.0-rc.zip "0.1.0-rc"), or clone the repo ```git clone https://github.com/codeboyim/reblog.git```
+- download [latest release](https://github.com/codeboyim/reblog/archive/0.1.0.zip "0.1.0"), or clone the repo ```git clone https://github.com/codeboyim/reblog.git```
 - install bower packages ```bower install```
 - install npm packages ```npm install```
  
