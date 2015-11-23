@@ -1,21 +1,16 @@
-var path = require('path'),
-	moment = require('moment'),
-	PostCollection = require('./collection'),
-	cx = React.addons.classSet;
+import path from 'path';
+import moment from 'moment';
+import PostCollection from './collection';
+import cx from 'classnames';
 
 require('./style.scss');
 
-class PostList{
+class PostList extends React.Component{
 
-	getDefaultProps(){
-		return {
-			type: '',	//'drafts', 'published', 'home'
-			activePostId: ''
-		};
-	}
+	constructor(props){
+		super(props);
 
-	getInitialState(){
-		return{
+		this.state = {
 			loading: false,
 			posts: new PostCollection
 		};
@@ -136,9 +131,8 @@ class PostList{
 
 	_loadHomeList(){
 		var loadMore,
-			posts = this.state.posts;
+				posts = this.state.posts;
 
-		if(this.isMounted()){
 			loadMore = document.body.clientHeight > this.refs.loadMore.getDOMNode().getBoundingClientRect().bottom;
 
 			if(loadMore){
@@ -152,18 +146,15 @@ class PostList{
 
 				});
 			}
-		}	
 
 	}
 
 	_onListChange(model, collection, options){
-		if(this.isMounted()){
 			this.forceUpdate();
 
 			if(this.props.type === 'home'){
 				this._loadHomeList();
 			}
-		}
 	}
 
 	_findFeatureImage(post){
@@ -199,5 +190,8 @@ class PostList{
 
 }
 
-
-module.exports = React.createClass(PostList.prototype);
+PostList.defaultProps = { 
+	type: '',	//'drafts', 'published', 'home' 
+	activePostId: ''
+};
+export default PostList;

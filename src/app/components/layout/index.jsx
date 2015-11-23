@@ -1,16 +1,12 @@
 require('./style.scss');
 var packageInfo = require('../../../../package.json');
-var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-class HomeLayout {
+var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 
-    getDefaultProps(){
-        return {
-            postId: null
-        };
-    }
+class HomeLayout extends React.Component{
 
-    getInitialState() {
-        return {
+    constructor(props){
+        super(props);
+        this.state = {
             hideHeader: false,
             hideHeaderDropdownMenu: true,
             authenticated: !!Parse.User.current()
@@ -18,7 +14,7 @@ class HomeLayout {
     }
 
     render() {
-        var cx = React.addons.classSet,
+        var cx = require('classnames'),
             cxHeader = cx({'rootHeader': true, 'hide': this.state.hideHeader});
 
         return (
@@ -128,4 +124,6 @@ class HomeLayout {
     }
 }
 
-module.exports = React.createClass(HomeLayout.prototype);
+HomeLayout.defaultProps = { postId: null };
+
+export default HomeLayout;

@@ -11,7 +11,7 @@ function requireAuth() {
 var appRoutes = {
     '/': () => {
         require(['home'], (home) => {
-            home();
+            home.render();
         });
     },
     '/p/:seoUrl': (seoUrl) => {

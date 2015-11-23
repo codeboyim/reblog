@@ -84,11 +84,11 @@ class ConfirmBox{
 
 ConfirmBox.prototype.statics = {
 	open(props){
-		var modal = Modal.open(null, onModalClose),
+		let modal = Modal.open(null, onModalClose),
 			confirmBox,
 			closingModal = false,
 			closingConfirm = false,
-			{onRender, onClose, ...props} = props;
+			{ onRender, onClose, ...props } = props;
 
 		confirmBox = React.render(<ConfirmBoxComponent {...props} onClose={onConfirmClose} />, modal.refs['contentContainer'].getDOMNode());
 

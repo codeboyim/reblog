@@ -1,6 +1,7 @@
-var PostModel = require('./model');
+import PostModel from './model';
+import Backbone from 'backbone';
 
-var PostCollection = Parse.Collection.extend({
+var PostCollection = Backbone.Collection.extend({
     model: PostModel,
 
     initialize() {
@@ -13,6 +14,9 @@ var PostCollection = Parse.Collection.extend({
         numToSkip = numToSkip === null || numToSkip === undefined ? this.length : numToSkip;
         query.descending('createdAt').equalTo('isDraft', false).limit(this._limit).skip(numToSkip).include('files');
         return query.find().done((posts) => {
+            posts = posts.map(p => {
+                return p.toJSON();
+            });
             this.add(posts);
 
             if (posts.length === 0 || posts.length < this._limit) {

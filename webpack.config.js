@@ -6,7 +6,7 @@ var webpack = require('webpack'),
     appPath = path.join(__dirname, 'src/app');
 
 module.exports = {
-    cache: true,
+    cache: false,
     entry: {
         main: ['webpack/hot/dev-server', './src/app/main.js']
     },
@@ -19,7 +19,12 @@ module.exports = {
     module: {
         loaders: [{
             test: /\.js$|\.jsx$/,
-            loaders: ['react-hot', 'jsx?harmony']
+            exclude: /node_modules|autoit\.js$/,
+            loader: 'babel',
+            query: {
+                presets: ['react', 'es2015'],
+                plugins: ['transform-object-rest-spread']
+            }
         }, {
             test: /\.json$/,
             loader: 'json'
@@ -30,7 +35,7 @@ module.exports = {
             test: /\.css$/,
             loader: 'style!css',
         }, {
-            test: /\.woff(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+            test: /\.woff\d?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
             loader: "url-loader?limit=10000&minetype=application/font-woff"
         }, {
             test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -39,7 +44,7 @@ module.exports = {
             test: /\.scss$/,
             loader: 'style!css!sass?imagePath=/assets/images&includePaths[]=' + [neatPath, bourbonPath, faPath, appPath].join('&includePaths[]=')
         }],
-        noParse: []
+        noParse: [/ace-builds\/.*/]
     },
     resolve: {
         alias: {},
@@ -52,7 +57,8 @@ module.exports = {
     plugins: [
         new webpack.ProvidePlugin({
             Parse: 'parse',
-            React: 'react/addons'
+            React: 'react',
+            ReactDOM: 'react-dom'
         }),
         new webpack.HotModuleReplacementPlugin()
     ],

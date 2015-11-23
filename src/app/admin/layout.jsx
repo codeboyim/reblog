@@ -1,19 +1,20 @@
-var PostModel = require('components/post/model'),
-    PostList = require('components/post/list'),
-    Post = require('components/post/view'),
-    AttachmentModel = require('components/attachment/model'),
-    router = require('router'),
-    path = require('path'),
-    fileTypes = {
+import PostModel from 'components/post/model';
+import PostList from 'components/post/list';
+import Post from 'components/post/view';
+import AttachmentModel from 'components/attachment/model';
+import router from 'router';
+import path from 'path';
+import Modal from 'components/modal';
+import ConfirmBox from 'components/confirmBox';
+
+var fileTypes = {
         '^image\\/':'image',
         'pdf':'pdf',
         '^text\\/plain': 'text',
         'msword|officedocument':'word'
-    },
-    Modal = require('components/modal'),
-    ConfirmBox = require('components/confirmBox');
+    };
 
-class Layout{
+class Layout extends React.Component{
 
     getDefaultProps(){
         return {
@@ -36,7 +37,7 @@ class Layout{
     }
 
     render() {
-        var cx = React.addons.classSet,
+        var cx = require('classnames'),
             cxAdmin = cx({'admin': true, 'blur': this.state.blur}),
             cxSidebar = cx({
                'hide': !this.state.isSidebarVisible 
@@ -613,4 +614,4 @@ class Layout{
     }
 }
 
-module.exports = React.createClass(Layout.prototype);
+export default Layout;
