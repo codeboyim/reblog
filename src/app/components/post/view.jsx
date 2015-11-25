@@ -1,8 +1,9 @@
-var moment = require('moment'),
-		marked = require('marked'),
-		hljs = require('highlight.js');
+import moment from 'moment';
+import marked from 'marked';
+import hljs from 'highlight.js';
 
 require('./style.scss');
+
 marked.setOptions({
 	langPrefix:'hljs ',
 	silent: true,
@@ -11,12 +12,7 @@ marked.setOptions({
 	}
 })
 
-class PostView{
-	getDefaultProps(){
-		return {
-			post:null
-		}
-	}
+class PostView extends React.Component{
 
 	render(){
 		var post = this.props.post;
@@ -35,4 +31,6 @@ class PostView{
 	}
 }
 
-module.exports = React.createClass(PostView.prototype);
+PostView.defaultProps = {post: null};
+
+export default PostView;

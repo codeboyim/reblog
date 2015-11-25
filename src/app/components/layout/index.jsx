@@ -63,7 +63,7 @@ class HomeLayout extends React.Component{
     }
 
     componentDidMount(){
-        window.addEventListener('scroll', this._onWindowScroll);
+        window.addEventListener('scroll', this._onWindowScroll.bind(this));
     }
 
     componentWillReceiveProps(nextProps){
@@ -93,7 +93,7 @@ class HomeLayout extends React.Component{
                 show = scrollDist < -50 || scrollTop <= 0;
                 callee.lastScrollTop = scrollTop;
                 callee.didScroll = false;
-                if(this.isMounted() && (show || hide) && (this.state.hideHeader && show || !this.state.hideHeader && hide)){
+                if(/*this.isMounted() &&*/ (show || hide) && (this.state.hideHeader && show || !this.state.hideHeader && hide)){
                     this.setState({'hideHeader':!show && hide});
                 }
             }, 60);

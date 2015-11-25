@@ -16,7 +16,7 @@ var appRoutes = {
     },
     '/p/:seoUrl': (seoUrl) => {
         require(['home/post'], (post) => {
-            post(seoUrl);
+            post.default(seoUrl);
         });
     },
     '/a': {

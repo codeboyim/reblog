@@ -16,11 +16,11 @@ function render(path, ...args){
 			post.on('all', postChanged);       
 		}
 
-		if(Array.isArray(args) && args.length > 0 && args[0].id !== post.id){
+		if(Array.isArray(args) && args.length > 0 && args[0].id !== post.get('objectId')) {
 			post.reset({silent:true});
 			
 			if(args[0].id){
-				post.id = args[0].id;
+				post.set('objectId', args[0].id);
 			}
 		}
 
@@ -33,7 +33,7 @@ function postChanged(event, post, ...args){
 	switch(event){
 
 		case 'sync':
-			router.setRoute(path.join('/a/p', post.id || 'new'));
+			router.setRoute(path.join('/a/p', post.get('objectId') || 'new'));
 			break;	
 	}
 }

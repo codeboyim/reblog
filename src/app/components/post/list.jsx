@@ -27,8 +27,8 @@ class PostList extends React.Component{
 					{
 						posts.map((post) => {
 							return (
-								<li key={post.id.substr(0, 5)} className={this.props.activePostId===post.id?'active':''}>
-									<a href={path.join('/a/p', post.id)}>{ post.get('title')?post.get('title'):'Untitled' }</a>
+								<li key={post.get('objectId').substr(0, 5)} className={this.props.activePostId===post.get('objectId')?'active':''}>
+									<a href={path.join('/a/p', post.get('objectId'))}>{ post.get('title')?post.get('title'):'Untitled' }</a>
 								</li>);
 						})
 					}
@@ -46,12 +46,12 @@ class PostList extends React.Component{
 						posts.map((post) => {
 							var featureImage = this._findFeatureImage(post);
 							return (
-								<li key={post.id.substr(0, 5)} className={'postListItem' + ( featureImage?' featured':'' )}>
+								<li key={post.get('objectId').substr(0, 5)} className={'postListItem' + ( featureImage?' featured':'' )}>
 									<a href={path.join('/p', post.get('seoUrl'))}>
 										<i className="postCreatedAt">{moment(post.createdAt).format('LL')}</i>
 										{
 											featureImage ?
-												<div className="postListItemFeature" style={{backgroundImage: 'url("'+featureImage.get('file').url()+'")'}}></div>
+												<div className="postListItemFeature" style={{backgroundImage: 'url("'+featureImage.file.url+'")'}}></div>
 												:null
 										}
 										<div className="postListItemTitle">
@@ -77,7 +77,7 @@ class PostList extends React.Component{
 	componentDidMount(){
 
 		if(this.props.type === 'home'){
-			window.addEventListener('scroll', this._onWindowScroll);
+			window.addEventListener('scroll', this._onWindowScroll.bind(this));
 		}
 
 		this._loadPosts();
@@ -140,9 +140,9 @@ class PostList extends React.Component{
 
 				posts.fetchHomeList().then(()=>{
 
-					if(this.isMounted()){
+					// if(this.isMounted()){
 						this.setState({ loading: false });
-					}
+					// }
 
 				});
 			}
@@ -166,13 +166,13 @@ class PostList extends React.Component{
 
 		if(files && Array.isArray(files)){
 			images = files.map( file => {
-				if(regExImage.test(file.get('type'))){
+				if(regExImage.test(file.type)){
 					return file;
 				}
 			})
 			if(images && images.length){
 				images.every( img => {
-					if(regExFeatureImage.test(img.get('name'))){
+					if(regExFeatureImage.test(img.name)){
 						featureImage = img;
 						return false;
 					}

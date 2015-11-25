@@ -1,7 +1,8 @@
-var AttachmentModel = require('components/attachment/model'),
-    packageInfo = require('../../../../package.json');
+import AttachmentModel from 'components/attachment/model';
+import packageInfo from '../../../../package.json';
+import Backbone from 'backbone';
 
-var PostModel = Parse.Object.extend({
+var PostModel = Backbone.Model.extend({
     className: 'Post',
 
     defaults: {
@@ -50,7 +51,7 @@ var PostModel = Parse.Object.extend({
             .first()
             .done(post => {
 
-                if(!post){
+                if (!post) {
                     this.trigger('notFound');
                     return;
                 }

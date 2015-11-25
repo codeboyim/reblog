@@ -1,13 +1,13 @@
-var Layout = require('components/layout'),
-		PostModel = require('components/post/model'),
-		Post = require('components/post/view'),
-		router = require('router'),
-		post = new PostModel;
+import Layout from 'components/layout';
+import PostModel from 'components/post/model';
+import Post from 'components/post/view';
+import router from 'router';
+var post = new PostModel;
 
 post.on('all', modelChanged);
 
 function render(){
-		React.render(<Layout postId={post.id}><Post post={post} /></Layout>, document.body);
+		ReactDOM.render(<Layout postId={post.get('objectId')}><Post post={post} /></Layout>, document.body);
 }
 
 function modelChanged(event, model){
@@ -19,7 +19,6 @@ function modelChanged(event, model){
 	}
 }
 
-
-module.exports = seoUrl => {
+export default seoUrl => {
 	post.set({seoUrl: seoUrl}, {silent: true}).fetchBySeoUrl();
 };

@@ -261,7 +261,7 @@ class Layout extends React.Component{
             visible = !this.state.isSidebarVisible; 
         }  
 
-        if(visible !== this.state.isSidebarVisible && this.isMounted()){
+        if(visible !== this.state.isSidebarVisible /*&& this.isMounted()*/){
             this.setState({isSidebarVisible: visible});
         }
     }
@@ -357,14 +357,14 @@ class Layout extends React.Component{
 
             case 'sync':
 
-                if(this.isMounted()){
+                // if(this.isMounted()){
                     newState = { isSidebarVisible: false, data:model.toJSON() };
                     if(args.length>0 && model.previous('isDraft') !== model.get('isDraft') && model.get('isDraft')){
                         this._flash('saved as draft');
                     } else{
                         newState.notification = null;
                     }
-            }
+            // }
 
                 break;
 
@@ -378,20 +378,20 @@ class Layout extends React.Component{
                 break;
         }
 
-        if(newState && this.isMounted()){
+        if(newState /*&& this.isMounted()*/){
             this.setState(newState);
         }
     } 
 
     _flash(message, type){
-        if(this.isMounted()){
+        // if(this.isMounted()){
             this.setState({notification:{text:message, type: type||'info'}});
-        }
+        // }
 
         this._flashTimeoutId = window.setTimeout(()=> {
-            if(this.isMounted()){
+            // if(this.isMounted()){
                 this.setState({notification:null});
-            }
+            // }
         }, 2000);
         
     }

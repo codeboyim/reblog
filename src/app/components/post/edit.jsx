@@ -111,7 +111,7 @@ class PostEdit {
 
 	_modelChanged(event, model){
 
-		if(this.isMounted()){
+		// if(this.isMounted()){
 
 			if((event === 'sync' || event === 'change')){
 
@@ -126,7 +126,7 @@ class PostEdit {
 			else if(event === 'change:insertText'){
 				this._editor.insert(model.get('insertText'));
 			}
-		}
+		// }
 	}
 
 }
