@@ -74,7 +74,7 @@ class PostList extends React.Component{
 		return null;
 	}
 
-	componentDidMount(){
+	componentDobjectIdMount(){
 
 		if(this.props.type === 'home'){
 			window.addEventListener('scroll', this._onWindowScroll.bind(this));
@@ -98,7 +98,7 @@ class PostList extends React.Component{
 
 	_onWindowScroll(e){
 		var callee = this._onWindowScroll,
-				didScroll = callee.didScroll || false,
+				dobjectIdScroll = callee.dobjectIdScroll || false,
 				posts = this.state.posts;
 
 		if(!didScroll && !this.state.loading && !posts.getAllLoaded()){
@@ -133,7 +133,7 @@ class PostList extends React.Component{
 		var loadMore,
 				posts = this.state.posts;
 
-			loadMore = document.body.clientHeight > this.refs.loadMore.getDOMNode().getBoundingClientRect().bottom;
+			loadMore = document.body.clientHeight > this.refs.loadMore.getBoundingClientRect().bottom;
 
 			if(loadMore){
 				this.setState({ loading: true });

@@ -1,11 +1,12 @@
 require('./style.scss');
 
-var PostModel = require('components/post/model'),
-		PostEdit = require('components/post/edit'),
-		Layout = require('./layout'),
-		post,
-		path = require('path'),
-		router = require('router');
+import PostModel from 'components/post/model';
+import PostEdit from 'components/post/edit';
+import Layout from './layout';
+import path from 'path';
+import router from 'router';
+
+var post;
 
 function render(path, ...args){
 
@@ -24,7 +25,7 @@ function render(path, ...args){
 			}
 		}
 
-		React.render(<Layout model={post}><PostEdit model={post} /></Layout>, document.body);
+		ReactDOM.render(<Layout model={post}><PostEdit model={post} /></Layout>, document.body);
 	}
 }
 
@@ -38,4 +39,4 @@ function postChanged(event, post, ...args){
 	}
 }
 
-module.exports = render; 
+export { render };

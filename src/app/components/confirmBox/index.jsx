@@ -1,23 +1,8 @@
-var Modal = require('components/modal');
 require('./style.scss');
 
-class ConfirmBox{
-	getDefaultProps(){
-		return {
-			title:'',
-			message: '',
-			confirmButtonText: 'Confirm',
-			customClass: '',
-			onConfirm: null,
-			onCancel: null,
-			onClose: null,
-			top: null,
-			left: null,
-			right: null,
-			bottom: null,
-			position: null
-		}
-	}
+import Modal from 'components/modal';
+
+export default class ConfirmBox extends React.Component{
 
 	render(){
 		var style = {};
@@ -33,13 +18,13 @@ class ConfirmBox{
 			<div style={style} className={'confirmBox ' + (this.props.customClass||'')}>
 				<header>
 					<h2>{this.props.title}</h2>
-					<i onClick={this._onCancelClick}></i>
+					<i onClick={this._onCancelClick.bind(this)}></i>
 				</header>
 				<main>
 					{this.props.message}
 				</main>
 				<footer>
-					<button onClick={this._onConfirmClick}>{this.props.confirmButtonText}</button>
+					<button onClick={this._onConfirmClick.bind(this)}>{this.props.confirmButtonText}</button>
 				</footer>
 			</div>
 		);
@@ -54,7 +39,6 @@ class ConfirmBox{
 	_onCancelClick(e){
 		e.preventDefault();
 		e.stopPropagation();
-
 
 		if(typeof this.props.onCancel === 'function'){
 			this.props.onCancel.apply(this, [this]);
@@ -77,7 +61,7 @@ class ConfirmBox{
 	}
 
 	_unmount(){
-			React.unmountComponentAtNode(this.getDOMNode().parentNode);
+			React.unmountComponentAtNode(this.parentNode);
 	}
 }
 
@@ -90,7 +74,8 @@ ConfirmBox.prototype.statics = {
 			closingConfirm = false,
 			{ onRender, onClose, ...props } = props;
 
-		confirmBox = React.render(<ConfirmBoxComponent {...props} onClose={onConfirmClose} />, modal.refs['contentContainer'].getDOMNode());
+		confirmBox = ReactDOM.render(<ConfirmBoxComponent {...props} onClose={onConfirmClose} />, 
+			modal.refs.contentContainer);
 
 		if(typeof onRender === 'function'){
 			onRender.apply(confirmBox, [confirmBox]);
@@ -100,7 +85,7 @@ ConfirmBox.prototype.statics = {
 			closingModal = true;
 
 			if(!closingConfirm){
-				React.unmountComponentAtNode(confirmBox.getDOMNode().parentNode);
+				React.unmountComponentAtNode(confirmBox.parentNode);
 			}
 
 		}
@@ -120,6 +105,17 @@ ConfirmBox.prototype.statics = {
 
 }
 
-var ConfirmBoxComponent = React.createClass(ConfirmBox.prototype);
-
-module.exports = ConfirmBoxComponent;
+ConfirmBox.defaultProps = {
+			title:'',
+			message: '',
+			confirmButtonText: 'Confirm',
+			customClass: '',
+			onConfirm: null,
+			onCancel: null,
+			onClose: null,
+			top: null,
+			left: null,
+			right: null,
+			bottom: null,
+			position: null
+};

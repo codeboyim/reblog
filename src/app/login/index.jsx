@@ -1,6 +1,6 @@
-var Layout = require('components/layout'),
-		Login = require('components/login');
+import Layout from 'components/layout';
+import Login from 'components/login';
 
-module.exports = (rtnUrl) =>{
-	React.render(<Layout><Login returnUrl={rtnUrl} /></Layout>, document.body);
+export default (rtnUrl) =>{
+	ReactDOM.render(<Layout><Login returnUrl={rtnUrl} /></Layout>, document.body);
 };

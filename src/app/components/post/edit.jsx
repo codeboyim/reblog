@@ -1,9 +1,9 @@
-var PostModel = require('components/post/model'),
-		marked = require('marked'),
-		slug = require('slug'),
-		router = require('router'),
-		path = require('path'),
-		hljs = require('highlight.js');
+import PostModel from 'components/post/model';
+import marked from 'marked';
+import slug from 'slug';
+import router from 'router';
+import path from 'path';
+import hljs from 'highlight.js';
 
 marked.setOptions({
 	langPrefix:'hljs ',
@@ -17,19 +17,14 @@ require('./style.scss');
 require('ace-builds/src-noconflict/ace');
 require('ace-builds/src-noconflict/mode-markdown');
 
-class PostEdit {
+export default class PostEdit extends React.Component {
 
-	getDefaultProps(){
-		return {
-			model: new PostModel
-		};
-	}
+	constructor(props){
+		super(props);
 
-	getInitialState(){
-
-		return {
+		this.state = {
 			post: this.props.model.toJSON()
-		}
+		};
 	}
 
 	render(){
@@ -57,9 +52,9 @@ class PostEdit {
 
 	componentDidMount(){
 		var model = this.props.model,
-				editor = this._editor = ace.edit(this.refs.postEditBody.getDOMNode()); 
+				editor = this._editor = ace.edit(this.refs.postEditBody); 
 
-		this.props.model.on('all', this._modelChanged);
+		this.props.model.on('all', this._modelChanged.bind(this));
 		editor.setFontSize(16);
 		editor.setOptions({maxLines: Infinity});
 		editor.renderer.setShowGutter(false);
@@ -131,4 +126,6 @@ class PostEdit {
 
 }
 
-module.exports = React.createClass(PostEdit.prototype);
+PostEdit.defaultProps = {
+			model: new PostModel
+};

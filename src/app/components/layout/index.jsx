@@ -1,6 +1,6 @@
 require('./style.scss');
-var packageInfo = require('../../../../package.json');
-var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
+import packageInfo from '../../../../package.json';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 class HomeLayout extends React.Component{
 

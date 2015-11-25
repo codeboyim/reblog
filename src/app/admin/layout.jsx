@@ -14,17 +14,11 @@ var fileTypes = {
         'msword|officedocument':'word'
     };
 
-class Layout extends React.Component{
+export default class Layout extends React.Component{
 
-    getDefaultProps(){
-        return {
-            model: null
-        };
-    }
-
-    getInitialState(){
-
-        return {
+    constructor(props){
+        super(props);
+        this.state = {
             isSidebarVisible: false,
             activeContentHeight: 1,
             activeNavDropdownUid: '',
@@ -108,7 +102,7 @@ class Layout extends React.Component{
         return (
         	<div className={cxAdmin} onClick={this._documentBodyClicked}>
                 <header className={cxHeader}>
-                    <i ref="toggle" className="adminSidebarToggler" onClick={this._toggleSidebar}></i>
+                    <i ref="toggle" className="adminSidebarToggler" onClick={this._toggleSidebar.bind(this)}></i>
                     {
                         this.props.model.get('isDraft') ?
                         <label className="adminHeaderLabel draft">Draft</label>
@@ -216,19 +210,19 @@ class Layout extends React.Component{
     componentDidMount(){
         this._resizeActiveMenuContent();
         window.addEventListener('resize', this._onWindowResize);
-        window.addEventListener('click', this._onWindowClicked);
-        window.addEventListener('keydown', this._onWindowKeydown);
+        window.addEventListener('click', this._onWindowClicked.bind(this));
+        window.addEventListener('keydown', this._onWindowKeydown.bind(this));
 
         if(this.props.model){
-            this.props.model.on('all', this._dataModelChanged);
+            this.props.model.on('all', this._dataModelChanged.bind(this));
         }
 
     }
 
     componentWillUnmount(){
-        window.removeEventListener('resize', this._onWindowResize);
-        window.removeEventListener('click', this._onWindowClicked);
-        window.removeEventListener('keydown', this._onWindowKeydown);
+        window.removeEventListener('resize', this._onWindowResize.bind(this));
+        window.removeEventListener('click', this._onWindowClicked.bind(this));
+        window.removeEventListener('keydown', this._onWindowKeydown.bind(this));
 
         if(this._flashTimeoutId){
             window.clearTimeout(this._flashTimeoutId);
@@ -397,7 +391,7 @@ class Layout extends React.Component{
     }
 
     _onDeleteClicked(e){
-        var dropdownBodyMoreBottom = this.refs['dropdownBodymore'].getDOMNode().getBoundingClientRect().bottom + 5,
+        var dropdownBodyMoreBottom = ReactDOM.findthis.refs.dropdownBodymore.getBoundingClientRect().bottom + 5,
             confirmBoxHeight,
             confirmBox,
             layoutComp = this;
@@ -431,7 +425,7 @@ class Layout extends React.Component{
 
         function onDeleteRender(_confirmBox){
             confirmBox = _confirmBox;
-            confirmBoxHeight = confirmBox.getDOMNode().offsetHeight; 
+            confirmBoxHeight = confirmBox.offsetHeight; 
             position();
             window.addEventListener('resize', onWindowResize);
             this.setState({blur:true});
@@ -472,7 +466,7 @@ class Layout extends React.Component{
 
     _onUploadClicked(e){
         e.preventDefault();
-        this.refs.fileAttach.getDOMNode().click();
+        this.refs.fileAttach.click();
     }
 
     _fileChanged(e){
@@ -584,15 +578,15 @@ class Layout extends React.Component{
     _resizeActiveMenuContent(){
         var menuItemsCount = 2,
             collapsedContentHeight = 1,
-            sidebarHeight = this.refs.sidebar.getDOMNode().offsetHeight;
+            sidebarHeight = this.refs.sidebar.offsetHeight;
 
         this._fixedHeight = this._fixedHeight || 
             ( 
-                menuItemsCount * this.refs.menuItemTitle.getDOMNode().offsetHeight +
+                menuItemsCount * this.refs.menuItemTitle.offsetHeight +
                 (menuItemsCount - 1) * collapsedContentHeight +
-                this.refs.compose.getDOMNode().offsetHeight +
-                this.refs.logo.getDOMNode().offsetHeight +
-                this.refs.footer.getDOMNode().offsetHeight
+                this.refs.compose.offsetHeight +
+                this.refs.logo.offsetHeight +
+                this.refs.footer.offsetHeight
             );
 
         window.requestAnimationFrame(function(){
@@ -614,4 +608,6 @@ class Layout extends React.Component{
     }
 }
 
-export default Layout;
+Layout.defaultProps = {
+            model: null
+};

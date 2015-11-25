@@ -29,7 +29,7 @@ var appRoutes = {
                 }
 
                 require(['admin'], (admin) => {
-                    admin('post', {
+                    admin.render('post', {
                         id: id
                     });
                 })
@@ -42,12 +42,12 @@ var appRoutes = {
     },
     '/login': () => {
         require(['login'], login => {
-            login(routeBeforeLogin);
+            login.default(routeBeforeLogin);
         });
     },
     '/404': () => {
         require(['404'], notFound => {
-            notFound();
+            // notFound();
         });
     }
 };

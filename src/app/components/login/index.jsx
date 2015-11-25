@@ -1,27 +1,22 @@
-var router = require('router');
+import router from 'router';
 
 require('./style.scss');
 
-class Login{
+class Login extends React.Component{
 
-	getDefaultProps(){
-		return {
-			returnUrl: ''
-		}
-	}
-
-	getInitialState(){
-		return {
+	constructor(props){
+		super(props);
+		this.state = {
 			'name':'',
 			'password': '',
 			'flashError': '',
 		};
-	}	
+	}
 
 	render(){
 		return (
 			<div className="login">
-				<form className="loginForm" onSubmit={this._onFormSubmit}>
+				<form className="loginForm" onSubmit={this._onFormSubmit.bind(this)}>
 					<div>
 						<label>Login Name</label>
 						<input type="text" ref="name" required onChange={this._onInputChange.bind(this, 'name')} value={this.state.name}/>
@@ -41,7 +36,7 @@ class Login{
 	}
 
 	componentDidMount(){
-		this.refs.name.getDOMNode().focus();
+		this.refs.name.focus();
 	}
 
 	_onFormSubmit(e){
@@ -78,4 +73,8 @@ class Login{
 	}
 }
 
-module.exports = React.createClass(Login.prototype);
+Login.defaultProps = {
+			returnUrl: ''
+};
+
+export default Login;

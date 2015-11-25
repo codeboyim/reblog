@@ -33,7 +33,7 @@ var PostCollection = Backbone.Collection.extend({
             .descending('updatedAt').limit(10);
 
         return query.find().done(posts => {
-            this.reset(posts);
+            this.reset(posts.map(p => p.toJSON()));
         });
     },
 
@@ -45,7 +45,7 @@ var PostCollection = Backbone.Collection.extend({
             .descending('updatedAt').limit(10);
 
         return query.find().done(posts => {
-            this.reset(posts);
+            this.reset(posts.map(p=>p.toJSON()));
         });
     },
 

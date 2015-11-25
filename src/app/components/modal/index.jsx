@@ -1,14 +1,6 @@
 require('./style.scss');
 
-class Modal{
-
-	getDefaultProps(){
-		return {
-			onClose: null,
-			container: null,
-			customClass: null 
-		}
-	}
+class Modal extends React.Component{
 
 	render(){
 		return (
@@ -42,11 +34,8 @@ class Modal{
 			ModalComponent.close(this)
 		}
 	}
-}
- 
-Modal.prototype.statics = {
 
-	open(content, customClass, onClose, onRendered){
+	static open(content, customClass, onClose, onRendered){
 		var container = document.createElement('div');
 
 		if(typeof customClass === 'function'){
@@ -56,9 +45,9 @@ Modal.prototype.statics = {
 		container.setAttribute('class', 'modalContainer');
 		document.body.appendChild(container);
 		return React.render(<ModalComponent onClose={onClose||null} customClass={customClass} container={container}>{content}</ModalComponent>, container, onRendered);
-	},
+	}
 
-	close(modal){
+	static close(modal){
 		var container = modal.props.container;
 
 		if(typeof modal.props.onClose === 'function' && modal.props.onClose(modal) === false){
@@ -68,9 +57,12 @@ Modal.prototype.statics = {
 		React.unmountComponentAtNode(container);
 		document.body.removeChild(container);
 	}
-
 }
 
-var ModalComponent = React.createClass(Modal.prototype);
+Modal.defaultProps = {
+			onClose: null,
+			container: null,
+			customClass: null 
+};
 
-module.exports = ModalComponent;
+export default Modal;
